@@ -1,0 +1,13 @@
+# Node
+node_modules/
+dist/
+.env
+.env.local
+
+# .NET
+backend/RestroApi/bin/
+backend/RestroApi/obj/
+backend/RestroApi/*.user
+
+# OS
+.DS_Store
