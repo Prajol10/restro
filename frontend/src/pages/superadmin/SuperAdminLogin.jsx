@@ -30,37 +30,109 @@ export default function SuperAdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#0d0d0d' }}>
-      <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center font-black text-black text-xl mx-auto mb-4"
-            style={{ backgroundColor: '#C9A84C' }}>D</div>
-          <h1 className="text-3xl font-black text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Dailo Technology
-          </h1>
-          <p className="text-gray-500 mt-2 text-sm">Super Administrator</p>
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center',
+      justifyContent: 'center', padding: '0 16px',
+      backgroundColor: '#0d0d0d'
+    }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
+
+        {/* Logo + Title */}
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{
+            width: '52px', height: '52px', borderRadius: '12px',
+            backgroundColor: '#C9A84C', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', fontWeight: 900, color: '#000',
+            fontSize: '20px', margin: '0 auto 16px'
+          }}>D</div>
+          <h1 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: '28px', fontWeight: 900, color: '#fff', margin: 0
+          }}>Dailo Technology</h1>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '8px' }}>
+            Super Administrator
+          </p>
         </div>
 
-        <div className="bg-[#111] rounded-2xl p-8 border border-white/5">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Email</label>
-              <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
-                required placeholder="superadmin@restro.com"
-                className="w-full bg-[#0d0d0d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-700 focus:outline-none focus:border-yellow-500/50 transition-colors" />
+        {/* Card */}
+        <div style={{
+          backgroundColor: '#111', borderRadius: '16px',
+          padding: '36px', border: '1px solid rgba(255,255,255,0.06)'
+        }}>
+          <form onSubmit={handleSubmit}>
+
+            {/* Email */}
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{
+                display: 'block', fontSize: '11px', fontWeight: 700,
+                textTransform: 'uppercase', letterSpacing: '0.1em',
+                color: 'rgba(255,255,255,0.4)', marginBottom: '8px'
+              }}>Email</label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={e => setForm({ ...form, email: e.target.value })}
+                required
+                placeholder="superadmin@restro.com"
+                style={{
+                  width: '100%', padding: '12px 16px', boxSizing: 'border-box',
+                  backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '10px', color: '#fff', fontSize: '14px',
+                  outline: 'none', transition: 'border-color 0.2s'
+                }}
+                onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+              />
             </div>
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Password</label>
-              <input type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })}
-                required placeholder="••••••••"
-                className="w-full bg-[#0d0d0d] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-700 focus:outline-none focus:border-yellow-500/50 transition-colors" />
+
+            {/* Password */}
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{
+                display: 'block', fontSize: '11px', fontWeight: 700,
+                textTransform: 'uppercase', letterSpacing: '0.1em',
+                color: 'rgba(255,255,255,0.4)', marginBottom: '8px'
+              }}>Password</label>
+              <input
+                type="password"
+                value={form.password}
+                onChange={e => setForm({ ...form, password: e.target.value })}
+                required
+                placeholder="••••••••"
+                style={{
+                  width: '100%', padding: '12px 16px', boxSizing: 'border-box',
+                  backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '10px', color: '#fff', fontSize: '14px',
+                  outline: 'none', transition: 'border-color 0.2s'
+                }}
+                onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
+                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+              />
             </div>
-            {error && <p className="text-red-400 text-sm">{error}</p>}
-            <button type="submit" disabled={loading}
-              className="w-full py-4 font-black uppercase tracking-widest text-black rounded-xl transition-all hover:opacity-90 disabled:opacity-50"
-              style={{ backgroundColor: '#C9A84C' }}>
+
+            {/* Error */}
+            {error && (
+              <div style={{
+                padding: '12px 16px', borderRadius: '8px', marginBottom: '20px',
+                backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                color: '#f87171', fontSize: '13px'
+              }}>{error}</div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%', padding: '14px', backgroundColor: '#C9A84C',
+                color: '#000', border: 'none', borderRadius: '10px',
+                fontWeight: 900, fontSize: '13px', letterSpacing: '0.15em',
+                textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s'
+              }}
+            >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
+
           </form>
         </div>
       </div>
