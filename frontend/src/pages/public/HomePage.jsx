@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTenant } from '../../context/TenantContext';
 import Layout from '../../components/public/Layout';
+import WhyChooseUs from '../../components/public/WhyChooseUs';
 import Hero from '../../components/public/Hero';
 
 const HomePage = () => {
@@ -107,6 +108,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Why Choose Us */}
+      <WhyChooseUs />
 
       {/* Reviews */}
       {previewReviews.length > 0 && (

@@ -310,6 +310,68 @@ namespace RestroApi.Controllers
             await _context.SaveChangesAsync();
             return Ok(item);
         }
+
+        // Why Choose Us
+        [HttpGet("why-choose-us")]
+        public async Task<IActionResult> GetWhyChooseUs()
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            return Ok(await _context.WhyChooseUs.Where(w => w.RestaurantId == id).OrderBy(w => w.SortOrder).ToListAsync());
+        }
+
+        [HttpPost("why-choose-us")]
+        public async Task<IActionResult> CreateWhyChooseUs([FromBody] WhyChooseUsDto dto)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = new WhyChooseUs
+            {
+                RestaurantId = id.Value,
+                Icon = dto.Icon ?? "",
+                Title = dto.Title,
+                Description = dto.Description,
+                SortOrder = dto.SortOrder,
+                IsActive = true
+            };
+            _context.WhyChooseUs.Add(item);
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
+        [HttpPut("why-choose-us/{itemId}")]
+        public async Task<IActionResult> UpdateWhyChooseUs(int itemId, [FromBody] WhyChooseUsDto dto)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = await _context.WhyChooseUs.FirstOrDefaultAsync(w => w.Id == itemId && w.RestaurantId == id);
+            if (item == null) return NotFound();
+            item.Icon = dto.Icon ?? item.Icon;
+            item.Title = dto.Title ?? item.Title;
+            item.Description = dto.Description ?? item.Description;
+            item.SortOrder = dto.SortOrder;
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
+        [HttpDelete("why-choose-us/{itemId}")]
+        public async Task<IActionResult> DeleteWhyChooseUs(int itemId)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = await _context.WhyChooseUs.FirstOrDefaultAsync(w => w.Id == itemId && w.RestaurantId == id);
+            if (item == null) return NotFound();
+            _context.WhyChooseUs.Remove(item);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPut("why-choose-us/{itemId}/archive")]
+        public async Task<IActionResult> ArchiveWhyChooseUs(int itemId)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = await _context.WhyChooseUs.FirstOrDefaultAsync(w => w.Id == itemId && w.RestaurantId == id);
+            if (item == null) return NotFound();
+            item.IsActive = !item.IsActive;
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
     }
 
     public class UpdateRestaurantDto
@@ -359,6 +421,14 @@ namespace RestroApi.Controllers
         public int SortOrder { get; set; } = 0;
     }
 
+    public class WhyChooseUsDto
+    {
+        public string? Icon { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public int SortOrder { get; set; } = 0;
+    }
+
     public class StatusDto { public string Status { get; set; } = string.Empty; }
     public class GalleryDto
     {
@@ -374,5 +444,3 @@ namespace RestroApi.Controllers
         public string? Source { get; set; }
     }
 }
-
-// Archive endpoints - add before the last closing brace
