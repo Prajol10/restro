@@ -47,6 +47,11 @@ const AdminDashboard = () => {
   const [editingWhyChooseUs, setEditingWhyChooseUs] = useState(null);
   const [whyChooseUsForm, setWhyChooseUsForm] = useState({ icon:'', title:'', description:'', sortOrder:0 });
 
+  // About Us form state
+  const [aboutForm, setAboutForm] = useState(null);
+  const [editingAbout, setEditingAbout] = useState(false);
+  const [savingAbout, setSavingAbout] = useState(false);
+
   // Stats states
   const [stats, setStats] = useState({
     totalOrders: 0,
@@ -170,6 +175,13 @@ const AdminDashboard = () => {
       fetchArchivedItems();
     } else if (activeTab === 'why-choose-us') {
       fetchWhyChooseUs();
+    } else if (activeTab === 'about-us' && restaurant) {
+      setAboutForm({
+        aboutText: restaurant.aboutText || '',
+        aboutShort: restaurant.aboutShort || '',
+        aboutImageUrl: restaurant.aboutImageUrl || '',
+      });
+      setEditingAbout(false);
     } else if (activeTab === 'info' && restaurant) {
       const h = (() => { try { return JSON.parse(restaurant.openingHours||'{}'); } catch { return {}; } })();
       setInfoForm({ ...restaurant, openingHoursObj:h });
@@ -178,34 +190,18 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      // Fetch orders to get total and pending counts
       const ordersRes = await authFetch(`${API}/Admin/orders`);
       const ordersData = await ordersRes.json();
-      
-      // Fetch reservations to get today's count
       const reservationsRes = await authFetch(`${API}/Admin/reservations`);
       const reservationsData = await reservationsRes.json();
-      
-      // Fetch reviews to get total count
       const reviewsRes = await authFetch(`${API}/Admin/reviews`);
       const reviewsData = await reviewsRes.json();
-      
-      // Calculate stats
       const totalOrders = ordersData.length;
       const pendingOrders = ordersData.filter(order => order.status === 'Pending').length;
-      
-      // Get today's date in YYYY-MM-DD format
       const today = new Date().toISOString().split('T')[0];
       const todayReservations = reservationsData.filter(res => res.date === today).length;
-      
       const totalReviews = reviewsData.length;
-      
-      setStats({
-        totalOrders,
-        pendingOrders,
-        todayReservations,
-        totalReviews
-      });
+      setStats({ totalOrders, pendingOrders, todayReservations, totalReviews });
     } catch (e) {
       console.error('Failed to fetch stats:', e);
     }
@@ -322,7 +318,6 @@ const AdminDashboard = () => {
       const res = await authFetch(`${API}/Admin/restaurant`, { method:'PUT', body:JSON.stringify(payload) });
       if (!res.ok) throw new Error('Failed');
       showMsg('✅ Saved!'); setEditingInfo(false);
-      // Reload restaurant data
       const restaurantRes = await authFetch(`${API}/Admin/restaurant`);
       const restaurantData = await restaurantRes.json();
       setRestaurant(restaurantData);
@@ -330,33 +325,40 @@ const AdminDashboard = () => {
     finally { setSavingInfo(false); }
   };
 
+  const saveAbout = async (e) => {
+    e.preventDefault(); setSavingAbout(true);
+    try {
+      const res = await authFetch(`${API}/Admin/restaurant`, { method:'PUT', body:JSON.stringify(aboutForm) });
+      if (!res.ok) throw new Error('Failed');
+      showMsg('✅ About Us saved!'); setEditingAbout(false);
+      const restaurantRes = await authFetch(`${API}/Admin/restaurant`);
+      const restaurantData = await restaurantRes.json();
+      setRestaurant(restaurantData);
+      setAboutForm({
+        aboutText: restaurantData.aboutText || '',
+        aboutShort: restaurantData.aboutShort || '',
+        aboutImageUrl: restaurantData.aboutImageUrl || '',
+      });
+    } catch(e) { showMsg('❌ '+e.message); }
+    finally { setSavingAbout(false); }
+  };
+
   const toggleMenuItemAvailability = async (id, isAvailable) => {
     try {
-      await authFetch(`${API}/Admin/menu-items/${id}`, { 
-        method: 'PUT', 
-        body: JSON.stringify({ isAvailable: !isAvailable }) 
-      });
+      await authFetch(`${API}/Admin/menu-items/${id}`, { method: 'PUT', body: JSON.stringify({ isAvailable: !isAvailable }) });
       fetchMenuItems();
       showMsg(`✅ ${!isAvailable ? 'Available' : 'Unavailable'}`);
-    } catch (e) {
-      showMsg('❌ Failed to update');
-    }
+    } catch (e) { showMsg('❌ Failed to update'); }
   };
 
   const toggleMenuItemSpecial = async (id, isSpecial) => {
     try {
-      await authFetch(`${API}/Admin/menu-items/${id}`, { 
-        method: 'PUT', 
-        body: JSON.stringify({ isSpecial: !isSpecial }) 
-      });
+      await authFetch(`${API}/Admin/menu-items/${id}`, { method: 'PUT', body: JSON.stringify({ isSpecial: !isSpecial }) });
       fetchMenuItems();
       showMsg(`✅ ${!isSpecial ? 'Marked as Special' : 'Unmarked as Special'}`);
-    } catch (e) {
-      showMsg('❌ Failed to update');
-    }
+    } catch (e) { showMsg('❌ Failed to update'); }
   };
 
-  // Why Choose Us functions
   const saveWhyChooseUs = async (e) => {
     e.preventDefault();
     const url = editingWhyChooseUs ? `${API}/Admin/why-choose-us/${editingWhyChooseUs.id}` : `${API}/Admin/why-choose-us`;
@@ -385,6 +387,7 @@ const AdminDashboard = () => {
     { id:'menu', label:'Menu' },
     { id:'reviews', label:'Reviews' },
     { id:'gallery', label:'Gallery' },
+    { id:'about-us', label:'About Us' },
     { id:'why-choose-us', label:'Why Choose Us' },
     { id:'filemanager', label:'Files' },
     { id:'archive', label:'Archive' },
@@ -562,7 +565,6 @@ const AdminDashboard = () => {
           <div>
             <h1 style={S.pageTitle}>Orders</h1>
             
-            {/* Status Filter Tabs */}
             <div style={S.tabs}>
               <button onClick={() => setOrderStatusFilter('all')} style={S.tab(orderStatusFilter === 'all', accent)}>All</button>
               <button onClick={() => setOrderStatusFilter('Pending')} style={S.tab(orderStatusFilter === 'Pending', accent)}>Pending</button>
@@ -644,7 +646,6 @@ const AdminDashboard = () => {
           <div>
             <h1 style={S.pageTitle}>Reservations</h1>
             
-            {/* Status Filter Tabs */}
             <div style={S.tabs}>
               <button onClick={() => setReservationStatusFilter('all')} style={S.tab(reservationStatusFilter === 'all', accent)}>All</button>
               <button onClick={() => setReservationStatusFilter('Pending')} style={S.tab(reservationStatusFilter === 'Pending', accent)}>Pending</button>
@@ -876,10 +877,7 @@ const AdminDashboard = () => {
                             <td style={S.menuTd}>
                               <button 
                                 onClick={() => toggleMenuItemSpecial(item.id, item.isSpecial)}
-                                style={{
-                                  ...S.toggleButton,
-                                  ...(item.isSpecial ? S.toggleOn : S.toggleOff)
-                                }}
+                                style={{ ...S.toggleButton, ...(item.isSpecial ? S.toggleOn : S.toggleOff) }}
                               >
                                 {item.isSpecial ? 'Yes' : 'No'}
                               </button>
@@ -887,10 +885,7 @@ const AdminDashboard = () => {
                             <td style={S.menuTd}>
                               <button 
                                 onClick={() => toggleMenuItemAvailability(item.id, item.isAvailable)}
-                                style={{
-                                  ...S.toggleButton,
-                                  ...(item.isAvailable ? S.toggleOn : S.toggleOff)
-                                }}
+                                style={{ ...S.toggleButton, ...(item.isAvailable ? S.toggleOn : S.toggleOff) }}
                               >
                                 {item.isAvailable ? 'Yes' : 'No'}
                               </button>
@@ -901,36 +896,17 @@ const AdminDashboard = () => {
                                   onClick={() => { 
                                     setEditingItem(item); 
                                     setItemForm({ 
-                                      categoryId: item.categoryId, 
-                                      name: item.name, 
-                                      subtitle: item.subtitle||'', 
-                                      description: item.description||'', 
-                                      price: item.price, 
-                                      imageUrl: item.imageUrl||'', 
-                                      isSpecial: item.isSpecial, 
-                                      isAvailable: item.isAvailable, 
-                                      sortOrder: item.sortOrder 
+                                      categoryId: item.categoryId, name: item.name, subtitle: item.subtitle||'', 
+                                      description: item.description||'', price: item.price, imageUrl: item.imageUrl||'', 
+                                      isSpecial: item.isSpecial, isAvailable: item.isAvailable, sortOrder: item.sortOrder 
                                     }); 
                                     setShowItemForm(true); 
                                     window.scrollTo({ top:0, behavior:'smooth' }); 
                                   }} 
                                   style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(255,255,255,0.4)', fontSize:'12px', padding:'4px 8px' }}
-                                >
-                                  ✏️
-                                </button>
-                                <button 
-                                  onClick={() => archiveMenuItem(item.id)} 
-                                  style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(251,191,36,0.6)', fontSize:'12px', padding:'4px 8px' }} 
-                                  title="Archive"
-                                >
-                                  🗄️
-                                </button>
-                                <button 
-                                  onClick={() => deleteItem(item.id)} 
-                                  style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(239,68,68,0.4)', fontSize:'12px', padding:'4px 8px' }}
-                                >
-                                  🗑
-                                </button>
+                                >✏️</button>
+                                <button onClick={() => archiveMenuItem(item.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(251,191,36,0.6)', fontSize:'12px', padding:'4px 8px' }} title="Archive">🗄️</button>
+                                <button onClick={() => deleteItem(item.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(239,68,68,0.4)', fontSize:'12px', padding:'4px 8px' }}>🗑</button>
                               </div>
                             </td>
                           </tr>
@@ -942,9 +918,7 @@ const AdminDashboard = () => {
                        item.description.toLowerCase().includes(menuSearch.toLowerCase()))
                     ).length === 0 && (
                       <tr>
-                        <td colSpan="7" style={{...S.menuTd, textAlign:'center', color:'rgba(255,255,255,0.3)'}}>
-                          No menu items found
-                        </td>
+                        <td colSpan="7" style={{...S.menuTd, textAlign:'center', color:'rgba(255,255,255,0.3)'}}>No menu items found</td>
                       </tr>
                     )}
                   </tbody>
@@ -952,7 +926,6 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {/* Categories */}
             {categories.length > 0 && (
               <div style={{ marginBottom:'24px' }}>
                 <p style={{ ...S.label, marginBottom:'12px' }}>Categories</p>
@@ -1090,6 +1063,95 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {/* ABOUT US */}
+        {activeTab==='about-us' && aboutForm && (
+          <div>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'24px' }}>
+              <h1 style={S.pageTitle}>About Us</h1>
+              {!editingAbout && <button onClick={() => setEditingAbout(true)} style={S.btnPrimary(accent)}>Edit</button>}
+            </div>
+
+            {editingAbout ? (
+              <form onSubmit={saveAbout}>
+                <div style={{ ...S.card, marginBottom:'16px' }}>
+                  <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(255,255,255,0.3)', marginBottom:'20px' }}>About Us Content</p>
+                  <div style={{ display:'flex', flexDirection:'column', gap:'16px' }}>
+                    <div>
+                      <label style={S.label}>Short Description</label>
+                      <input
+                        value={aboutForm.aboutShort}
+                        onChange={e => setAboutForm({ ...aboutForm, aboutShort:e.target.value })}
+                        placeholder="A brief one-liner about your restaurant..."
+                        style={S.input}
+                      />
+                    </div>
+                    <div>
+                      <label style={S.label}>Full About Text</label>
+                      <textarea
+                        value={aboutForm.aboutText}
+                        onChange={e => setAboutForm({ ...aboutForm, aboutText:e.target.value })}
+                        rows={6}
+                        placeholder="Tell your restaurant's full story..."
+                        style={{ ...S.textarea, minHeight:'140px' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={S.label}>About Image</label>
+                      <div style={{ display:'flex', gap:'8px' }}>
+                        <input
+                          value={aboutForm.aboutImageUrl}
+                          onChange={e => setAboutForm({ ...aboutForm, aboutImageUrl:e.target.value })}
+                          placeholder="Paste image URL..."
+                          style={{ ...S.input, flex:1 }}
+                        />
+                        <label style={S.uploadBtn}>
+                          📁 Upload
+                          <input type="file" accept="image/*" style={{ display:'none' }} onChange={async e => {
+                            const file = e.target.files[0]; if (!file) return;
+                            try { const url = await uploadFile(file, slug, 'about'); setAboutForm(f => ({ ...f, aboutImageUrl:url })); }
+                            catch(err) { alert('Upload failed: '+err.message); }
+                          }} />
+                        </label>
+                        <button type="button" onClick={() => setFilePicker({ onSelect:(url) => setAboutForm(f => ({ ...f, aboutImageUrl:url })) })} style={{ ...S.uploadBtn, backgroundColor:'rgba(255,255,255,0.05)' }}>
+                          📂 Files
+                        </button>
+                      </div>
+                      {aboutForm.aboutImageUrl && (
+                        <img src={aboutForm.aboutImageUrl} alt="" style={{ marginTop:'10px', height:'120px', borderRadius:'8px', objectFit:'cover' }} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display:'flex', gap:'10px' }}>
+                  <button type="submit" disabled={savingAbout} style={{ ...S.btnPrimary(accent), opacity:savingAbout?0.5:1 }}>
+                    {savingAbout ? 'Saving...' : 'Save Changes'}
+                  </button>
+                  <button type="button" onClick={() => setEditingAbout(false)} style={S.btnOutline}>Cancel</button>
+                </div>
+              </form>
+            ) : (
+              <div style={S.card}>
+                <div style={{ borderBottom:'1px solid rgba(255,255,255,0.05)', paddingBottom:'14px', marginBottom:'14px' }}>
+                  <p style={{ ...S.label, marginBottom:'4px' }}>Short Description</p>
+                  <p style={{ color:'rgba(255,255,255,0.7)', fontSize:'14px' }}>{aboutForm.aboutShort || 'Not set'}</p>
+                </div>
+                <div style={{ borderBottom:'1px solid rgba(255,255,255,0.05)', paddingBottom:'14px', marginBottom:'14px' }}>
+                  <p style={{ ...S.label, marginBottom:'4px' }}>Full About Text</p>
+                  <p style={{ color:'rgba(255,255,255,0.7)', fontSize:'14px', lineHeight:1.7, whiteSpace:'pre-wrap' }}>{aboutForm.aboutText || 'Not set'}</p>
+                </div>
+                <div>
+                  <p style={{ ...S.label, marginBottom:'8px' }}>About Image</p>
+                  {aboutForm.aboutImageUrl ? (
+                    <img src={aboutForm.aboutImageUrl} alt="" style={{ height:'140px', borderRadius:'8px', objectFit:'cover' }} />
+                  ) : (
+                    <p style={{ color:'rgba(255,255,255,0.3)', fontSize:'14px' }}>Not set</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* WHY CHOOSE US */}
         {activeTab==='why-choose-us' && (
           <div>
@@ -1145,37 +1207,16 @@ const AdminDashboard = () => {
                         <h3 style={{ fontWeight:700, color:'#fff', fontSize:'16px' }}>{item.title}</h3>
                         <div style={{ display:'flex', gap:'8px' }}>
                           <button 
-                            onClick={() => { 
-                              setEditingWhyChooseUs(item); 
-                              setWhyChooseUsForm({ 
-                                icon: item.icon, 
-                                title: item.title, 
-                                description: item.description, 
-                                sortOrder: item.sortOrder 
-                              }); 
-                              setShowWhyChooseUsForm(true); 
-                            }} 
+                            onClick={() => { setEditingWhyChooseUs(item); setWhyChooseUsForm({ icon:item.icon, title:item.title, description:item.description, sortOrder:item.sortOrder }); setShowWhyChooseUsForm(true); }} 
                             style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(255,255,255,0.4)', fontSize:'12px', padding:'4px 8px' }}
-                          >
-                            ✏️
-                          </button>
-                          <button 
-                            onClick={() => deleteWhyChooseUs(item.id)} 
-                            style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(239,68,68,0.4)', fontSize:'12px', padding:'4px 8px' }}
-                          >
-                            🗑
-                          </button>
+                          >✏️</button>
+                          <button onClick={() => deleteWhyChooseUs(item.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(239,68,68,0.4)', fontSize:'12px', padding:'4px 8px' }}>🗑</button>
                         </div>
                       </div>
                       <p style={{ color:'rgba(255,255,255,0.7)', fontSize:'14px', lineHeight:1.5 }}>{item.description}</p>
                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:'12px' }}>
                         <span style={{ fontSize:'12px', color:'rgba(255,255,255,0.4)' }}>Order: {item.sortOrder}</span>
-                        <button 
-                          onClick={() => archiveWhyChooseUs(item.id)} 
-                          style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(251,191,36,0.6)', fontSize:'12px', padding:'4px 8px' }}
-                        >
-                          Archive
-                        </button>
+                        <button onClick={() => archiveWhyChooseUs(item.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'rgba(251,191,36,0.6)', fontSize:'12px', padding:'4px 8px' }}>Archive</button>
                       </div>
                     </div>
                   </div>
@@ -1205,7 +1246,6 @@ const AdminDashboard = () => {
 
             {editingInfo ? (
               <form onSubmit={saveInfo}>
-                {/* Basic Info */}
                 <div style={{ ...S.card, marginBottom:'16px' }}>
                   <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(255,255,255,0.3)', marginBottom:'20px' }}>Basic Info</p>
                   <div style={S.grid2}>
@@ -1232,7 +1272,6 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* Colors */}
                 <div style={{ ...S.card, marginBottom:'16px' }}>
                   <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(255,255,255,0.3)', marginBottom:'20px' }}>Colors & Theme</p>
                   <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'16px' }}>
@@ -1248,7 +1287,6 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* Media */}
                 <div style={{ ...S.card, marginBottom:'16px' }}>
                   <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(255,255,255,0.3)', marginBottom:'20px' }}>Media</p>
                   <div style={S.grid2}>
@@ -1316,7 +1354,6 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* Social */}
                 <div style={{ ...S.card, marginBottom:'16px' }}>
                   <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(255,255,255,0.3)', marginBottom:'20px' }}>Social & Maps</p>
                   <div style={S.grid2}>
@@ -1329,7 +1366,6 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* Opening Hours */}
                 <div style={{ ...S.card, marginBottom:'16px' }}>
                   <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:'rgba(255,255,255,0.3)', marginBottom:'20px' }}>Opening Hours</p>
                   <div style={S.grid2}>
@@ -1360,52 +1396,60 @@ const AdminDashboard = () => {
           </div>
         )}
 
-      {/* ARCHIVE TAB */}
-      {activeTab==='archive' && (
-        <div>
-          <h1 style={S.pageTitle}>Archive</h1>
-          <p style={{ color:'rgba(255,255,255,0.35)', fontSize:'13px', marginBottom:'24px' }}>Archived items are hidden from the public site. Restore them anytime.</p>
-          {archivedGallery.length === 0 && archivedItems.length === 0 && (
-            <div style={S.empty}>
-              <p style={{ fontSize:'40px', marginBottom:'12px' }}>🗄️</p>
-              <p>No archived items yet</p>
-            </div>
-          )}
-          {archivedGallery.length > 0 && (
-            <div style={{ marginBottom:'32px' }}>
-              <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:accent, marginBottom:'16px' }}>Gallery ({archivedGallery.length})</p>
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(160px, 1fr))', gap:'12px' }}>
-                {archivedGallery.map(img => (
-                  <div key={img.id} style={{ ...S.card, padding:0, overflow:'hidden', margin:0, position:'relative', opacity:0.7 }}>
-                    <img src={img.imageUrl} alt="" style={{ width:'100%', aspectRatio:'1', objectFit:'cover' }} />
-                    <div style={{ padding:'10px', display:'flex', gap:'6px' }}>
-                      <button onClick={() => restoreGalleryImage(img.id)} style={{ flex:1, ...S.btnSuccess, padding:'6px', fontSize:'11px' }}>Restore</button>
-                      <button onClick={() => deleteGalleryImage(img.id)} style={{ ...S.btnDanger, padding:'6px', fontSize:'11px' }}>Del</button>
-                    </div>
-                  </div>
-                ))}
+        {/* ARCHIVE TAB */}
+        {activeTab==='archive' && (
+          <div>
+            <h1 style={S.pageTitle}>Archive</h1>
+            <p style={{ color:'rgba(255,255,255,0.35)', fontSize:'13px', marginBottom:'24px' }}>Archived items are hidden from the public site. Restore them anytime.</p>
+            {archivedGallery.length === 0 && archivedItems.length === 0 && (
+              <div style={S.empty}>
+                <p style={{ fontSize:'40px', marginBottom:'12px' }}>🗄️</p>
+                <p>No archived items yet</p>
               </div>
-            </div>
-          )}
-          {archivedItems.length > 0 && (
-            <div>
-              <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:accent, marginBottom:'16px' }}>Menu Items ({archivedItems.length})</p>
-              <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
-                {archivedItems.map(item => (
-                  <div key={item.id} style={{ ...S.card, display:'flex', alignItems:'center', gap:'14px', margin:0, opacity:0.7 }}>
-                    {item.imageUrl && <img src={item.imageUrl} alt="" style={{ width:'48px', height:'48px', objectFit:'cover', borderRadius:'6px' }} />}
-                    <div style={{ flex:1 }}>
-                      <p style={{ fontWeight:700, color:'#fff', fontSize:'14px' }}>{item.name}</p>
-                      <p style={{ color:'rgba(255,255,255,0.35)', fontSize:'12px' }}>${parseFloat(item.price).toFixed(2)}</p>
+            )}
+            {archivedGallery.length > 0 && (
+              <div style={{ marginBottom:'32px' }}>
+                <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:accent, marginBottom:'16px' }}>Gallery ({archivedGallery.length})</p>
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(160px, 1fr))', gap:'12px' }}>
+                  {archivedGallery.map(img => (
+                    <div key={img.id} style={{ ...S.card, padding:0, overflow:'hidden', margin:0, position:'relative', opacity:0.7 }}>
+                      <img src={img.imageUrl} alt="" style={{ width:'100%', aspectRatio:'1', objectFit:'cover' }} />
+                      <div style={{ padding:'10px', display:'flex', gap:'6px' }}>
+                        <button onClick={() => restoreGalleryImage(img.id)} style={{ flex:1, ...S.btnSuccess, padding:'6px', fontSize:'11px' }}>Restore</button>
+                        <button onClick={() => deleteGalleryImage(img.id)} style={{ ...S.btnDanger, padding:'6px', fontSize:'11px' }}>Del</button>
+                      </div>
                     </div>
-                    <button onClick={() => restoreMenuItem(item.id)} style={{ ...S.btnSuccess, padding:'7px 14px' }}>Restore</button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+            {archivedItems.length > 0 && (
+              <div>
+                <p style={{ fontSize:'11px', fontWeight:700, letterSpacing:'0.2em', textTransform:'uppercase', color:accent, marginBottom:'16px' }}>Menu Items ({archivedItems.length})</p>
+                <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
+                  {archivedItems.map(item => (
+                    <div key={item.id} style={{ ...S.card, display:'flex', alignItems:'center', gap:'14px', margin:0, opacity:0.7 }}>
+                      {item.imageUrl && <img src={item.imageUrl} alt="" style={{ width:'48px', height:'48px', objectFit:'cover', borderRadius:'6px' }} />}
+                      <div style={{ flex:1 }}>
+                        <p style={{ fontWeight:700, color:'#fff', fontSize:'14px' }}>{item.name}</p>
+                        <p style={{ color:'rgba(255,255,255,0.35)', fontSize:'12px' }}>${parseFloat(item.price).toFixed(2)}</p>
+                      </div>
+                      <button onClick={() => restoreMenuItem(item.id)} style={{ ...S.btnSuccess, padding:'7px 14px' }}>Restore</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {filePicker && (
+          <FilePicker
+            restaurantSlug={slug}
+            onSelect={(url) => { filePicker.onSelect(url); setFilePicker(null); }}
+            onClose={() => setFilePicker(null)}
+          />
+        )}
       </div>
     </div>
   );
