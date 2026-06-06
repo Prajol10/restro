@@ -7,8 +7,8 @@ export default function AdminLogin() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Wake up Render backend on mount
   useEffect(() => { fetch(`${API}/Auth/ping`).catch(() => {}); }, []);
   const navigate = useNavigate();
   const { slug } = useParams();
@@ -39,7 +39,6 @@ export default function AdminLogin() {
     <div style={{ minHeight: '100vh', backgroundColor: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: "'Inter', sans-serif" }}>
       <div style={{ width: '100%', maxWidth: '400px' }}>
 
-        {/* Logo/Icon */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ width: '56px', height: '56px', borderRadius: '14px', backgroundColor: '#1a1a1a', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', fontSize: '24px' }}>
             🍽️
@@ -52,7 +51,6 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        {/* Form Card */}
         <div style={{ backgroundColor: '#111', borderRadius: '16px', padding: '32px', border: '1px solid rgba(255,255,255,0.06)' }}>
           <form onSubmit={handleSubmit} autoComplete="on" method="post">
             <div style={{ marginBottom: '20px' }}>
@@ -60,14 +58,9 @@ export default function AdminLogin() {
                 Email Address
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="username email"
-                value={form.email}
-                onChange={e => setForm({ ...form, email: e.target.value })}
-                required
-                placeholder="admin@restaurant.com"
+                id="email" name="email" type="email" autoComplete="username email"
+                value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
+                required placeholder="admin@restaurant.com"
                 style={{ width: '100%', backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '13px 16px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", transition: 'border-color 0.2s' }}
                 onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
@@ -78,19 +71,25 @@ export default function AdminLogin() {
               <label htmlFor="password" style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '8px' }}>
                 Password
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={form.password}
-                onChange={e => setForm({ ...form, password: e.target.value })}
-                required
-                placeholder="••••••••"
-                style={{ width: '100%', backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '13px 16px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", transition: 'border-color 0.2s' }}
-                onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  id="password" name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  value={form.password} onChange={e => setForm({ ...form, password: e.target.value })}
+                  required placeholder="••••••••"
+                  style={{ width: '100%', backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '13px 48px 13px 16px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", transition: 'border-color 0.2s' }}
+                  onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', fontSize: '16px', padding: '0', lineHeight: 1 }}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
 
             {error && (
@@ -100,8 +99,7 @@ export default function AdminLogin() {
             )}
 
             <button
-              type="submit"
-              disabled={loading}
+              type="submit" disabled={loading}
               style={{ width: '100%', padding: '14px', backgroundColor: '#C9A84C', color: '#000', border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '13px', letterSpacing: '0.1em', textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, transition: 'opacity 0.2s', fontFamily: "'Inter', sans-serif" }}
             >
               {loading ? 'Signing in...' : 'Sign In'}

@@ -7,8 +7,8 @@ export default function SuperAdminLogin() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Wake up Render backend on mount
   useEffect(() => { fetch(`${API}/Auth/ping`).catch(() => {}); }, []);
   const navigate = useNavigate();
 
@@ -33,105 +33,61 @@ export default function SuperAdminLogin() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', padding: '0 16px',
-      backgroundColor: '#0d0d0d'
-    }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', backgroundColor: '#0d0d0d' }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
 
-        {/* Logo + Title */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{
-            width: '52px', height: '52px', borderRadius: '12px',
-            backgroundColor: '#C9A84C', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', fontWeight: 900, color: '#000',
-            fontSize: '20px', margin: '0 auto 16px'
-          }}>D</div>
-          <h1 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: '28px', fontWeight: 900, color: '#fff', margin: 0
-          }}>Dailo Technology</h1>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '8px' }}>
-            Super Administrator
-          </p>
+          <div style={{ width: '52px', height: '52px', borderRadius: '12px', backgroundColor: '#C9A84C', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#000', fontSize: '20px', margin: '0 auto 16px' }}>D</div>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '28px', fontWeight: 900, color: '#fff', margin: 0 }}>Dailo Technology</h1>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '8px' }}>Super Administrator</p>
         </div>
 
-        {/* Card */}
-        <div style={{
-          backgroundColor: '#111', borderRadius: '16px',
-          padding: '36px', border: '1px solid rgba(255,255,255,0.06)'
-        }}>
+        <div style={{ backgroundColor: '#111', borderRadius: '16px', padding: '36px', border: '1px solid rgba(255,255,255,0.06)' }}>
           <form onSubmit={handleSubmit}>
 
-            {/* Email */}
             <div style={{ marginBottom: '20px' }}>
-              <label style={{
-                display: 'block', fontSize: '11px', fontWeight: 700,
-                textTransform: 'uppercase', letterSpacing: '0.1em',
-                color: 'rgba(255,255,255,0.4)', marginBottom: '8px'
-              }}>Email</label>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginBottom: '8px' }}>Email</label>
               <input
-                type="email"
-                value={form.email}
+                type="email" value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
-                required
-                placeholder="superadmin@restro.com"
-                style={{
-                  width: '100%', padding: '12px 16px', boxSizing: 'border-box',
-                  backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '10px', color: '#fff', fontSize: '14px',
-                  outline: 'none', transition: 'border-color 0.2s'
-                }}
+                required placeholder="superadmin@restro.com"
+                style={{ width: '100%', padding: '12px 16px', boxSizing: 'border-box', backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: '#fff', fontSize: '14px', outline: 'none', transition: 'border-color 0.2s' }}
                 onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
                 onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
               />
             </div>
 
-            {/* Password */}
             <div style={{ marginBottom: '24px' }}>
-              <label style={{
-                display: 'block', fontSize: '11px', fontWeight: 700,
-                textTransform: 'uppercase', letterSpacing: '0.1em',
-                color: 'rgba(255,255,255,0.4)', marginBottom: '8px'
-              }}>Password</label>
-              <input
-                type="password"
-                value={form.password}
-                onChange={e => setForm({ ...form, password: e.target.value })}
-                required
-                placeholder="••••••••"
-                style={{
-                  width: '100%', padding: '12px 16px', boxSizing: 'border-box',
-                  backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: '10px', color: '#fff', fontSize: '14px',
-                  outline: 'none', transition: 'border-color 0.2s'
-                }}
-                onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
-                onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
-              />
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)', marginBottom: '8px' }}>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={form.password}
+                  onChange={e => setForm({ ...form, password: e.target.value })}
+                  required placeholder="••••••••"
+                  style={{ width: '100%', padding: '12px 48px 12px 16px', boxSizing: 'border-box', backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', color: '#fff', fontSize: '14px', outline: 'none', transition: 'border-color 0.2s' }}
+                  onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)', fontSize: '16px', padding: '0', lineHeight: 1 }}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
 
-            {/* Error */}
             {error && (
-              <div style={{
-                padding: '12px 16px', borderRadius: '8px', marginBottom: '20px',
-                backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
-                color: '#f87171', fontSize: '13px'
-              }}>{error}</div>
+              <div style={{ padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', backgroundColor: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171', fontSize: '13px' }}>
+                {error}
+              </div>
             )}
 
-            {/* Submit */}
             <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%', padding: '14px', backgroundColor: '#C9A84C',
-                color: '#000', border: 'none', borderRadius: '10px',
-                fontWeight: 900, fontSize: '13px', letterSpacing: '0.15em',
-                textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s'
-              }}
+              type="submit" disabled={loading}
+              style={{ width: '100%', padding: '14px', backgroundColor: '#C9A84C', color: '#000', border: 'none', borderRadius: '10px', fontWeight: 900, fontSize: '13px', letterSpacing: '0.15em', textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s' }}
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
