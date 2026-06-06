@@ -7,6 +7,9 @@ export default function AdminLogin() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Wake up Render backend on mount
+  useEffect(() => { fetch(`${API}/Auth/ping`).catch(() => {}); }, []);
   const navigate = useNavigate();
   const { slug } = useParams();
 
