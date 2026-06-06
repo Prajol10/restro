@@ -202,8 +202,6 @@ const MenuPage = () => {
                     {item.subtitle && <p style={S.subtitle}>{item.subtitle}</p>}
                     <p style={S.price}>Rs. {item.price}</p>
                     <p style={S.description}>{item.description}</p>
-                    <div style={{
-                    </div>
                   </div>
                 ))}
               </div>
