@@ -78,9 +78,6 @@ const MenuPage = () => {
     subtitle: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', marginBottom: '12px', fontStyle: 'italic' },
     price: { fontSize: '1rem', color: accent, fontWeight: 700, marginBottom: '12px' },
     description: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6', marginBottom: '16px' },
-    dietary: { fontSize: '0.75rem', fontWeight: 600, padding: '4px 12px', borderRadius: '4px', marginBottom: '16px' },
-    veg: { backgroundColor: 'rgba(0,255,0,0.1)', color: 'lightgreen' },
-    nonVeg: { backgroundColor: 'rgba(255,0,0,0.1)', color: 'orange' },
     printOnly: { display: 'none' },
     noResults: { textAlign: 'center', padding: '48px', color: 'rgba(255,255,255,0.5)' }
   };
@@ -206,20 +203,6 @@ const MenuPage = () => {
                     <p style={S.price}>Rs. {item.price}</p>
                     <p style={S.description}>{item.description}</p>
                     <div style={{
-                      ...S.dietary,
-                      ...(item.name.toLowerCase().includes('chicken') || 
-                          item.name.toLowerCase().includes('mutton') || 
-                          item.name.toLowerCase().includes('fish') || 
-                          item.name.toLowerCase().includes('egg') ||
-                          item.name.toLowerCase().includes('buff') ||
-                          item.name.toLowerCase().includes('pork') ? S.nonVeg : S.veg)
-                    }}>
-                      {item.name.toLowerCase().includes('chicken') || 
-                       item.name.toLowerCase().includes('mutton') || 
-                       item.name.toLowerCase().includes('fish') || 
-                       item.name.toLowerCase().includes('egg') ||
-                       item.name.toLowerCase().includes('buff') ||
-                       item.name.toLowerCase().includes('pork') ? '🔴 Non-Veg' : '🟢 Veg'}
                     </div>
                   </div>
                 ))}
