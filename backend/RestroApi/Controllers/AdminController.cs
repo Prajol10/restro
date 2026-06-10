@@ -43,9 +43,9 @@ namespace RestroApi.Controllers
             r.LogoUrl = dto.LogoUrl != null ? dto.LogoUrl : r.LogoUrl;
             r.BannerUrl = dto.BannerUrl != null ? dto.BannerUrl : r.BannerUrl;
             r.VideoUrl = dto.VideoUrl != null ? dto.VideoUrl : r.VideoUrl;
-            r.PrimaryColor = dto.PrimaryColor ?? r.PrimaryColor;
-            r.AccentColor = dto.AccentColor ?? r.AccentColor;
-            r.BgColor = dto.BgColor ?? r.BgColor;
+            r.PrimaryColor = !string.IsNullOrEmpty(dto.PrimaryColor) ? dto.PrimaryColor : r.PrimaryColor;
+            r.AccentColor = !string.IsNullOrEmpty(dto.AccentColor) ? dto.AccentColor : r.AccentColor;
+            r.BgColor = !string.IsNullOrEmpty(dto.BgColor) ? dto.BgColor : r.BgColor;
             r.Tagline = dto.Tagline != null ? dto.Tagline : r.Tagline;
             r.HeroTitle = dto.HeroTitle != null ? dto.HeroTitle : r.HeroTitle;
             r.HeroSubtitle = dto.HeroSubtitle != null ? dto.HeroSubtitle : r.HeroSubtitle;
