@@ -113,8 +113,8 @@ const AdminDashboard = () => {
     tab: (active, accent) => ({ padding:'8px 16px', backgroundColor: active ? accent : 'transparent', color: active ? '#000' : 'rgba(255,255,255,0.5)', border:'none', borderRadius:'6px', fontWeight:600, fontSize:'13px', cursor:'pointer', transition:'all 0.2s' }),
     menuTableContainer: { overflowX:'auto' },
     menuTable: { width:'100%', borderCollapse:'collapse' },
-    menuTh: { textAlign:'left', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.5)', fontSize:'0.75rem', textTransform:'uppercase', letterSpacing:'0.05em' },
-    menuTd: { padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.05)', color:'rgba(255,255,255,0.7)' },
+    menuTh: { textAlign:'left', padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.1)', color:'rgba(255,255,255,0.75)', fontSize:'0.75rem', textTransform:'uppercase', letterSpacing:'0.05em', fontWeight:700 },
+    menuTd: { padding:'12px 16px', borderBottom:'1px solid rgba(255,255,255,0.05)', color:'rgba(255,255,255,0.92)', fontWeight:500 },
     menuTr: { transition:'background-color 0.2s' },
     menuTrHover: { backgroundColor:'rgba(255,255,255,0.02)' },
     menuImage: { width:'40px', height:'40px', borderRadius:'6px', objectFit:'cover' },
@@ -502,7 +502,7 @@ const AdminDashboard = () => {
                           <td style={S.menuTd}>{item.imageUrl?<img src={item.imageUrl} alt={item.name} style={S.menuImage}/>:<div style={{width:'40px',height:'40px',borderRadius:'6px',backgroundColor:'#1a1a1a',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'16px'}}>🍽️</div>}</td>
                           <td style={S.menuTd}>{category?.name||'Uncategorized'}</td>
                           <td style={S.menuTd}>{item.name}</td>
-                          <td style={S.menuTd}>${parseFloat(item.price).toFixed(2)}</td>
+                          <td style={S.menuTd}>Rs. {parseFloat(item.price).toFixed(0)}</td>
                           <td style={S.menuTd}><button onClick={()=>toggleMenuItemSpecial(item.id,item.isSpecial)} style={{...S.toggleButton,...(item.isSpecial?S.toggleOn:S.toggleOff)}}>{item.isSpecial?'Yes':'No'}</button></td>
                           <td style={S.menuTd}><button onClick={()=>toggleMenuItemAvailability(item.id,item.isAvailable)} style={{...S.toggleButton,...(item.isAvailable?S.toggleOn:S.toggleOff)}}>{item.isAvailable?'Yes':'No'}</button></td>
                           <td style={S.menuTd}>
