@@ -150,7 +150,11 @@ const AdminDashboard = () => {
     else if (activeTab==='info' && restaurant) { const h=(()=>{try{return JSON.parse(restaurant.openingHours||'{}');}catch{return {};}})(); setInfoForm({...restaurant,openingHoursObj:h}); }
   }, [activeTab, restaurant]);
 
-  const authFetch = (url, opts={}) => fetch(url, {...opts, headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`, ...opts.headers}});
+  const authFetch = async (url, opts={}) => {
+    const res = await fetch(url, {...opts, headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`, ...opts.headers}});
+    if (res.status === 401) { localStorage.clear(); navigate(`/${slug}/admin`); return res; }
+    return res;
+  };
   const showMsg = (m) => { setMsg(m); setTimeout(()=>setMsg(''), 3000); };
 
   const fetchStats = async () => {
@@ -162,14 +166,14 @@ const AdminDashboard = () => {
     } catch(e) { console.error(e); }
   };
 
-  const fetchOrders = async () => { try { const r=await authFetch(`${API}/Admin/orders`); setOrders(await r.json()); } catch(e){} };
-  const fetchReservations = async () => { try { const r=await authFetch(`${API}/Admin/reservations`); setReservations(await r.json()); } catch(e){} };
-  const fetchReviews = async () => { try { const r=await authFetch(`${API}/Admin/reviews`); setReviews(await r.json()); } catch(e){} };
-  const fetchCategories = async () => { try { const r=await authFetch(`${API}/Admin/menu-categories`); setCategories(await r.json()); } catch(e){} };
-  const fetchMenuItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); setMenuItems(await r.json()); } catch(e){} };
-  const fetchGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery`); setGallery(await r.json()); } catch(e){} };
-  const fetchWhyChooseUs = async () => { try { const r=await authFetch(`${API}/Admin/why-choose-us`); setWhyChooseUs(await r.json()); } catch(e){} };
-  const fetchArchivedGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery/archived`); setArchivedGallery(await r.json()); } catch(e){} };
+  const fetchOrders = async () => { try { const r=await authFetch(`${API}/Admin/orders`); const d=await r.json(); setOrders(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchReservations = async () => { try { const r=await authFetch(`${API}/Admin/reservations`); const d=await r.json(); setReservations(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchReviews = async () => { try { const r=await authFetch(`${API}/Admin/reviews`); const d=await r.json(); setReviews(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchCategories = async () => { try { const r=await authFetch(`${API}/Admin/menu-categories`); const d=await r.json(); setCategories(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchMenuItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); const d=await r.json(); setMenuItems(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery`); const d=await r.json(); setGallery(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchWhyChooseUs = async () => { try { const r=await authFetch(`${API}/Admin/why-choose-us`); const d=await r.json(); setWhyChooseUs(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchArchivedGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery/archived`); const d=await r.json(); setArchivedGallery(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchArchivedItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); const all=await r.json(); setArchivedItems(all.filter(i=>i.isArchived)); } catch(e){} };
 
   const archiveGalleryImage = async (id) => { await authFetch(`${API}/Admin/gallery/${id}/archive`,{method:'PUT'}); fetchGallery(); showMsg('✅ Archived!'); };
