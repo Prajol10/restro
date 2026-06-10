@@ -45,6 +45,18 @@ namespace RestroApi.Controllers
             };
             _context.Restaurants.Add(restaurant);
             await _context.SaveChangesAsync();
+
+            // Seed default WhyChooseUs items
+            var defaults = new List<WhyChooseUs>
+            {
+                new WhyChooseUs { RestaurantId = restaurant.Id, Icon = "🍽️", Title = "Authentic Flavors", Description = "Every dish is crafted with authentic recipes passed down through generations, bringing you the true taste of our cuisine.", SortOrder = 0, IsActive = true },
+                new WhyChooseUs { RestaurantId = restaurant.Id, Icon = "🌱", Title = "Fresh Ingredients", Description = "We source only the freshest, locally-grown ingredients daily to ensure every meal is of the highest quality.", SortOrder = 1, IsActive = true },
+                new WhyChooseUs { RestaurantId = restaurant.Id, Icon = "👨‍🍳", Title = "Expert Chefs", Description = "Our team of experienced chefs brings passion and expertise to every plate, turning simple ingredients into extraordinary meals.", SortOrder = 2, IsActive = true },
+                new WhyChooseUs { RestaurantId = restaurant.Id, Icon = "⭐", Title = "Exceptional Service", Description = "We pride ourselves on warm, attentive service that makes every visit a memorable dining experience.", SortOrder = 3, IsActive = true }
+            };
+            _context.WhyChooseUs.AddRange(defaults);
+            await _context.SaveChangesAsync();
+
             return Ok(restaurant);
         }
 
@@ -105,6 +117,27 @@ namespace RestroApi.Controllers
             _context.AdminUsers.Add(admin);
             await _context.SaveChangesAsync();
             return Ok(new { message = "Admin created successfully" });
+        }
+
+        // Backfill default WhyChooseUs for existing restaurants that have none
+        [HttpPost("restaurants/{id}/seed-why-choose-us")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> SeedWhyChooseUs(int id)
+        {
+            var r = await _context.Restaurants.FindAsync(id);
+            if (r == null) return NotFound();
+            if (await _context.WhyChooseUs.AnyAsync(w => w.RestaurantId == id))
+                return BadRequest("Already has Why Choose Us items");
+            var defaults = new List<WhyChooseUs>
+            {
+                new WhyChooseUs { RestaurantId = id, Icon = "🍽️", Title = "Authentic Flavors", Description = "Every dish is crafted with authentic recipes passed down through generations, bringing you the true taste of our cuisine.", SortOrder = 0, IsActive = true },
+                new WhyChooseUs { RestaurantId = id, Icon = "🌱", Title = "Fresh Ingredients", Description = "We source only the freshest, locally-grown ingredients daily to ensure every meal is of the highest quality.", SortOrder = 1, IsActive = true },
+                new WhyChooseUs { RestaurantId = id, Icon = "👨‍🍳", Title = "Expert Chefs", Description = "Our team of experienced chefs brings passion and expertise to every plate, turning simple ingredients into extraordinary meals.", SortOrder = 2, IsActive = true },
+                new WhyChooseUs { RestaurantId = id, Icon = "⭐", Title = "Exceptional Service", Description = "We pride ourselves on warm, attentive service that makes every visit a memorable dining experience.", SortOrder = 3, IsActive = true }
+            };
+            _context.WhyChooseUs.AddRange(defaults);
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Seeded 4 default items" });
         }
 
         [HttpPost("seed")]
