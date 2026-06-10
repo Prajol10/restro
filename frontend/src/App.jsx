@@ -18,22 +18,16 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/superadmin/login" element={<SuperAdminLogin />} />
         <Route path="/superadmin/dashboard" element={<SuperAdminDashboard />} />
-
         <Route path="/:slug" element={<TenantProvider><HomePage /></TenantProvider>} />
         <Route path="/:slug/menu" element={<TenantProvider><MenuPage /></TenantProvider>} />
         <Route path="/:slug/about" element={<TenantProvider><AboutPage /></TenantProvider>} />
         <Route path="/:slug/gallery" element={<TenantProvider><GalleryPage /></TenantProvider>} />
         <Route path="/:slug/contact" element={<TenantProvider><ContactPage /></TenantProvider>} />
-
         <Route path="/:slug/admin" element={<AdminLogin />} />
-        <Route path="/:slug/*/admin" element={<AdminLogin />} />
-        <Route path="/:slug/admin/dashboard" element={
-          <TenantProvider>
-            <AdminDashboard />
-          </TenantProvider>
-        } />
+        <Route path="/:slug/admin/dashboard" element={<TenantProvider><AdminDashboard /></TenantProvider>} />
       </Routes>
     </BrowserRouter>
   );
 }
+
 export default App;
