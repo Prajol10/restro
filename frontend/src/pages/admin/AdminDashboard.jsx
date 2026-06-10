@@ -179,8 +179,7 @@ const AdminDashboard = () => {
   const fetchMenuItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); const d=await r.json(); setMenuItems(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery`); const d=await r.json(); setGallery(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchAwards = async () => { try { const r=await authFetch(`${API}/Admin/awards`); const d=await r.json(); setAwards(Array.isArray(d)?d:[]); } catch(e){} };
-  const fetchAwards = async () => { try { const r=await authFetch(`${API}/Admin/awards`); const d=await r.json(); setAwards(Array.isArray(d)?d:[]); } catch(e){} };
-  const fetchWhyChooseUs = async () => { try { const r=await authFetch(`${API}/Admin/why-choose-us`); const d=await r.json(); setWhyChooseUs(Array.isArray(d)?d:[]); } catch(e){} };
+    const fetchWhyChooseUs = async () => { try { const r=await authFetch(`${API}/Admin/why-choose-us`); const d=await r.json(); setWhyChooseUs(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchArchivedGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery/archived`); const d=await r.json(); setArchivedGallery(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchArchivedItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); const all=await r.json(); setArchivedItems(all.filter(i=>i.isArchived)); } catch(e){} };
 
