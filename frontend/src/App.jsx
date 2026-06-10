@@ -26,6 +26,7 @@ function App() {
         <Route path="/:slug/contact" element={<TenantProvider><ContactPage /></TenantProvider>} />
 
         <Route path="/:slug/admin" element={<AdminLogin />} />
+        <Route path="/:slug/*/admin" element={<AdminLogin />} />
         <Route path="/:slug/admin/dashboard" element={
           <TenantProvider>
             <AdminDashboard />
