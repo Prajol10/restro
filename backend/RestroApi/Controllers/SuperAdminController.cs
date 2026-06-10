@@ -34,9 +34,9 @@ namespace RestroApi.Controllers
             {
                 Name = dto.Name, Subdomain = dto.Subdomain.ToLower(),
                 LogoUrl = dto.LogoUrl, BannerUrl = dto.BannerUrl, VideoUrl = dto.VideoUrl,
-                PrimaryColor = dto.PrimaryColor ?? "#1a1a1a",
-                AccentColor = dto.AccentColor ?? "#C9A84C",
-                BgColor = dto.BgColor ?? "#0d0d0d",
+                PrimaryColor = !string.IsNullOrEmpty(dto.PrimaryColor) ? dto.PrimaryColor : "#1a1a1a",
+                AccentColor = !string.IsNullOrEmpty(dto.AccentColor) ? dto.AccentColor : "#C9A84C",
+                BgColor = !string.IsNullOrEmpty(dto.BgColor) ? dto.BgColor : "#0d0d0d",
                 Tagline = dto.Tagline, HeroTitle = dto.HeroTitle,
                 Address = dto.Address, Phone = dto.Phone, Email = dto.Email,
                 FacebookUrl = dto.FacebookUrl, InstagramUrl = dto.InstagramUrl,
@@ -58,9 +58,9 @@ namespace RestroApi.Controllers
             r.LogoUrl = dto.LogoUrl != null ? dto.LogoUrl : r.LogoUrl;
             r.BannerUrl = dto.BannerUrl != null ? dto.BannerUrl : r.BannerUrl;
             r.VideoUrl = dto.VideoUrl != null ? dto.VideoUrl : r.VideoUrl;
-            r.PrimaryColor = dto.PrimaryColor ?? r.PrimaryColor;
-            r.AccentColor = dto.AccentColor ?? r.AccentColor;
-            r.BgColor = dto.BgColor ?? r.BgColor;
+            r.PrimaryColor = !string.IsNullOrEmpty(dto.PrimaryColor) ? dto.PrimaryColor : r.PrimaryColor;
+            r.AccentColor = !string.IsNullOrEmpty(dto.AccentColor) ? dto.AccentColor : r.AccentColor;
+            r.BgColor = !string.IsNullOrEmpty(dto.BgColor) ? dto.BgColor : r.BgColor;
             r.Tagline = dto.Tagline != null ? dto.Tagline : r.Tagline;
             r.HeroTitle = dto.HeroTitle != null ? dto.HeroTitle : r.HeroTitle;
             r.HeroSubtitle = dto.HeroSubtitle != null ? dto.HeroSubtitle : r.HeroSubtitle;
