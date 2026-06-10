@@ -441,10 +441,6 @@ export default function SuperAdminDashboard() {
                       </div>
                     )}
                   </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
 
                   <hr style={S.divider} />
 
