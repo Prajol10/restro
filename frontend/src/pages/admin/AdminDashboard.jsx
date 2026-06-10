@@ -23,6 +23,8 @@ const AdminDashboard = () => {
   const [archivedGallery, setArchivedGallery] = useState([]);
   const [archivedItems, setArchivedItems] = useState([]);
   const [whyChooseUs, setWhyChooseUs] = useState([]);
+  const [awards, setAwards] = useState([]);
+  const [awards, setAwards] = useState([]);
 
   const [showCatForm, setShowCatForm] = useState(false);
   const [editingCat, setEditingCat] = useState(null);
@@ -41,6 +43,12 @@ const AdminDashboard = () => {
   const [filePicker, setFilePicker] = useState(null);
 
   const [showWhyChooseUsForm, setShowWhyChooseUsForm] = useState(false);
+  const [showAwardForm, setShowAwardForm] = useState(false);
+  const [editingAward, setEditingAward] = useState(null);
+  const [awardForm, setAwardForm] = useState({ icon:"🏆", title:"", organization:"", year:"", description:"", sortOrder:0 });
+  const [showAwardForm, setShowAwardForm] = useState(false);
+  const [editingAward, setEditingAward] = useState(null);
+  const [awardForm, setAwardForm] = useState({ icon:"🏆", title:"", organization:"", year:"", description:"", sortOrder:0 });
   const [editingWhyChooseUs, setEditingWhyChooseUs] = useState(null);
   const [whyChooseUsForm, setWhyChooseUsForm] = useState({ icon:'', title:'', description:'', sortOrder:0 });
 
@@ -127,7 +135,7 @@ const AdminDashboard = () => {
     { label:'Overview', tabs:[{ id:'dashboard', label:'Dashboard' }] },
     { label:'Restaurant Management', tabs:[{ id:'orders', label:'Orders' }, { id:'reservations', label:'Reservations' }, { id:'reviews', label:'Reviews' }] },
     { label:'Menu Management', tabs:[{ id:'menu', label:'Menu' }] },
-    { label:'CMS Content', tabs:[{ id:'about-us', label:'About Us' }, { id:'why-choose-us', label:'Why Choose Us' }, { id:'gallery', label:'Gallery' }] },
+    { label:'CMS Content', tabs:[{ id:'about-us', label:'About Us' }, { id:'why-choose-us', label:'Why Choose Us' }, { id:'awards', label:'Awards & Recognition' }, { id:'gallery', label:'Gallery' }] },
     { label:'Site Management', tabs:[{ id:'info', label:'Restaurant Info' }, { id:'filemanager', label:'Files' }, { id:'archive', label:'Archive' }] },
   ];
 
@@ -146,6 +154,8 @@ const AdminDashboard = () => {
     else if (activeTab==='gallery') fetchGallery();
     else if (activeTab==='archive') { fetchArchivedGallery(); fetchArchivedItems(); }
     else if (activeTab==='why-choose-us') fetchWhyChooseUs();
+    else if (activeTab==='awards') fetchAwards();
+    else if (activeTab==='awards') fetchAwards();
     else if (activeTab==='about-us' && restaurant) { setAboutForm({ aboutText:restaurant.aboutText||'', aboutShort:restaurant.aboutShort||'', aboutImageUrl:restaurant.aboutImageUrl||'' }); setEditingAbout(false); }
     else if (activeTab==='info' && restaurant) { const h=(()=>{try{return JSON.parse(restaurant.openingHours||'{}');}catch{return {};}})(); setInfoForm({...restaurant,openingHoursObj:h}); }
   }, [activeTab, restaurant]);
@@ -172,6 +182,8 @@ const AdminDashboard = () => {
   const fetchCategories = async () => { try { const r=await authFetch(`${API}/Admin/menu-categories`); const d=await r.json(); setCategories(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchMenuItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); const d=await r.json(); setMenuItems(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery`); const d=await r.json(); setGallery(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchAwards = async () => { try { const r=await authFetch(`${API}/Admin/awards`); const d=await r.json(); setAwards(Array.isArray(d)?d:[]); } catch(e){} };
+  const fetchAwards = async () => { try { const r=await authFetch(`${API}/Admin/awards`); const d=await r.json(); setAwards(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchWhyChooseUs = async () => { try { const r=await authFetch(`${API}/Admin/why-choose-us`); const d=await r.json(); setWhyChooseUs(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchArchivedGallery = async () => { try { const r=await authFetch(`${API}/Admin/gallery/archived`); const d=await r.json(); setArchivedGallery(Array.isArray(d)?d:[]); } catch(e){} };
   const fetchArchivedItems = async () => { try { const r=await authFetch(`${API}/Admin/menu-items`); const all=await r.json(); setArchivedItems(all.filter(i=>i.isArchived)); } catch(e){} };
@@ -251,6 +263,36 @@ const AdminDashboard = () => {
   const toggleMenuItemSpecial = async (id, isSpecial) => {
     try { await authFetch(`${API}/Admin/menu-items/${id}`,{method:'PUT',body:JSON.stringify({isSpecial:!isSpecial})}); fetchMenuItems(); showMsg(`✅ ${!isSpecial?'Marked as Special':'Unmarked as Special'}`); }
     catch(e) { showMsg('❌ Failed to update'); }
+  };
+
+  const saveAward = async (e) => {
+    e.preventDefault();
+    const url = editingAward ? `${API}/Admin/awards/${editingAward.id}` : `${API}/Admin/awards`;
+    await authFetch(url, {method:editingAward?'PUT':'POST', body:JSON.stringify(awardForm)});
+    setShowAwardForm(false); setEditingAward(null);
+    setAwardForm({icon:'🏆',title:'',organization:'',year:'',description:'',sortOrder:0});
+    fetchAwards(); showMsg('✅ Award saved!');
+  };
+
+  const deleteAward = async (awardId) => {
+    if(!window.confirm('Delete award?')) return;
+    await authFetch(`${API}/Admin/awards/${awardId}`,{method:'DELETE'});
+    fetchAwards(); showMsg('✅ Deleted!');
+  };
+
+  const saveAward = async (e) => {
+    e.preventDefault();
+    const url = editingAward ? `${API}/Admin/awards/${editingAward.id}` : `${API}/Admin/awards`;
+    await authFetch(url, {method:editingAward?'PUT':'POST', body:JSON.stringify(awardForm)});
+    setShowAwardForm(false); setEditingAward(null);
+    setAwardForm({icon:'🏆',title:'',organization:'',year:'',description:'',sortOrder:0});
+    fetchAwards(); showMsg('✅ Award saved!');
+  };
+
+  const deleteAward = async (awardId) => {
+    if(!window.confirm('Delete award?')) return;
+    await authFetch(`${API}/Admin/awards/${awardId}`,{method:'DELETE'});
+    fetchAwards(); showMsg('✅ Deleted!');
   };
 
   const saveWhyChooseUs = async (e) => {
@@ -691,6 +733,108 @@ const AdminDashboard = () => {
                         <span style={{fontSize:'12px',color:'rgba(255,255,255,0.4)'}}>Order: {item.sortOrder}</span>
                         <button onClick={()=>archiveWhyChooseUs(item.id)} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(251,191,36,0.6)',fontSize:'12px',padding:'4px 8px'}}>Archive</button>
                       </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab==='awards' && (
+          <div>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'24px'}}>
+              <h1 style={S.pageTitle}>Awards & Recognition</h1>
+              <button onClick={()=>{setShowAwardForm(!showAwardForm);setEditingAward(null);setAwardForm({icon:'🏆',title:'',organization:'',year:'',description:'',sortOrder:0});}} style={S.btnPrimary(accent)}>{showAwardForm?'Cancel':'+ Add Award'}</button>
+            </div>
+            {showAwardForm&&(
+              <div style={{...S.card,marginBottom:'16px'}}>
+                <p style={{fontWeight:700,color:'#fff',fontSize:'14px',marginBottom:'16px'}}>{editingAward?'Edit Award':'New Award'}</p>
+                <form onSubmit={saveAward}>
+                  <div style={S.grid2}>
+                    <div><label style={S.label}>Icon (emoji)</label><input value={awardForm.icon} onChange={e=>setAwardForm({...awardForm,icon:e.target.value})} placeholder="🏆 🥇 ⭐" style={S.input} /></div>
+                    <div><label style={S.label}>Year</label><input value={awardForm.year} onChange={e=>setAwardForm({...awardForm,year:e.target.value})} placeholder="2024" style={S.input} /></div>
+                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Title *</label><input value={awardForm.title} onChange={e=>setAwardForm({...awardForm,title:e.target.value})} required placeholder="Best Restaurant Award" style={S.input} /></div>
+                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Organization</label><input value={awardForm.organization} onChange={e=>setAwardForm({...awardForm,organization:e.target.value})} placeholder="Nepal Restaurant Association" style={S.input} /></div>
+                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Description</label><textarea value={awardForm.description} onChange={e=>setAwardForm({...awardForm,description:e.target.value})} rows={3} placeholder="Brief description of the award..." style={S.textarea} /></div>
+                    <div><label style={S.label}>Sort Order</label><input type="number" value={awardForm.sortOrder} onChange={e=>setAwardForm({...awardForm,sortOrder:parseInt(e.target.value)||0})} style={S.input} /></div>
+                  </div>
+                  <div style={{display:'flex',gap:'8px',marginTop:'16px'}}>
+                    <button type="submit" style={S.btnPrimary(accent)}>Save Award</button>
+                    <button type="button" onClick={()=>{setShowAwardForm(false);setEditingAward(null);}} style={S.btnOutline}>Cancel</button>
+                  </div>
+                </form>
+              </div>
+            )}
+            {awards.length===0?(
+              <div style={S.empty}><p style={{fontSize:'40px',marginBottom:'12px'}}>🏆</p><p>No awards yet — click "+ Add Award" to add</p></div>
+            ):(
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(320px, 1fr))',gap:'20px'}}>
+                {awards.map(item=>(
+                  <div key={item.id} style={{...S.card,display:'flex',gap:'16px'}}>
+                    <div style={{fontSize:'2.5rem',flexShrink:0}}>{item.icon||'🏆'}</div>
+                    <div style={{flex:1}}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'6px'}}>
+                        <h3 style={{fontWeight:700,color:'#fff',fontSize:'15px',lineHeight:1.3}}>{item.title}</h3>
+                        <div style={{display:'flex',gap:'6px',marginLeft:'8px',flexShrink:0}}>
+                          <button onClick={()=>{setEditingAward(item);setAwardForm({icon:item.icon||'🏆',title:item.title,organization:item.organization||'',year:item.year||'',description:item.description||'',sortOrder:item.sortOrder});setShowAwardForm(true);window.scrollTo({top:0,behavior:'smooth'});}} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(255,255,255,0.4)',fontSize:'13px',padding:'4px 6px'}}>✏️</button>
+                          <button onClick={()=>deleteAward(item.id)} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(239,68,68,0.4)',fontSize:'13px',padding:'4px 6px'}}>🗑</button>
+                        </div>
+                      </div>
+                      {item.organization&&<p style={{color:'rgba(255,255,255,0.5)',fontSize:'12px',marginBottom:'4px'}}>🏛 {item.organization}</p>}
+                      {item.year&&<p style={{color:accent,fontSize:'12px',fontWeight:700,marginBottom:'6px'}}>📅 {item.year}</p>}
+                      {item.description&&<p style={{color:'rgba(255,255,255,0.65)',fontSize:'13px',lineHeight:1.5}}>{item.description}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab==='awards' && (
+          <div>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'24px'}}>
+              <h1 style={S.pageTitle}>Awards & Recognition</h1>
+              <button onClick={()=>{setShowAwardForm(!showAwardForm);setEditingAward(null);setAwardForm({icon:'🏆',title:'',organization:'',year:'',description:'',sortOrder:0});}} style={S.btnPrimary(accent)}>{showAwardForm?'Cancel':'+ Add Award'}</button>
+            </div>
+            {showAwardForm&&(
+              <div style={{...S.card,marginBottom:'16px'}}>
+                <p style={{fontWeight:700,color:'#fff',fontSize:'14px',marginBottom:'16px'}}>{editingAward?'Edit Award':'New Award'}</p>
+                <form onSubmit={saveAward}>
+                  <div style={S.grid2}>
+                    <div><label style={S.label}>Icon (emoji)</label><input value={awardForm.icon} onChange={e=>setAwardForm({...awardForm,icon:e.target.value})} placeholder="🏆 🥇 ⭐" style={S.input} /></div>
+                    <div><label style={S.label}>Year</label><input value={awardForm.year} onChange={e=>setAwardForm({...awardForm,year:e.target.value})} placeholder="2024" style={S.input} /></div>
+                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Title *</label><input value={awardForm.title} onChange={e=>setAwardForm({...awardForm,title:e.target.value})} required placeholder="Best Restaurant Award" style={S.input} /></div>
+                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Organization</label><input value={awardForm.organization} onChange={e=>setAwardForm({...awardForm,organization:e.target.value})} placeholder="Nepal Restaurant Association" style={S.input} /></div>
+                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Description</label><textarea value={awardForm.description} onChange={e=>setAwardForm({...awardForm,description:e.target.value})} rows={3} placeholder="Brief description of the award..." style={S.textarea} /></div>
+                    <div><label style={S.label}>Sort Order</label><input type="number" value={awardForm.sortOrder} onChange={e=>setAwardForm({...awardForm,sortOrder:parseInt(e.target.value)||0})} style={S.input} /></div>
+                  </div>
+                  <div style={{display:'flex',gap:'8px',marginTop:'16px'}}>
+                    <button type="submit" style={S.btnPrimary(accent)}>Save Award</button>
+                    <button type="button" onClick={()=>{setShowAwardForm(false);setEditingAward(null);}} style={S.btnOutline}>Cancel</button>
+                  </div>
+                </form>
+              </div>
+            )}
+            {awards.length===0?(
+              <div style={S.empty}><p style={{fontSize:'40px',marginBottom:'12px'}}>🏆</p><p>No awards yet — click "+ Add Award" to add</p></div>
+            ):(
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(320px, 1fr))',gap:'20px'}}>
+                {awards.map(item=>(
+                  <div key={item.id} style={{...S.card,display:'flex',gap:'16px'}}>
+                    <div style={{fontSize:'2.5rem',flexShrink:0}}>{item.icon||'🏆'}</div>
+                    <div style={{flex:1}}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'6px'}}>
+                        <h3 style={{fontWeight:700,color:'#fff',fontSize:'15px',lineHeight:1.3}}>{item.title}</h3>
+                        <div style={{display:'flex',gap:'6px',marginLeft:'8px',flexShrink:0}}>
+                          <button onClick={()=>{setEditingAward(item);setAwardForm({icon:item.icon||'🏆',title:item.title,organization:item.organization||'',year:item.year||'',description:item.description||'',sortOrder:item.sortOrder});setShowAwardForm(true);window.scrollTo({top:0,behavior:'smooth'});}} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(255,255,255,0.4)',fontSize:'13px',padding:'4px 6px'}}>✏️</button>
+                          <button onClick={()=>deleteAward(item.id)} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(239,68,68,0.4)',fontSize:'13px',padding:'4px 6px'}}>🗑</button>
+                        </div>
+                      </div>
+                      {item.organization&&<p style={{color:'rgba(255,255,255,0.5)',fontSize:'12px',marginBottom:'4px'}}>🏛 {item.organization}</p>}
+                      {item.year&&<p style={{color:accent,fontSize:'12px',fontWeight:700,marginBottom:'6px'}}>📅 {item.year}</p>}
+                      {item.description&&<p style={{color:'rgba(255,255,255,0.65)',fontSize:'13px',lineHeight:1.5}}>{item.description}</p>}
                     </div>
                   </div>
                 ))}
