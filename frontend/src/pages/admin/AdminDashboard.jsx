@@ -24,7 +24,6 @@ const AdminDashboard = () => {
   const [archivedItems, setArchivedItems] = useState([]);
   const [whyChooseUs, setWhyChooseUs] = useState([]);
   const [awards, setAwards] = useState([]);
-  const [awards, setAwards] = useState([]);
 
   const [showCatForm, setShowCatForm] = useState(false);
   const [editingCat, setEditingCat] = useState(null);
@@ -43,9 +42,6 @@ const AdminDashboard = () => {
   const [filePicker, setFilePicker] = useState(null);
 
   const [showWhyChooseUsForm, setShowWhyChooseUsForm] = useState(false);
-  const [showAwardForm, setShowAwardForm] = useState(false);
-  const [editingAward, setEditingAward] = useState(null);
-  const [awardForm, setAwardForm] = useState({ icon:"🏆", title:"", organization:"", year:"", description:"", sortOrder:0 });
   const [showAwardForm, setShowAwardForm] = useState(false);
   const [editingAward, setEditingAward] = useState(null);
   const [awardForm, setAwardForm] = useState({ icon:"🏆", title:"", organization:"", year:"", description:"", sortOrder:0 });
@@ -263,21 +259,6 @@ const AdminDashboard = () => {
   const toggleMenuItemSpecial = async (id, isSpecial) => {
     try { await authFetch(`${API}/Admin/menu-items/${id}`,{method:'PUT',body:JSON.stringify({isSpecial:!isSpecial})}); fetchMenuItems(); showMsg(`✅ ${!isSpecial?'Marked as Special':'Unmarked as Special'}`); }
     catch(e) { showMsg('❌ Failed to update'); }
-  };
-
-  const saveAward = async (e) => {
-    e.preventDefault();
-    const url = editingAward ? `${API}/Admin/awards/${editingAward.id}` : `${API}/Admin/awards`;
-    await authFetch(url, {method:editingAward?'PUT':'POST', body:JSON.stringify(awardForm)});
-    setShowAwardForm(false); setEditingAward(null);
-    setAwardForm({icon:'🏆',title:'',organization:'',year:'',description:'',sortOrder:0});
-    fetchAwards(); showMsg('✅ Award saved!');
-  };
-
-  const deleteAward = async (awardId) => {
-    if(!window.confirm('Delete award?')) return;
-    await authFetch(`${API}/Admin/awards/${awardId}`,{method:'DELETE'});
-    fetchAwards(); showMsg('✅ Deleted!');
   };
 
   const saveAward = async (e) => {
