@@ -18,6 +18,7 @@ namespace RestroApi.Data
         public DbSet<GalleryImage> GalleryImages { get; set; }
         public DbSet<AdminUser> AdminUsers { get; set; }
         public DbSet<WhyChooseUs> WhyChooseUs { get; set; }
+        public DbSet<Award> Awards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,10 @@ namespace RestroApi.Data
                 .IsUnique();
 
             // WhyChooseUs constraints
+            modelBuilder.Entity<Award>()
+                .HasIndex(a => new { a.RestaurantId, a.Title })
+                .IsUnique();
+
             modelBuilder.Entity<WhyChooseUs>()
                 .HasIndex(wcu => new { wcu.RestaurantId, wcu.Title })
                 .IsUnique();

@@ -372,6 +372,51 @@ namespace RestroApi.Controllers
             await _context.SaveChangesAsync();
             return Ok(item);
         }
+
+        // Awards
+        [HttpGet("awards")]
+        public async Task<IActionResult> GetAwards()
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            return Ok(await _context.Awards.Where(a => a.RestaurantId == id).OrderBy(a => a.SortOrder).ToListAsync());
+        }
+
+        [HttpPost("awards")]
+        public async Task<IActionResult> CreateAward([FromBody] AwardDto dto)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = new Award { RestaurantId = id.Value, Icon = dto.Icon ?? "🏆", Title = dto.Title, Organization = dto.Organization, Year = dto.Year, Description = dto.Description, SortOrder = dto.SortOrder, IsActive = true };
+            _context.Awards.Add(item);
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
+        [HttpPut("awards/{itemId}")]
+        public async Task<IActionResult> UpdateAward(int itemId, [FromBody] AwardDto dto)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = await _context.Awards.FirstOrDefaultAsync(a => a.Id == itemId && a.RestaurantId == id);
+            if (item == null) return NotFound();
+            item.Icon = dto.Icon ?? item.Icon;
+            item.Title = dto.Title ?? item.Title;
+            item.Organization = dto.Organization ?? item.Organization;
+            item.Year = dto.Year ?? item.Year;
+            item.Description = dto.Description ?? item.Description;
+            item.SortOrder = dto.SortOrder;
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
+        [HttpDelete("awards/{itemId}")]
+        public async Task<IActionResult> DeleteAward(int itemId)
+        {
+            var id = GetRestaurantId(); if (id == null) return Unauthorized();
+            var item = await _context.Awards.FirstOrDefaultAsync(a => a.Id == itemId && a.RestaurantId == id);
+            if (item == null) return NotFound();
+            _context.Awards.Remove(item);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 
     public class UpdateRestaurantDto
@@ -436,6 +481,16 @@ namespace RestroApi.Controllers
         public string? Caption { get; set; }
         public int SortOrder { get; set; } = 0;
     }
+    public class AwardDto
+    {
+        public string? Icon { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Organization { get; set; }
+        public string? Year { get; set; }
+        public string? Description { get; set; }
+        public int SortOrder { get; set; } = 0;
+    }
+
     public class AdminReviewDto
     {
         public string CustomerName { get; set; } = string.Empty;

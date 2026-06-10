@@ -38,5 +38,6 @@ namespace RestroApi.Models
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<GalleryImage> GalleryImages { get; set; } = new List<GalleryImage>();
         public ICollection<AdminUser> AdminUsers { get; set; } = new List<AdminUser>();
+        public ICollection<Award> Awards { get; set; } = new List<Award>();
     }
 }
