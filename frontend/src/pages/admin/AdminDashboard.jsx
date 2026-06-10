@@ -76,20 +76,22 @@ const AdminDashboard = () => {
   const S = {
     page: { display:'flex', minHeight:'100vh', backgroundColor:'#000 !important' },
     sidebar: { width:'240px', backgroundColor:'#0d0d0d', borderRight:'1px solid rgba(255,255,255,0.05)', display:'flex', flexDirection:'column', padding:'24px 16px', flexShrink:0 },
-    sidebarTop: { marginBottom:'32px', textAlign:'center' },
+    sidebarTop: { marginBottom:'24px', marginTop:'8px', textAlign:'center' },
     sidebarName: { color:'#fff', fontSize:'16px', fontWeight:700, marginTop:'12px' },
     sidebarRole: { color:'rgba(255,255,255,0.4)', fontSize:'12px', marginTop:'4px' },
     nav: { flex:1 },
     navBtn: (active) => ({
       width:'100%', display:'flex', alignItems:'center', padding:'10px 16px',
-      backgroundColor: active ? 'rgba(255,255,255,0.05)' : 'transparent',
-      border:'none', borderRadius:'8px', color: active ? '#fff' : 'rgba(255,255,255,0.5)',
-      cursor:'pointer', fontSize:'13px', fontWeight:600, marginBottom:'2px',
+      backgroundColor: active ? 'rgba(255,255,255,0.08)' : 'transparent',
+      border: active ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+      borderRadius:'8px', color: active ? '#fff' : 'rgba(255,255,255,0.75)',
+      cursor:'pointer', fontSize:'13px', fontWeight: active ? 700 : 500, marginBottom:'2px',
       transition:'all 0.2s', textAlign:'left'
     }),
     navSection: {
       fontSize:'10px', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase',
-      color:'rgba(255,255,255,0.2)', padding:'14px 16px 4px', marginTop:'4px'
+      color:'rgba(255,255,255,0.4)', padding:'14px 16px 6px', marginTop:'8px',
+      borderTop:'1px solid rgba(255,255,255,0.05)'
     },
     sidebarBottom: { marginTop:'auto' },
     main: { flex:1, padding:'32px 48px', overflowY:'auto' },
