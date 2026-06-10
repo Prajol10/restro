@@ -95,15 +95,25 @@ const HomePage = () => {
           <p style={S.label}>OUR STORY</p>
           <h2 style={S.title}>About Us</h2>
           <div style={{...S.divider, marginBottom: '32px'}} />
-          <div style={{ display: 'grid', gridTemplateColumns: restaurant.aboutImageUrl ? '1fr 1fr' : '1fr', gap: '48px', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: restaurant.aboutImageUrl ? '1fr 1fr' : '1fr', gap: '64px', alignItems: 'center' }}>
             <div>
-              <p style={{...S.desc, lineHeight: '1.8', marginBottom: '24px'}}>
-                {restaurant.aboutShort || (restaurant.aboutText ? restaurant.aboutText.substring(0, 300) + '...' : 'Welcome to our restaurant.')}
-              </p>
+              {restaurant.aboutShort && (
+                <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '24px', borderLeft: `3px solid ${accent}`, paddingLeft: '20px' }}>
+                  {restaurant.aboutShort}
+                </p>
+              )}
+              {restaurant.aboutText && (
+                <p style={{...S.desc, lineHeight: '2', marginBottom: '32px', whiteSpace: 'pre-line'}}>
+                  {restaurant.aboutText}
+                </p>
+              )}
+              {!restaurant.aboutShort && !restaurant.aboutText && (
+                <p style={{...S.desc, lineHeight: '1.8', marginBottom: '24px'}}>Welcome to our restaurant.</p>
+              )}
               <span onClick={() => navigate(`/${slug}/about`)} style={S.link}>Learn More →</span>
             </div>
             {restaurant.aboutImageUrl && (
-              <img src={restaurant.aboutImageUrl} alt="About Us" style={{ width: '100%', borderRadius: '8px' }} />
+              <img src={restaurant.aboutImageUrl} alt="About Us" style={{ width: '100%', borderRadius: '8px', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }} />
             )}
           </div>
         </div>
