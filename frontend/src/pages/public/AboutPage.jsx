@@ -99,7 +99,7 @@ const AboutPage = () => {
         </section>
 
         {/* CTA */}
-        <section style={{ backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: '80px 0', textAlign: 'center' }}>
+        <section style={{ backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: '80px 0', textAlign: 'center', color: '#fff' }}>
           <div style={S.container}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: '#fff', marginBottom: '24px' }}>
               Visit Us Today

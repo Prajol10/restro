@@ -60,6 +60,10 @@ const AdminDashboard = () => {
   const [reservationStatusFilter, setReservationStatusFilter] = useState('all');
 
   const accent = restaurant?.accentColor || '#C9A84C';
+  // Admin always uses dark theme regardless of restaurant colors
+  const adminBg = '#000';
+  const adminSidebarBg = '#0d0d0d';
+  const adminCardBg = '#111';
   const DAYS = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
   const API = import.meta.env.VITE_API_URL || 'http://localhost:5240/api';
   const STATUS_BADGE = {
@@ -70,8 +74,8 @@ const AdminDashboard = () => {
   };
 
   const S = {
-    page: { display:'flex', minHeight:'100vh', backgroundColor:'#000' },
-    sidebar: { width:'240px', backgroundColor:'#0d0d0d', borderRight:'1px solid rgba(255,255,255,0.05)', display:'flex', flexDirection:'column', padding:'24px 16px' },
+    page: { display:'flex', minHeight:'100vh', backgroundColor:'#000 !important' },
+    sidebar: { width:'240px', backgroundColor:'#0d0d0d', borderRight:'1px solid rgba(255,255,255,0.05)', display:'flex', flexDirection:'column', padding:'24px 16px', flexShrink:0 },
     sidebarTop: { marginBottom:'32px', textAlign:'center' },
     sidebarName: { color:'#fff', fontSize:'16px', fontWeight:700, marginTop:'12px' },
     sidebarRole: { color:'rgba(255,255,255,0.4)', fontSize:'12px', marginTop:'4px' },

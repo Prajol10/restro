@@ -76,7 +76,7 @@ const MenuPage = () => {
 
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
-    section: { padding: '100px 0' },
+    section: { padding: '100px 0', backgroundColor: bg },
     container: { maxWidth: '1280px', margin: '0 auto', padding: '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
