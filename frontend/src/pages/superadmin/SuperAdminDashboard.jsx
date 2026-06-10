@@ -151,7 +151,11 @@ export default function SuperAdminDashboard() {
         method, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ ...form, subdomain: form.subdomain.toLowerCase().replace(/[^a-z0-9]/g, '') })
       });
-      if (!res.ok) { const d = await res.json(); throw new Error(d.message || 'Failed'); }
+      if (!res.ok) {
+        let errMsg = 'Failed';
+        try { const d = await res.json(); errMsg = d.message || errMsg; } catch {}
+        throw new Error(errMsg);
+      }
       setMsg(editing ? '✅ Restaurant updated!' : '✅ Restaurant created!');
       setShowForm(false); setEditing(null); setForm(defaultForm);
       fetchRestaurants();

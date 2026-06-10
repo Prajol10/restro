@@ -11,7 +11,7 @@ const AboutPage = () => {
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
     section: { padding: '100px 0' },
-    darkSection: { padding: '100px 0', backgroundColor: '#111' },
+    darkSection: { padding: '100px 0', backgroundColor: restaurant?.primaryColor || '#111' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: '0 48px' },
     label: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     title: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
@@ -26,7 +26,7 @@ const AboutPage = () => {
         <div style={{
           height: '60vh', position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: '#111',
+          backgroundColor: restaurant?.primaryColor || '#111',
           backgroundImage: restaurant.aboutImageUrl ? `url(${restaurant.aboutImageUrl})` : 'none',
           backgroundSize: 'cover', backgroundPosition: 'center'
         }}>
@@ -72,7 +72,7 @@ const AboutPage = () => {
             <div style={S.divider} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '32px' }}>
               {whyChooseUs && whyChooseUs.length > 0 ? whyChooseUs.map(item => (
-                <div key={item.id} style={{ backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}
+                <div key={item.id} style={{ backgroundColor: restaurant?.bgColor || '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = accent}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'}>
                   {item.icon && <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{item.icon}</div>}
@@ -86,7 +86,7 @@ const AboutPage = () => {
                  { icon: '👨‍🍳', title: 'Expert Chefs', desc: 'Our skilled chefs bring years of experience and passion to every dish.' },
                  { icon: '🍷', title: 'Premium Experience', desc: 'From ambiance to service, we ensure every visit is memorable.' }
                 ].map((item, i) => (
-                  <div key={i} style={{ backgroundColor: '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}>
+                  <div key={i} style={{ backgroundColor: restaurant?.bgColor || '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}>
                     <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{item.icon}</div>
                     <div style={{ width: '32px', height: '2px', backgroundColor: accent, margin: '0 auto 16px' }} />
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>{item.title}</h3>

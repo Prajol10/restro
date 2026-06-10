@@ -73,6 +73,7 @@ const MenuPage = () => {
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
+  const primary = restaurant?.primaryColor || '#111';
 
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
@@ -86,7 +87,7 @@ const MenuPage = () => {
     searchInput: {
       width: '100%',
       padding: '12px 20px',
-      backgroundColor: '#0d0d0d',
+      backgroundColor: bg,
       border: '1px solid rgba(255,255,255,0.1)',
       color: '#fff',
       fontFamily: "'Inter', sans-serif",
@@ -96,7 +97,7 @@ const MenuPage = () => {
     controls: { display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' },
     categorySelect: {
       padding: '12px 20px',
-      backgroundColor: '#0d0d0d',
+      backgroundColor: bg,
       border: '1px solid rgba(255,255,255,0.1)',
       color: '#fff',
       fontFamily: "'Inter', sans-serif",
@@ -394,7 +395,7 @@ const MenuPage = () => {
       {showCart && (
         <div style={{ position:'fixed', inset:0, zIndex:1000 }}>
           <div onClick={() => setShowCart(false)} style={{ position:'absolute', inset:0, backgroundColor:'rgba(0,0,0,0.6)' }} />
-          <div style={{ position:'absolute', right:0, top:0, bottom:0, width:'420px', maxWidth:'100vw', backgroundColor:'#111', borderLeft:'1px solid rgba(255,255,255,0.08)', display:'flex', flexDirection:'column', padding:'32px 24px', overflowY:'auto' }}>
+          <div style={{ position:'absolute', right:0, top:0, bottom:0, width:'420px', maxWidth:'100vw', backgroundColor:primary, borderLeft:'1px solid rgba(255,255,255,0.08)', display:'flex', flexDirection:'column', padding:'32px 24px', overflowY:'auto' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'24px' }}>
               <h2 style={{ color:'#fff', fontFamily:"'Playfair Display',serif", fontSize:'1.5rem', fontWeight:900 }}>Your Order</h2>
               <button onClick={() => setShowCart(false)} style={{ background:'none', border:'none', color:'rgba(255,255,255,0.5)', fontSize:'20px', cursor:'pointer' }}>✕</button>
@@ -439,7 +440,7 @@ const MenuPage = () => {
       {showCheckout && (
         <div style={{ position:'fixed', inset:0, zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:'24px' }}>
           <div onClick={() => setShowCheckout(false)} style={{ position:'absolute', inset:0, backgroundColor:'rgba(0,0,0,0.7)' }} />
-          <div style={{ position:'relative', backgroundColor:'#111', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'40px', width:'100%', maxWidth:'480px', maxHeight:'90vh', overflowY:'auto' }}>
+          <div style={{ position:'relative', backgroundColor:primary, border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'40px', width:'100%', maxWidth:'480px', maxHeight:'90vh', overflowY:'auto' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'24px' }}>
               <h2 style={{ color:'#fff', fontFamily:"'Playfair Display',serif", fontSize:'1.5rem', fontWeight:900 }}>Complete Your Order</h2>
               <button onClick={() => setShowCheckout(false)} style={{ background:'none', border:'none', color:'rgba(255,255,255,0.5)', fontSize:'20px', cursor:'pointer' }}>✕</button>
@@ -459,11 +460,11 @@ const MenuPage = () => {
             <form onSubmit={placeOrder}>
               <div style={{ marginBottom:'16px' }}>
                 <label style={{ display:'block', fontSize:'11px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)', marginBottom:'8px' }}>Full Name *</label>
-                <input value={orderForm.customerName} onChange={e=>setOrderForm({...orderForm,customerName:e.target.value})} required placeholder="Your name" style={{ width:'100%', padding:'12px 16px', backgroundColor:'#0d0d0d', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', boxSizing:'border-box' }} />
+                <input value={orderForm.customerName} onChange={e=>setOrderForm({...orderForm,customerName:e.target.value})} required placeholder="Your name" style={{ width:'100%', padding:'12px 16px', backgroundColor:bg, border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', boxSizing:'border-box' }} />
               </div>
               <div style={{ marginBottom:'16px' }}>
                 <label style={{ display:'block', fontSize:'11px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)', marginBottom:'8px' }}>Phone Number *</label>
-                <input value={orderForm.customerPhone} onChange={e=>setOrderForm({...orderForm,customerPhone:e.target.value})} required placeholder="98XXXXXXXX" style={{ width:'100%', padding:'12px 16px', backgroundColor:'#0d0d0d', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', boxSizing:'border-box' }} />
+                <input value={orderForm.customerPhone} onChange={e=>setOrderForm({...orderForm,customerPhone:e.target.value})} required placeholder="98XXXXXXXX" style={{ width:'100%', padding:'12px 16px', backgroundColor:bg, border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', boxSizing:'border-box' }} />
               </div>
               <div style={{ marginBottom:'24px' }}>
                 <label style={{ display:'block', fontSize:'11px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)', marginBottom:'8px' }}>Notes / Delivery Address</label>

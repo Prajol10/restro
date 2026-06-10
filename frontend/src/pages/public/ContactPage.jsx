@@ -16,6 +16,7 @@ const ContactPage = () => {
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
+  const primary = restaurant?.primaryColor || '#111111';
 
   // Styles
   const S = {
@@ -30,7 +31,7 @@ const ContactPage = () => {
     map: { width: '100%', height: '100%', border: 'none' },
     contactInfo: { display: 'flex', flexDirection: 'column', gap: '32px' },
     infoCard: { 
-      backgroundColor: '#111111', 
+      backgroundColor: primary, 
       border: '1px solid rgba(255,255,255,0.06)', 
       padding: '28px',
       display: 'flex',
@@ -62,7 +63,7 @@ const ContactPage = () => {
       transition: 'color 0.3s ease'
     },
     form: { 
-      backgroundColor: '#111111', 
+      backgroundColor: primary, 
       border: '1px solid rgba(255,255,255,0.06)', 
       padding: '40px',
       borderRadius: '8px'
@@ -80,7 +81,7 @@ const ContactPage = () => {
     input: { 
       width: '100%', 
       padding: '14px 18px', 
-      backgroundColor: '#0d0d0d', 
+      backgroundColor: bg, 
       border: '1px solid rgba(255,255,255,0.1)', 
       color: '#fff',
       fontFamily: "'Inter', sans-serif",
@@ -89,7 +90,7 @@ const ContactPage = () => {
     textarea: { 
       width: '100%', 
       padding: '14px 18px', 
-      backgroundColor: '#0d0d0d', 
+      backgroundColor: bg, 
       border: '1px solid rgba(255,255,255,0.1)', 
       color: '#fff',
       fontFamily: "'Inter', sans-serif",
@@ -187,7 +188,7 @@ const ContactPage = () => {
                     ></iframe>
                   </div>
                 ) : (
-                  <div style={{...S.mapContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1a1a1a'}}>
+                  <div style={{...S.mapContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: primary}}>
                     <p style={{color: 'rgba(255,255,255,0.5)'}}>Map not available</p>
                   </div>
                 )}
