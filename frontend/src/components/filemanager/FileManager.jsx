@@ -69,7 +69,7 @@ const FileManager = ({ restaurantSlug, onSelect, mode = 'browse' }) => {
     header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', backgroundColor: '#111', borderBottom: '1px solid rgba(255,255,255,0.06)' },
     body: { display: 'flex', flex: 1, overflow: 'hidden' },
     sidebar: { width: '160px', backgroundColor: '#0a0a0a', borderRight: '1px solid rgba(255,255,255,0.06)', padding: '12px', overflowY: 'auto', flexShrink: 0 },
-    folderBtn: (active) => ({ width: '100%', textAlign: 'left', padding: '8px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px', backgroundColor: active ? 'rgba(201,168,76,0.15)' : 'transparent', color: active ? '#C9A84C' : 'rgba(255,255,255,0.4)', transition: 'all 0.2s' }),
+    folderBtn: (active) => ({ width: '100%', textAlign: 'left', padding: '8px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: active ? 700 : 500, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px', backgroundColor: active ? 'rgba(201,168,76,0.15)' : 'transparent', color: active ? '#C9A84C' : 'rgba(255,255,255,0.75)', transition: 'all 0.2s' }),
     main: { flex: 1, overflowY: 'auto', padding: '16px' },
     grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '10px' },
     fileCard: (selected) => ({ borderRadius: '8px', overflow: 'hidden', border: `1px solid ${selected ? '#C9A84C' : 'rgba(255,255,255,0.06)'}`, cursor: 'pointer', backgroundColor: '#111', transition: 'all 0.2s', position: 'relative' }),
@@ -83,7 +83,7 @@ const FileManager = ({ restaurantSlug, onSelect, mode = 'browse' }) => {
       {/* Header */}
       <div style={S.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>
-          <button onClick={() => setCurrentPath(restaurantSlug)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)', fontSize: '12px', padding: '2px 6px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.05)' }}>
+          <button onClick={() => setCurrentPath(restaurantSlug)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.8)', fontSize: '12px', padding: '2px 6px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.05)' }}>
             📁 {restaurantSlug}
           </button>
           {currentPath !== restaurantSlug && (
@@ -111,7 +111,7 @@ const FileManager = ({ restaurantSlug, onSelect, mode = 'browse' }) => {
       <div style={S.body}>
         {/* Sidebar */}
         <div style={S.sidebar}>
-          <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: '8px' }}>Folders</p>
+          <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Folders</p>
           <button onClick={() => setCurrentPath(restaurantSlug)} style={S.folderBtn(currentPath === restaurantSlug)}>
             <span>📁</span> All Files
           </button>
@@ -132,8 +132,8 @@ const FileManager = ({ restaurantSlug, onSelect, mode = 'browse' }) => {
           ) : filteredFiles.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '48px 0', color: 'rgba(255,255,255,0.2)' }}>
               <p style={{ fontSize: '40px', marginBottom: '8px' }}>📂</p>
-              <p style={{ fontSize: '13px' }}>No files here yet</p>
-              <p style={{ fontSize: '11px', marginTop: '4px', color: 'rgba(255,255,255,0.15)' }}>Upload files using the button above</p>
+              <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>No files here yet</p>
+              <p style={{ fontSize: '11px', marginTop: '4px', color: 'rgba(255,255,255,0.4)' }}>Upload files using the button above</p>
             </div>
           ) : (
             <div style={S.grid}>
@@ -154,7 +154,7 @@ const FileManager = ({ restaurantSlug, onSelect, mode = 'browse' }) => {
                       )}
                     </div>
                     <div style={{ padding: '6px 8px' }}>
-                      <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name.split('-').slice(2).join('-') || file.name}</p>
+                      <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name.split('-').slice(2).join('-') || file.name}</p>
                     </div>
                     {/* Hover actions */}
                     <div style={{ position: 'absolute', top: '4px', right: '4px', display: 'flex', gap: '3px' }}>
