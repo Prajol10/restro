@@ -857,8 +857,8 @@ const AdminDashboard = () => {
                 <div style={{...S.card,marginBottom:'16px'}}>
                   <p style={{fontSize:'11px',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'20px'}}>Colors & Theme</p>
                   <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'16px'}}>
-                    {[{key:'accentColor',label:'Accent Color'},{key:'primaryColor',label:'Primary Color'},{key:'bgColor',label:'Background Color'}].map(({key,label})=>(
-                      <div key={key}><label style={S.label}>{label}</label><div style={{display:'flex',gap:'8px'}}><input type="color" value={infoForm[key]||'#000'} onChange={e=>setInfoForm({...infoForm,[key]:e.target.value})} style={{width:'44px',height:'44px',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'8px',cursor:'pointer',backgroundColor:'transparent',padding:'2px'}} /><input value={infoForm[key]||''} onChange={e=>setInfoForm({...infoForm,[key]:e.target.value})} style={{...S.input,flex:1}} /></div></div>
+                    {[{key:'accentColor',label:'Accent Color',def:'#C9A84C'},{key:'primaryColor',label:'Primary Color',def:'#1a1a1a'},{key:'bgColor',label:'Background Color',def:'#0d0d0d'}].map(({key,label,def})=>(
+                      <div key={key}><label style={S.label}>{label}</label><div style={{display:'flex',gap:'8px'}}><input type="color" value={infoForm[key]||def} onChange={e=>setInfoForm({...infoForm,[key]:e.target.value})} style={{width:'44px',height:'44px',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'8px',cursor:'pointer',backgroundColor:'transparent',padding:'2px'}} /><input value={infoForm[key]||def} onChange={e=>setInfoForm({...infoForm,[key]:e.target.value})} style={{...S.input,flex:1}} /></div></div>
                     ))}
                   </div>
                 </div>
