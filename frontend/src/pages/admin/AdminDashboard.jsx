@@ -56,6 +56,7 @@ const AdminDashboard = () => {
   const [menuSearch, setMenuSearch] = useState('');
   const [menuCategoryFilter, setMenuCategoryFilter] = useState('all');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [reservationStatusFilter, setReservationStatusFilter] = useState('all');
 
   const accent = restaurant?.accentColor || '#C9A84C';
@@ -344,7 +345,7 @@ const AdminDashboard = () => {
                   <thead><tr><th style={S.th}>#</th><th style={S.th}>Customer</th><th style={S.th}>Phone</th><th style={S.th}>Items Ordered</th><th style={S.th}>Total</th><th style={S.th}>Date</th><th style={S.th}>Status</th></tr></thead>
                   <tbody>
                     {orders.slice(0,5).map(order => (
-                      <tr key={order.id} style={S.tr} onMouseEnter={e=>e.target.closest('tr').style.backgroundColor=S.trHover.backgroundColor} onMouseLeave={e=>e.target.closest('tr').style.backgroundColor='transparent'}>
+                      <tr key={order.id} style={{...S.tr,cursor:'pointer'}} onClick={()=>setSelectedOrder(order)} onMouseEnter={e=>e.target.closest('tr').style.backgroundColor=S.trHover.backgroundColor} onMouseLeave={e=>e.target.closest('tr').style.backgroundColor='transparent'}>
                         <td style={S.td}>#{order.id}</td><td style={S.td}>{order.customerName}</td><td style={S.td}>{order.customerPhone}</td>
                         <td style={S.td}>{(()=>{try{const i=JSON.parse(order.items);return Array.isArray(i)?i.map(x=>`${x.name} x${x.qty||1}`).join(', '):'1 item';}catch{return order.items||'N/A';}})()}</td>
                         <td style={S.td}>Rs. {parseFloat(order.totalAmount).toFixed(0)}</td><td style={S.td}>{new Date(order.createdAt).toLocaleDateString()}</td>
@@ -390,7 +391,7 @@ const AdminDashboard = () => {
                 <thead><tr><th style={S.th}>#</th><th style={S.th}>Customer</th><th style={S.th}>Phone</th><th style={S.th} style={{minWidth:'200px'}}>Items Ordered</th><th style={S.th}>Total</th><th style={S.th}>Date</th><th style={S.th}>Status</th><th style={S.th}>Actions</th></tr></thead>
                 <tbody>
                   {orders.filter(o=>orderStatusFilter==='all'||o.status===orderStatusFilter).map(order => (
-                    <tr key={order.id} style={S.tr} onMouseEnter={e=>e.target.closest('tr').style.backgroundColor=S.trHover.backgroundColor} onMouseLeave={e=>e.target.closest('tr').style.backgroundColor='transparent'}>
+                    <tr key={order.id} style={{...S.tr,cursor:'pointer'}} onClick={()=>setSelectedOrder(order)} onMouseEnter={e=>e.target.closest('tr').style.backgroundColor=S.trHover.backgroundColor} onMouseLeave={e=>e.target.closest('tr').style.backgroundColor='transparent'}>
                       <td style={S.td}>#{order.id}</td><td style={S.td}>{order.customerName}</td><td style={S.td}>{order.customerPhone}</td>
                       <td style={S.td}><div style={{fontSize:'12px',lineHeight:1.7}}>{(()=>{try{const i=JSON.parse(order.items);return Array.isArray(i)?i.map((x,idx)=><div key={idx} style={{color:'rgba(255,255,255,0.85)'}}>{x.name} <span style={{color:'rgba(255,255,255,0.4)'}}>x{x.qty||1}</span> <span style={{color:'#C9A84C',fontWeight:600}}>Rs.{(parseFloat(x.price||0)*(x.qty||1)).toFixed(0)}</span></div>):'1 item';}catch{return <span>{order.items||'N/A'}</span>;}})()}</div></td>
                       <td style={S.td} style={{fontWeight:700,color:'#C9A84C'}}>Rs. {parseFloat(order.totalAmount).toFixed(0)}</td><td style={S.td}>{new Date(order.createdAt).toLocaleDateString()}</td>
@@ -930,6 +931,54 @@ const AdminDashboard = () => {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Order Detail Modal */}
+        {selectedOrder && (
+          <div style={{position:'fixed',inset:0,zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'24px'}}>
+            <div onClick={()=>setSelectedOrder(null)} style={{position:'absolute',inset:0,backgroundColor:'rgba(0,0,0,0.7)'}} />
+            <div style={{position:'relative',backgroundColor:'#111',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'12px',padding:'32px',width:'100%',maxWidth:'520px',maxHeight:'90vh',overflowY:'auto'}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'24px'}}>
+                <h2 style={{color:'#fff',fontSize:'18px',fontWeight:800}}>Order #{selectedOrder.id}</h2>
+                <button onClick={()=>setSelectedOrder(null)} style={{background:'none',border:'none',color:'rgba(255,255,255,0.5)',fontSize:'20px',cursor:'pointer'}}>✕</button>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
+                <div style={{backgroundColor:'rgba(255,255,255,0.03)',borderRadius:'8px',padding:'16px'}}>
+                  <p style={{fontSize:'11px',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'12px'}}>Customer</p>
+                  <p style={{color:'#fff',fontWeight:600,marginBottom:'4px'}}>{selectedOrder.customerName}</p>
+                  <p style={{color:'rgba(255,255,255,0.6)',fontSize:'14px'}}>{selectedOrder.customerPhone}</p>
+                </div>
+                <div style={{backgroundColor:'rgba(255,255,255,0.03)',borderRadius:'8px',padding:'16px'}}>
+                  <p style={{fontSize:'11px',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'12px'}}>Items Ordered</p>
+                  {(()=>{try{const items=JSON.parse(selectedOrder.items);return Array.isArray(items)?items.map((item,i)=>(
+                    <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+                      <span style={{color:'rgba(255,255,255,0.85)',fontSize:'14px'}}>{item.name} <span style={{color:'rgba(255,255,255,0.4)'}}>x{item.qty||1}</span></span>
+                      <span style={{color:accent,fontWeight:700,fontSize:'14px'}}>Rs. {(parseFloat(item.price||0)*(item.qty||1)).toFixed(0)}</span>
+                    </div>
+                  )):<p style={{color:'rgba(255,255,255,0.5)',fontSize:'14px'}}>{selectedOrder.items}</p>;}catch{return <p style={{color:'rgba(255,255,255,0.5)',fontSize:'14px'}}>{selectedOrder.items}</p>;}})()}
+                  <div style={{display:'flex',justifyContent:'space-between',marginTop:'12px',paddingTop:'12px',borderTop:'1px solid rgba(255,255,255,0.1)'}}>
+                    <span style={{color:'#fff',fontWeight:700}}>Total</span>
+                    <span style={{color:accent,fontWeight:800,fontSize:'16px'}}>Rs. {parseFloat(selectedOrder.totalAmount).toFixed(0)}</span>
+                  </div>
+                </div>
+                {selectedOrder.notes && (
+                  <div style={{backgroundColor:'rgba(255,255,255,0.03)',borderRadius:'8px',padding:'16px'}}>
+                    <p style={{fontSize:'11px',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'8px'}}>Notes / Address</p>
+                    <p style={{color:'rgba(255,255,255,0.7)',fontSize:'14px',lineHeight:1.6}}>{selectedOrder.notes}</p>
+                  </div>
+                )}
+                <div style={{backgroundColor:'rgba(255,255,255,0.03)',borderRadius:'8px',padding:'16px'}}>
+                  <p style={{fontSize:'11px',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'8px'}}>Status</p>
+                  <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
+                    {['Pending','Confirmed','Completed','Cancelled'].map(s=>(
+                      <button key={s} onClick={()=>{updateOrderStatus(selectedOrder.id,s);setSelectedOrder({...selectedOrder,status:s});}} style={{padding:'8px 16px',borderRadius:'6px',border:'none',cursor:'pointer',fontSize:'12px',fontWeight:700,backgroundColor:selectedOrder.status===s?accent:'rgba(255,255,255,0.08)',color:selectedOrder.status===s?'#000':'rgba(255,255,255,0.6)'}}>{s}</button>
+                    ))}
+                  </div>
+                </div>
+                <p style={{color:'rgba(255,255,255,0.3)',fontSize:'12px',textAlign:'right'}}>Ordered on {new Date(selectedOrder.createdAt).toLocaleString()}</p>
+              </div>
+            </div>
           </div>
         )}
 
