@@ -412,13 +412,13 @@ export default function SuperAdminDashboard() {
                   </div>
 
                   <hr style={S.divider} />
-
                   <div style={{ marginBottom: '24px' }}>
-                    <label style={{ ...S.label, marginBottom: '16px' }}>Banner Images (up to 5)</label>
+                    <label style={{ ...S.label, marginBottom: '8px' }}>Hero Background Images</label>
+                    <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', marginBottom: '16px' }}>Used as hero background when no video is set. Up to 5 images, auto-slideshow.</p>
                     {banners.map((b, i) => (
                       <div key={i} style={S.bannerItem}>
                         <img src={b} alt="banner" style={S.bannerImage} />
-                        <span style={S.bannerText}>Banner {i + 1}</span>
+                        <span style={S.bannerText}>Image {i + 1}</span>
                         <button type="button" onClick={() => updateBanners(banners.filter((_, idx) => idx !== i))} style={S.removeButton}>✕</button>
                       </div>
                     ))}
@@ -428,19 +428,19 @@ export default function SuperAdminDashboard() {
                           <input type="text" placeholder="Paste image URL..." id="sa-banner-url" style={S.input}
                             onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
                             onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
-                          <button type="button" onClick={() => {
-                            const input = document.getElementById('sa-banner-url');
-                            if (input.value) { updateBanners([...banners, input.value]); input.value = ''; }
-                          }} style={S.addButton}>Add</button>
+                          <button type="button" onClick={() => { const input = document.getElementById('sa-banner-url'); if (input.value) { updateBanners([...banners, input.value]); input.value = ''; } }} style={S.addButton}>Add</button>
                           <span style={S.orText}>or</span>
-                          <label style={S.uploadButton}>
-                            📁 Upload
+                          <label style={S.uploadButton}>📁 Upload
                             <input type="file" accept="image/*" style={{ display: 'none' }} onChange={async e => {
                               const file = e.target.files[0]; if (!file) return;
                               try { const url = await uploadFile(file, form.subdomain || 'shared', 'banners'); updateBanners([...banners, url]); }
                               catch (err) { alert('Upload failed: ' + err.message); }
                             }} />
                           </label>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                         </div>
                       </div>
                     )}
