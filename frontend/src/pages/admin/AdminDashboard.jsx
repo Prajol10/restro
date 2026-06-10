@@ -341,13 +341,13 @@ const AdminDashboard = () => {
               <h2 style={{...S.pageTitle,fontSize:'1.5rem',marginBottom:'16px'}}>Recent Orders</h2>
               <div style={S.tableContainer}>
                 <table style={S.table}>
-                  <thead><tr><th style={S.th}>#</th><th style={S.th}>Customer</th><th style={S.th}>Phone</th><th style={S.th}>Items</th><th style={S.th}>Total</th><th style={S.th}>Date</th><th style={S.th}>Status</th></tr></thead>
+                  <thead><tr><th style={S.th}>#</th><th style={S.th}>Customer</th><th style={S.th}>Phone</th><th style={S.th}>Items Ordered</th><th style={S.th}>Total</th><th style={S.th}>Date</th><th style={S.th}>Status</th></tr></thead>
                   <tbody>
                     {orders.slice(0,5).map(order => (
                       <tr key={order.id} style={S.tr} onMouseEnter={e=>e.target.closest('tr').style.backgroundColor=S.trHover.backgroundColor} onMouseLeave={e=>e.target.closest('tr').style.backgroundColor='transparent'}>
                         <td style={S.td}>#{order.id}</td><td style={S.td}>{order.customerName}</td><td style={S.td}>{order.customerPhone}</td>
-                        <td style={S.td}>{(()=>{try{const i=JSON.parse(order.items);return Array.isArray(i)?`${i.length} items`:'1 item';}catch{return '1 item';}})()}</td>
-                        <td style={S.td}>${parseFloat(order.totalAmount).toFixed(2)}</td><td style={S.td}>{new Date(order.createdAt).toLocaleDateString()}</td>
+                        <td style={S.td}>{(()=>{try{const i=JSON.parse(order.items);return Array.isArray(i)?i.map(x=>`${x.name} x${x.qty||1}`).join(', '):'1 item';}catch{return order.items||'N/A';}})()}</td>
+                        <td style={S.td}>Rs. {parseFloat(order.totalAmount).toFixed(0)}</td><td style={S.td}>{new Date(order.createdAt).toLocaleDateString()}</td>
                         <td style={S.td}><span style={S.badge(...(STATUS_BADGE[order.status]||['#fff','rgba(255,255,255,0.1)']))}>{order.status}</span></td>
                       </tr>
                     ))}
@@ -387,13 +387,13 @@ const AdminDashboard = () => {
             </div>
             <div style={S.tableContainer}>
               <table style={S.table}>
-                <thead><tr><th style={S.th}>#</th><th style={S.th}>Customer</th><th style={S.th}>Phone</th><th style={S.th}>Items</th><th style={S.th}>Total</th><th style={S.th}>Date</th><th style={S.th}>Status</th><th style={S.th}>Actions</th></tr></thead>
+                <thead><tr><th style={S.th}>#</th><th style={S.th}>Customer</th><th style={S.th}>Phone</th><th style={S.th} style={{minWidth:'200px'}}>Items Ordered</th><th style={S.th}>Total</th><th style={S.th}>Date</th><th style={S.th}>Status</th><th style={S.th}>Actions</th></tr></thead>
                 <tbody>
                   {orders.filter(o=>orderStatusFilter==='all'||o.status===orderStatusFilter).map(order => (
                     <tr key={order.id} style={S.tr} onMouseEnter={e=>e.target.closest('tr').style.backgroundColor=S.trHover.backgroundColor} onMouseLeave={e=>e.target.closest('tr').style.backgroundColor='transparent'}>
                       <td style={S.td}>#{order.id}</td><td style={S.td}>{order.customerName}</td><td style={S.td}>{order.customerPhone}</td>
-                      <td style={S.td}>{(()=>{try{const i=JSON.parse(order.items);return Array.isArray(i)?`${i.length} items`:'1 item';}catch{return '1 item';}})()}</td>
-                      <td style={S.td}>${parseFloat(order.totalAmount).toFixed(2)}</td><td style={S.td}>{new Date(order.createdAt).toLocaleDateString()}</td>
+                      <td style={S.td}><div style={{fontSize:'12px',lineHeight:1.7}}>{(()=>{try{const i=JSON.parse(order.items);return Array.isArray(i)?i.map((x,idx)=><div key={idx} style={{color:'rgba(255,255,255,0.85)'}}>{x.name} <span style={{color:'rgba(255,255,255,0.4)'}}>x{x.qty||1}</span> <span style={{color:'#C9A84C',fontWeight:600}}>Rs.{(parseFloat(x.price||0)*(x.qty||1)).toFixed(0)}</span></div>):'1 item';}catch{return <span>{order.items||'N/A'}</span>;}})()}</div></td>
+                      <td style={S.td} style={{fontWeight:700,color:'#C9A84C'}}>Rs. {parseFloat(order.totalAmount).toFixed(0)}</td><td style={S.td}>{new Date(order.createdAt).toLocaleDateString()}</td>
                       <td style={S.td}><span style={S.badge(...(STATUS_BADGE[order.status]||['#fff','rgba(255,255,255,0.1)']))}>{order.status}</span></td>
                       <td style={S.td}>
                         <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
