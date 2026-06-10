@@ -4,6 +4,8 @@ import Layout from '../../components/public/Layout';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5240/api';
+
 const MenuPage = () => {
   const { restaurant, menuItems, menuCategories } = useTenant();
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,6 +13,63 @@ const MenuPage = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [isDownloading, setIsDownloading] = useState(false);
   const printRef = useRef();
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [orderForm, setOrderForm] = useState({ customerName:'', customerPhone:'', notes:'' });
+  const [orderPlacing, setOrderPlacing] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const [orderError, setOrderError] = useState('');
+
+  const addToCart = (item) => {
+    setCart(prev => {
+      const existing = prev.find(c => c.id === item.id);
+      if (existing) return prev.map(c => c.id === item.id ? {...c, qty: c.qty+1} : c);
+      return [...prev, {...item, qty:1}];
+    });
+    setShowCart(true);
+  };
+
+  const removeFromCart = (id) => setCart(prev => prev.filter(c => c.id !== id));
+  const updateQty = (id, qty) => {
+    if (qty < 1) { removeFromCart(id); return; }
+    setCart(prev => prev.map(c => c.id === id ? {...c, qty} : c));
+  };
+
+  const cartTotal = cart.reduce((sum, c) => sum + (parseFloat(c.price) * c.qty), 0);
+  const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
+
+  const placeOrder = async (e) => {
+    e.preventDefault();
+    setOrderPlacing(true);
+    setOrderError('');
+    try {
+      const items = cart.map(c => ({ id:c.id, name:c.name, price:c.price, qty:c.qty }));
+      const res = await fetch(`${API}/Restaurant/${restaurant.subdomain}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: orderForm.customerName,
+          customerPhone: orderForm.customerPhone,
+          notes: orderForm.notes,
+          items: JSON.stringify(items),
+          totalAmount: cartTotal,
+          status: 'Pending'
+        })
+      });
+      if (!res.ok) throw new Error('Failed to place order');
+      setOrderSuccess(true);
+      setCart([]);
+      setShowCheckout(false);
+      setShowCart(false);
+      setOrderForm({ customerName:'', customerPhone:'', notes:'' });
+      setTimeout(() => setOrderSuccess(false), 6000);
+    } catch(err) {
+      setOrderError('Failed to place order. Please try again or call us.');
+    } finally {
+      setOrderPlacing(false);
+    }
+  };
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
@@ -243,6 +302,14 @@ const MenuPage = () => {
                     {item.subtitle && <p style={S.subtitle}>{item.subtitle}</p>}
                     <p style={S.price}>Rs. {item.price}</p>
                     <p style={S.description}>{item.description}</p>
+                    {item.isAvailable && (
+                      <button
+                        onClick={() => addToCart(item)}
+                        style={{ marginTop:'8px', padding:'10px 24px', backgroundColor: accent, color:'#000', border:'none', borderRadius:'4px', fontWeight:700, fontSize:'0.8rem', textTransform:'uppercase', letterSpacing:'0.08em', cursor:'pointer' }}
+                      >
+                        + Add to Order
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -303,6 +370,108 @@ const MenuPage = () => {
           </div>
         </div>
       </div>
+      {/* Floating Cart Button */}
+      {cartCount > 0 && !showCart && (
+        <button onClick={() => setShowCart(true)} style={{ position:'fixed', bottom:'32px', right:'32px', backgroundColor:accent, color:'#000', border:'none', borderRadius:'50px', padding:'16px 28px', fontWeight:800, fontSize:'14px', cursor:'pointer', boxShadow:'0 8px 32px rgba(0,0,0,0.4)', zIndex:1000, display:'flex', alignItems:'center', gap:'10px' }}>
+          🛒 {cartCount} item{cartCount>1?'s':''} — Rs. {cartTotal.toFixed(0)}
+        </button>
+      )}
+
+      {/* Order Success Banner */}
+      {orderSuccess && (
+        <div style={{ position:'fixed', top:'24px', left:'50%', transform:'translateX(-50%)', backgroundColor:'rgba(74,222,128,0.15)', border:'1px solid rgba(74,222,128,0.4)', color:'#4ade80', padding:'16px 32px', borderRadius:'8px', fontWeight:700, fontSize:'14px', zIndex:2000, textAlign:'center' }}>
+          ✅ Order placed successfully! We will call you to confirm.
+        </div>
+      )}
+
+      {/* Cart Drawer */}
+      {showCart && (
+        <div style={{ position:'fixed', inset:0, zIndex:1000 }}>
+          <div onClick={() => setShowCart(false)} style={{ position:'absolute', inset:0, backgroundColor:'rgba(0,0,0,0.6)' }} />
+          <div style={{ position:'absolute', right:0, top:0, bottom:0, width:'420px', maxWidth:'100vw', backgroundColor:'#111', borderLeft:'1px solid rgba(255,255,255,0.08)', display:'flex', flexDirection:'column', padding:'32px 24px', overflowY:'auto' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'24px' }}>
+              <h2 style={{ color:'#fff', fontFamily:"'Playfair Display',serif", fontSize:'1.5rem', fontWeight:900 }}>Your Order</h2>
+              <button onClick={() => setShowCart(false)} style={{ background:'none', border:'none', color:'rgba(255,255,255,0.5)', fontSize:'20px', cursor:'pointer' }}>✕</button>
+            </div>
+            {cart.length === 0 ? (
+              <p style={{ color:'rgba(255,255,255,0.4)', textAlign:'center', marginTop:'48px' }}>Your cart is empty</p>
+            ) : (
+              <>
+                <div style={{ flex:1 }}>
+                  {cart.map(item => (
+                    <div key={item.id} style={{ display:'flex', alignItems:'center', gap:'12px', padding:'16px 0', borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+                      {item.imageUrl && <img src={item.imageUrl} alt="" style={{ width:'48px', height:'48px', borderRadius:'6px', objectFit:'cover' }} />}
+                      <div style={{ flex:1 }}>
+                        <p style={{ color:'#fff', fontWeight:600, fontSize:'14px', marginBottom:'4px' }}>{item.name}</p>
+                        <p style={{ color:accent, fontSize:'13px', fontWeight:700 }}>Rs. {(parseFloat(item.price) * item.qty).toFixed(0)}</p>
+                      </div>
+                      <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
+                        <button onClick={() => updateQty(item.id, item.qty-1)} style={{ width:'28px', height:'28px', borderRadius:'50%', border:'1px solid rgba(255,255,255,0.2)', background:'none', color:'#fff', cursor:'pointer', fontSize:'16px' }}>−</button>
+                        <span style={{ color:'#fff', fontSize:'14px', minWidth:'20px', textAlign:'center' }}>{item.qty}</span>
+                        <button onClick={() => updateQty(item.id, item.qty+1)} style={{ width:'28px', height:'28px', borderRadius:'50%', border:'1px solid rgba(255,255,255,0.2)', background:'none', color:'#fff', cursor:'pointer', fontSize:'16px' }}>+</button>
+                        <button onClick={() => removeFromCart(item.id)} style={{ background:'none', border:'none', color:'rgba(239,68,68,0.6)', cursor:'pointer', fontSize:'14px', marginLeft:'4px' }}>🗑</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ borderTop:'1px solid rgba(255,255,255,0.1)', paddingTop:'20px', marginTop:'16px' }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'20px' }}>
+                    <span style={{ color:'rgba(255,255,255,0.7)', fontSize:'15px' }}>Total</span>
+                    <span style={{ color:accent, fontWeight:800, fontSize:'18px' }}>Rs. {cartTotal.toFixed(0)}</span>
+                  </div>
+                  <button onClick={() => { setShowCart(false); setShowCheckout(true); }} style={{ width:'100%', padding:'14px', backgroundColor:accent, color:'#000', border:'none', borderRadius:'6px', fontWeight:800, fontSize:'14px', textTransform:'uppercase', letterSpacing:'0.08em', cursor:'pointer' }}>
+                    Proceed to Checkout
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Checkout Modal */}
+      {showCheckout && (
+        <div style={{ position:'fixed', inset:0, zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:'24px' }}>
+          <div onClick={() => setShowCheckout(false)} style={{ position:'absolute', inset:0, backgroundColor:'rgba(0,0,0,0.7)' }} />
+          <div style={{ position:'relative', backgroundColor:'#111', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', padding:'40px', width:'100%', maxWidth:'480px', maxHeight:'90vh', overflowY:'auto' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'24px' }}>
+              <h2 style={{ color:'#fff', fontFamily:"'Playfair Display',serif", fontSize:'1.5rem', fontWeight:900 }}>Complete Your Order</h2>
+              <button onClick={() => setShowCheckout(false)} style={{ background:'none', border:'none', color:'rgba(255,255,255,0.5)', fontSize:'20px', cursor:'pointer' }}>✕</button>
+            </div>
+            <div style={{ backgroundColor:'rgba(255,255,255,0.03)', borderRadius:'8px', padding:'16px', marginBottom:'24px' }}>
+              {cart.map(item => (
+                <div key={item.id} style={{ display:'flex', justifyContent:'space-between', marginBottom:'8px', fontSize:'13px' }}>
+                  <span style={{ color:'rgba(255,255,255,0.7)' }}>{item.name} x{item.qty}</span>
+                  <span style={{ color:accent, fontWeight:600 }}>Rs. {(parseFloat(item.price)*item.qty).toFixed(0)}</span>
+                </div>
+              ))}
+              <div style={{ borderTop:'1px solid rgba(255,255,255,0.1)', paddingTop:'10px', marginTop:'10px', display:'flex', justifyContent:'space-between', fontWeight:800 }}>
+                <span style={{ color:'#fff' }}>Total</span>
+                <span style={{ color:accent }}>Rs. {cartTotal.toFixed(0)}</span>
+              </div>
+            </div>
+            <form onSubmit={placeOrder}>
+              <div style={{ marginBottom:'16px' }}>
+                <label style={{ display:'block', fontSize:'11px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)', marginBottom:'8px' }}>Full Name *</label>
+                <input value={orderForm.customerName} onChange={e=>setOrderForm({...orderForm,customerName:e.target.value})} required placeholder="Your name" style={{ width:'100%', padding:'12px 16px', backgroundColor:'#0d0d0d', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', boxSizing:'border-box' }} />
+              </div>
+              <div style={{ marginBottom:'16px' }}>
+                <label style={{ display:'block', fontSize:'11px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)', marginBottom:'8px' }}>Phone Number *</label>
+                <input value={orderForm.customerPhone} onChange={e=>setOrderForm({...orderForm,customerPhone:e.target.value})} required placeholder="98XXXXXXXX" style={{ width:'100%', padding:'12px 16px', backgroundColor:'#0d0d0d', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', boxSizing:'border-box' }} />
+              </div>
+              <div style={{ marginBottom:'24px' }}>
+                <label style={{ display:'block', fontSize:'11px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)', marginBottom:'8px' }}>Notes / Delivery Address</label>
+                <textarea value={orderForm.notes} onChange={e=>setOrderForm({...orderForm,notes:e.target.value})} placeholder="Delivery address or special instructions..." rows={3} style={{ width:'100%', padding:'12px 16px', backgroundColor:'#0d0d0d', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'6px', color:'#fff', fontSize:'14px', resize:'vertical', boxSizing:'border-box' }} />
+              </div>
+              {orderError && <p style={{ color:'#f87171', fontSize:'13px', marginBottom:'16px' }}>{orderError}</p>}
+              <button type="submit" disabled={orderPlacing} style={{ width:'100%', padding:'14px', backgroundColor:accent, color:'#000', border:'none', borderRadius:'6px', fontWeight:800, fontSize:'14px', textTransform:'uppercase', letterSpacing:'0.08em', cursor:orderPlacing?'not-allowed':'pointer', opacity:orderPlacing?0.7:1 }}>
+                {orderPlacing ? 'Placing Order...' : 'Place Order'}
+              </button>
+              <p style={{ color:'rgba(255,255,255,0.35)', fontSize:'12px', textAlign:'center', marginTop:'12px' }}>We will call you to confirm your order</p>
+            </form>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };
