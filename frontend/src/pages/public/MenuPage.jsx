@@ -8,6 +8,13 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:5240/api';
 
 const MenuPage = () => {
   const { restaurant, menuItems, menuCategories } = useTenant();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [filteredItems, setFilteredItems] = useState([]);
@@ -70,14 +77,6 @@ const MenuPage = () => {
       setOrderPlacing(false);
     }
   };
-
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
   const primary = restaurant?.primaryColor || '#111';

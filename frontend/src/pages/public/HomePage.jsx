@@ -9,6 +9,13 @@ const HomePage = () => {
   const { restaurant, menuItems, gallery, reviews } = useTenant();
   const navigate = useNavigate();
   const { slug } = useParams();
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const [featuredItems, setFeaturedItems] = useState([]);
   const [previewGallery, setPreviewGallery] = useState([]);
   const [previewReviews, setPreviewReviews] = useState([]);
@@ -32,14 +39,6 @@ const HomePage = () => {
   }, [reviews]);
 
   if (!restaurant) return null;
-
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
   const accent = restaurant.accentColor || '#C9A84C';
   const averageRating = previewReviews.length > 0
     ? (previewReviews.reduce((sum, r) => sum + r.rating, 0) / previewReviews.length).toFixed(1)

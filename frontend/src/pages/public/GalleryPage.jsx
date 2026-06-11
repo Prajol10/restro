@@ -4,11 +4,6 @@ import Layout from '../../components/public/Layout';
 
 const GalleryPage = () => {
   const { restaurant, gallery } = useTenant();
-  const [filteredGallery, setFilteredGallery] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -16,6 +11,10 @@ const GalleryPage = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+  const [filteredGallery, setFilteredGallery] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
 
