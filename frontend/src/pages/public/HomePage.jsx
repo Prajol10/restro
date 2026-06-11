@@ -33,19 +33,25 @@ const HomePage = () => {
 
   if (!restaurant) return null;
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const h = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, []);
   const accent = restaurant.accentColor || '#C9A84C';
   const averageRating = previewReviews.length > 0
     ? (previewReviews.reduce((sum, r) => sum + r.rating, 0) / previewReviews.length).toFixed(1)
     : 0;
 
   const S = {
-    section: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: '100px 0' },
-    darkSection: { backgroundColor: restaurant.primaryColor || '#111111', padding: '100px 0' },
-    container: { maxWidth: '1280px', margin: '0 auto', padding: '0 48px' },
+    section: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0' },
+    darkSection: { backgroundColor: restaurant.primaryColor || '#111111', padding: isMobile ? '60px 0' : '100px 0' },
+    container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     label: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
-    title: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
+    title: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2rem' : 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '32px' },
+    grid: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', gap: isMobile ? '24px' : '32px' },
     card: { backgroundColor: restaurant.primaryColor || '#111111', border: '1px solid rgba(255,255,255,0.06)', padding: '28px', textAlign: 'center' },
     image: { width: '160px', height: '160px', borderRadius: '50%', border: `3px solid ${accent}`, objectFit: 'cover', marginBottom: '20px' },
     itemName: { fontFamily: "'Playfair Display', serif", fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '8px' },
@@ -53,10 +59,10 @@ const HomePage = () => {
     desc: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', lineHeight: '1.6' },
     link: { color: accent, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', marginTop: '24px', display: 'inline-block', cursor: 'pointer' },
     reviewCard: { backgroundColor: restaurant.primaryColor || '#111111', border: '1px solid rgba(255,255,255,0.06)', padding: '28px' },
-    ctaSection: { backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: '100px 0', textAlign: 'center' },
-    ctaTitle: { fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: '#fff', marginBottom: '24px' },
+    ctaSection: { backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: isMobile ? '60px 0' : '100px 0', textAlign: 'center' },
+    ctaTitle: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, color: '#fff', marginBottom: '24px' },
     ctaBtn: { padding: '16px 32px', fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', border: 'none', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
-    galleryGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' },
+    galleryGrid: { display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px', marginBottom: '32px' },
     galleryImg: { width: '100%', height: '200px', objectFit: 'cover', borderRadius: '4px' }
   };
 
@@ -95,7 +101,7 @@ const HomePage = () => {
           <p style={S.label}>OUR STORY</p>
           <h2 style={S.title}>About Us</h2>
           <div style={{...S.divider, marginBottom: '32px'}} />
-          <div style={{ display: 'grid', gridTemplateColumns: restaurant.aboutImageUrl ? '1fr 1fr' : '1fr', gap: '64px', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: (restaurant.aboutImageUrl && !isMobile) ? '1fr 1fr' : '1fr', gap: isMobile ? '32px' : '64px', alignItems: 'center' }}>
             <div>
               {restaurant.aboutShort && (
                 <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '24px', borderLeft: `3px solid ${accent}`, paddingLeft: '20px' }}>

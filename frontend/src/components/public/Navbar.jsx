@@ -9,378 +9,126 @@ const Navbar = ({ isScrolled }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuDropdownOpen, setIsMenuDropdownOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
-  const text = '#ffffff';
 
-  // Styles
-  const S = {
-    nav: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 1000,
-      backgroundColor: isScrolled ? 'rgba(13, 13, 13, 0.9)' : 'transparent',
-      backdropFilter: isScrolled ? 'blur(10px)' : 'none',
-      padding: '16px 48px',
-      transition: 'all 0.3s ease',
-      borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.08)' : 'none'
-    },
-    container: {
-      maxWidth: '1280px',
-      margin: '0 auto',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    },
-    logoSection: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px'
-    },
-    logo: {
-      height: '40px',
-      width: '40px',
-      borderRadius: '50%',
-      objectFit: 'cover',
-      border: `2px solid ${accent}`
-    },
-    restaurantName: {
-      fontFamily: "'Playfair Display', serif",
-      fontSize: '24px',
-      fontWeight: 700,
-      color: text,
-      textDecoration: 'none'
-    },
-    navLinks: {
-      display: 'flex',
-      gap: '32px',
-      alignItems: 'center'
-    },
-    navLink: {
-      fontFamily: "'Inter', sans-serif",
-      fontSize: '14px',
-      fontWeight: 600,
-      color: text,
-      textDecoration: 'none',
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em',
-      position: 'relative',
-      padding: '8px 0'
-    },
-    activeLink: {
-      color: accent
-    },
-    dropdown: {
-      position: 'absolute',
-      top: '100%',
-      left: 0,
-      backgroundColor: bg,
-      minWidth: '200px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-      borderRadius: '8px',
-      padding: '12px 0',
-      display: 'none'
-    },
-    dropdownOpen: {
-      display: 'block'
-    },
-    dropdownLink: {
-      display: 'block',
-      padding: '10px 20px',
-      color: text,
-      textDecoration: 'none',
-      fontSize: '14px',
-      transition: 'all 0.2s ease'
-    },
-    dropdownLinkHover: {
-      backgroundColor: 'rgba(255,255,255,0.05)'
-    },
-    contactSection: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '24px'
-    },
-    phone: {
-      fontFamily: "'Inter', sans-serif",
-      fontSize: '14px',
-      color: text,
-      textDecoration: 'none',
-      fontWeight: 500
-    },
-    orderButton: {
-      backgroundColor: accent,
-      color: '#000',
-      border: 'none',
-      padding: '12px 24px',
-      fontFamily: "'Inter', sans-serif",
-      fontSize: '12px',
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      letterSpacing: '0.1em',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease'
-    },
-    mobileMenuButton: {
-      display: 'none',
-      backgroundColor: 'transparent',
-      border: 'none',
-      color: text,
-      fontSize: '24px',
-      cursor: 'pointer'
-    },
-    mobileMenu: {
-      display: 'none',
-      position: 'fixed',
-      top: 0,
-      right: 0,
-      height: '100vh',
-      width: '80%',
-      maxWidth: '300px',
-      backgroundColor: bg,
-      zIndex: 1001,
-      padding: '20px',
-      transform: 'translateX(100%)',
-      transition: 'transform 0.3s ease'
-    },
-    mobileMenuOpen: {
-      transform: 'translateX(0)'
-    },
-    mobileNavLinks: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '20px',
-      marginTop: '40px'
-    },
-    mobileNavLink: {
-      color: text,
-      textDecoration: 'none',
-      fontSize: '16px',
-      fontWeight: 600,
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em'
-    },
-    overlay: {
-      display: 'none',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.7)',
-      zIndex: 1000
-    },
-    overlayVisible: {
-      display: 'block'
-    }
-  };
-
-  // Get current path for active link detection
-  const isActive = (path) => {
-    if (path === '/') {
-      return location.pathname === `/${restaurant?.subdomain}` || location.pathname === '/';
-    }
-    return location.pathname.includes(path);
-  };
-
-  // Close mobile menu when resizing to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setIsMenuOpen(false);
-      }
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) setIsMenuOpen(false);
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Lock body scroll when mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isMenuOpen]);
+
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === `/${restaurant?.subdomain}` || location.pathname === '/';
+    return location.pathname.includes(path);
+  };
+
+  const S = {
+    nav: {
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
+      backgroundColor: isScrolled ? 'rgba(13,13,13,0.95)' : 'transparent',
+      backdropFilter: isScrolled ? 'blur(10px)' : 'none',
+      padding: isMobile ? '12px 20px' : '16px 48px',
+      transition: 'all 0.3s ease',
+      borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.08)' : 'none'
+    },
+    container: { maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+    logoSection: { display: 'flex', alignItems: 'center', gap: '10px' },
+    logo: { height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${accent}` },
+    restaurantName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '18px' : '22px', fontWeight: 700, color: '#fff', textDecoration: 'none' },
+    navLinks: { display: 'flex', gap: '28px', alignItems: 'center' },
+    navLink: { fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 600, color: '#fff', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '8px 0' },
+    activeLink: { color: accent },
+    dropdown: { position: 'absolute', top: '100%', left: 0, backgroundColor: bg === '#0d0d0d' ? '#1a1a1a' : bg, minWidth: '200px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', borderRadius: '8px', padding: '12px 0', zIndex: 100 },
+    dropdownLink: { display: 'block', padding: '10px 20px', color: '#fff', textDecoration: 'none', fontSize: '13px' },
+    orderButton: { backgroundColor: accent, color: '#000', border: 'none', padding: isMobile ? '10px 16px' : '12px 24px', fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', borderRadius: '4px', cursor: 'pointer' },
+  };
 
   return (
     <>
       <nav style={S.nav}>
         <div style={S.container}>
+          {/* Logo */}
           <div style={S.logoSection}>
-            {restaurant?.logoUrl && (
-              <img 
-                src={restaurant.logoUrl} 
-                alt={restaurant.name} 
-                style={S.logo}
-                onError={(e) => e.target.style.display = 'none'}
-              />
-            )}
-            <Link 
-              to={`/${restaurant?.subdomain}`} 
-              style={S.restaurantName}
-            >
-              {restaurant?.name}
-            </Link>
+            {restaurant?.logoUrl && <img src={restaurant.logoUrl} alt={restaurant.name} style={S.logo} onError={e=>e.target.style.display='none'} />}
+            <Link to={`/${restaurant?.subdomain}`} style={S.restaurantName}>{restaurant?.name}</Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          {/* Desktop Nav */}
+          {!isMobile && (
             <div style={S.navLinks}>
-              <Link 
-                to={`/${restaurant?.subdomain}`} 
-                style={{
-                  ...S.navLink,
-                  ...(isActive(`/${restaurant?.subdomain}`) && location.pathname === `/${restaurant?.subdomain}` ? S.activeLink : {})
-                }}
-              >
-                HOME
-              </Link>
-              
-              <Link 
-                to={`/${restaurant?.subdomain}/about`} 
-                style={{
-                  ...S.navLink,
-                  ...(isActive('/about') ? S.activeLink : {})
-                }}
-              >
-                ABOUT US
-              </Link>
-              
-              <div 
-                style={{ position: 'relative' }}
-                onMouseEnter={() => setIsMenuDropdownOpen(true)}
-                onMouseLeave={() => setIsMenuDropdownOpen(false)}
-              >
-                <Link 
-                  to={`/${restaurant?.subdomain}/menu`} 
-                  style={{
-                    ...S.navLink,
-                    ...(isActive('/menu') ? S.activeLink : {})
-                  }}
-                >
-                  MENU ▼
-                </Link>
-                
-                <div 
-                  style={{
-                    ...S.dropdown,
-                    ...(isMenuDropdownOpen ? S.dropdownOpen : {})
-                  }}
-                >
-                  {menuCategories?.map(category => (
-                    <Link
-                      key={category.id}
-                      to={`/${restaurant?.subdomain}/menu#${category.name.replace(/\s+/g, '-').toLowerCase()}`}
-                      style={S.dropdownLink}
-                      onMouseEnter={(e) => e.target.style.backgroundColor = S.dropdownLinkHover.backgroundColor}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                    >
-                      {category.name}
-                    </Link>
-                  ))}
-                </div>
+              <Link to={`/${restaurant?.subdomain}`} style={{...S.navLink,...(location.pathname===`/${restaurant?.subdomain}`?S.activeLink:{})}}>HOME</Link>
+              <Link to={`/${restaurant?.subdomain}/about`} style={{...S.navLink,...(isActive('/about')?S.activeLink:{})}}>ABOUT US</Link>
+              <div style={{position:'relative'}} onMouseEnter={()=>setIsMenuDropdownOpen(true)} onMouseLeave={()=>setIsMenuDropdownOpen(false)}>
+                <Link to={`/${restaurant?.subdomain}/menu`} style={{...S.navLink,...(isActive('/menu')?S.activeLink:{})}}>MENU ▼</Link>
+                {isMenuDropdownOpen && (
+                  <div style={S.dropdown}>
+                    {menuCategories?.map(cat=>(
+                      <Link key={cat.id} to={`/${restaurant?.subdomain}/menu`} style={S.dropdownLink}
+                        onMouseEnter={e=>e.target.style.backgroundColor='rgba(255,255,255,0.05)'}
+                        onMouseLeave={e=>e.target.style.backgroundColor='transparent'}>
+                        {cat.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-              
-              <Link 
-                to={`/${restaurant?.subdomain}/gallery`} 
-                style={{
-                  ...S.navLink,
-                  ...(isActive('/gallery') ? S.activeLink : {})
-                }}
-              >
-                GALLERY
-              </Link>
-              
-              <Link 
-                to={`/${restaurant?.subdomain}/contact`} 
-                style={{
-                  ...S.navLink,
-                  ...(isActive('/contact') ? S.activeLink : {})
-                }}
-              >
-                CONTACT
-              </Link>
+              <Link to={`/${restaurant?.subdomain}/gallery`} style={{...S.navLink,...(isActive('/gallery')?S.activeLink:{})}}>GALLERY</Link>
+              <Link to={`/${restaurant?.subdomain}/contact`} style={{...S.navLink,...(isActive('/contact')?S.activeLink:{})}}>CONTACT</Link>
             </div>
-          </div>
+          )}
 
-          <div style={S.contactSection}>
-            {restaurant?.phone && (
-              <a 
-                href={`tel:${restaurant.phone}`} 
-                style={S.phone}
-              >
-                {restaurant.phone}
-              </a>
+          {/* Right side */}
+          <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
+            {!isMobile && restaurant?.phone && (
+              <a href={`tel:${restaurant.phone}`} style={{fontSize:'13px',color:'#fff',textDecoration:'none',fontWeight:500}}>{restaurant.phone}</a>
             )}
-            
-            <button style={S.orderButton} onClick={() => navigate(`/${restaurant?.subdomain}/menu`)}>
-              ORDER ONLINE
-            </button>
-            
-            <button 
-              style={S.mobileMenuButton}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              ☰
-            </button>
+            {!isMobile && <button style={S.orderButton} onClick={()=>navigate(`/${restaurant?.subdomain}/menu`)}>ORDER ONLINE</button>}
+            {isMobile && (
+              <button onClick={()=>setIsMenuOpen(!isMenuOpen)} style={{background:'none',border:'none',color:'#fff',fontSize:'26px',cursor:'pointer',lineHeight:1,padding:'4px'}}>
+                {isMenuOpen ? '✕' : '☰'}
+              </button>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      <div 
-        style={{
-          ...S.mobileMenu,
-          ...(isMenuOpen ? S.mobileMenuOpen : {})
-        }}
-      >
-        <div style={S.mobileNavLinks}>
-          <Link 
-            to={`/${restaurant?.subdomain}`} 
-            style={S.mobileNavLink}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            HOME
-          </Link>
-          
-          <Link 
-            to={`/${restaurant?.subdomain}/about`} 
-            style={S.mobileNavLink}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            ABOUT US
-          </Link>
-          
-          <Link 
-            to={`/${restaurant?.subdomain}/menu`} 
-            style={S.mobileNavLink}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            MENU
-          </Link>
-          
-          <Link 
-            to={`/${restaurant?.subdomain}/gallery`} 
-            style={S.mobileNavLink}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            GALLERY
-          </Link>
-          
-          <Link 
-            to={`/${restaurant?.subdomain}/contact`} 
-            style={S.mobileNavLink}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            CONTACT
-          </Link>
+      {/* Mobile Menu Overlay */}
+      {isMobile && isMenuOpen && (
+        <div style={{position:'fixed',inset:0,zIndex:999}} onClick={()=>setIsMenuOpen(false)}>
+          <div style={{position:'absolute',inset:0,backgroundColor:'rgba(0,0,0,0.7)'}} />
+          <div style={{position:'absolute',top:0,right:0,height:'100vh',width:'75%',maxWidth:'300px',backgroundColor:'#111',padding:'80px 32px 32px',display:'flex',flexDirection:'column',gap:'8px'}} onClick={e=>e.stopPropagation()}>
+            <button onClick={()=>setIsMenuOpen(false)} style={{position:'absolute',top:'20px',right:'20px',background:'none',border:'none',color:'rgba(255,255,255,0.6)',fontSize:'24px',cursor:'pointer'}}>✕</button>
+            {[
+              {to:`/${restaurant?.subdomain}`,label:'Home'},
+              {to:`/${restaurant?.subdomain}/about`,label:'About Us'},
+              {to:`/${restaurant?.subdomain}/menu`,label:'Menu'},
+              {to:`/${restaurant?.subdomain}/gallery`,label:'Gallery'},
+              {to:`/${restaurant?.subdomain}/contact`,label:'Contact'},
+            ].map(({to,label})=>(
+              <Link key={to} to={to} onClick={()=>setIsMenuOpen(false)}
+                style={{color:location.pathname===to?accent:'rgba(255,255,255,0.85)',textDecoration:'none',fontSize:'18px',fontWeight:600,textTransform:'uppercase',letterSpacing:'0.08em',padding:'14px 0',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+                {label}
+              </Link>
+            ))}
+            <div style={{marginTop:'24px',display:'flex',flexDirection:'column',gap:'12px'}}>
+              {restaurant?.phone && <a href={`tel:${restaurant.phone}`} style={{color:'rgba(255,255,255,0.6)',fontSize:'14px',textDecoration:'none'}}>📞 {restaurant.phone}</a>}
+              <button onClick={()=>{navigate(`/${restaurant?.subdomain}/menu`);setIsMenuOpen(false);}} style={{...S.orderButton,width:'100%',padding:'14px',fontSize:'13px'}}>ORDER ONLINE</button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Overlay */}
-      <div 
-        style={{
-          ...S.overlay,
-          ...(isMenuOpen ? S.overlayVisible : {})
-        }}
-        onClick={() => setIsMenuOpen(false)}
-      />
+      )}
     </>
   );
 };

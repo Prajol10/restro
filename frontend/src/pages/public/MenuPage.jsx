@@ -71,18 +71,24 @@ const MenuPage = () => {
     }
   };
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const h = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, []);
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
   const primary = restaurant?.primaryColor || '#111';
 
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
-    section: { padding: '100px 0', backgroundColor: bg },
-    container: { maxWidth: '1280px', margin: '0 auto', padding: '0 48px' },
+    section: { padding: isMobile ? '80px 0 60px' : '100px 0', backgroundColor: bg },
+    container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
-    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px', flexWrap: 'wrap', gap: '20px' },
+    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '24px' : '48px', flexWrap: 'wrap', gap: '16px' },
     searchContainer: { position: 'relative', maxWidth: '300px' },
     searchInput: {
       width: '100%',
@@ -116,7 +122,7 @@ const MenuPage = () => {
       cursor: isDownloading ? 'not-allowed' : 'pointer',
       borderRadius: '4px'
     },
-    categoryTabs: { display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '48px' },
+    categoryTabs: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: isMobile ? '24px' : '48px' },
     categoryTab: {
       padding: '10px 20px',
       backgroundColor: 'transparent',
@@ -128,11 +134,11 @@ const MenuPage = () => {
       transition: 'all 0.3s ease'
     },
     activeTab: { backgroundColor: accent, color: '#000', border: '1px solid ' + accent },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '48px' },
+    grid: { display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(280px, 1fr))', gap: isMobile ? '24px' : '48px' },
     card: { display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' },
-    image: { width: '160px', height: '160px', borderRadius: '50%', objectFit: 'cover', marginBottom: '20px' },
+    image: { width: isMobile ? '110px' : '160px', height: isMobile ? '110px' : '160px', borderRadius: '50%', objectFit: 'cover', marginBottom: '16px' },
     specialImage: { border: `3px solid ${accent}` },
-    itemName: { fontFamily: "'Playfair Display', serif", fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    itemName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '0.95rem' : '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
     subtitle: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', marginBottom: '12px', fontStyle: 'italic' },
     price: { fontSize: '1rem', color: accent, fontWeight: 700, marginBottom: '12px' },
     description: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6', marginBottom: '16px' },

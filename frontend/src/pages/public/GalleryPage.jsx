@@ -9,6 +9,12 @@ const GalleryPage = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const h = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, []);
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
 
@@ -16,7 +22,7 @@ const GalleryPage = () => {
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
     section: { padding: '100px 0' },
-    container: { maxWidth: '1280px', margin: '0 auto', padding: '0 48px' },
+    container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
@@ -38,7 +44,7 @@ const GalleryPage = () => {
     },
     gallery: { 
       display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+      gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(250px, 1fr))', 
       gap: '16px' 
     },
     galleryItem: { 

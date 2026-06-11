@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTenant } from '../../context/TenantContext';
 import Layout from '../../components/public/Layout';
 
@@ -14,6 +14,12 @@ const ContactPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const h = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', h);
+    return () => window.removeEventListener('resize', h);
+  }, []);
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
   const primary = restaurant?.primaryColor || '#111111';
@@ -21,13 +27,13 @@ const ContactPage = () => {
   // Styles
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
-    section: { padding: '100px 0' },
-    container: { maxWidth: '1280px', margin: '0 auto', padding: '0 48px' },
+    section: { padding: isMobile ? '80px 0 60px' : '100px 0' },
+    container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
-    content: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'start' },
-    mapContainer: { height: '500px', borderRadius: '8px', overflow: 'hidden' },
+    content: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '32px' : '64px', alignItems: 'start' },
+    mapContainer: { height: isMobile ? '280px' : '500px', borderRadius: '8px', overflow: 'hidden' },
     map: { width: '100%', height: '100%', border: 'none' },
     contactInfo: { display: 'flex', flexDirection: 'column', gap: '32px' },
     infoCard: { 
