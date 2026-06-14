@@ -29,6 +29,7 @@ namespace RestroApi.Models
         public string? TiktokUrl { get; set; }
         public string? WebsiteUrl { get; set; }
         public string? MapEmbedUrl { get; set; }
+    public string? Restro24Url { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<MenuCategory> MenuCategories { get; set; } = new List<MenuCategory>();

@@ -41,7 +41,8 @@ namespace RestroApi.Controllers
                 Address = dto.Address, Phone = dto.Phone, Email = dto.Email,
                 FacebookUrl = dto.FacebookUrl, InstagramUrl = dto.InstagramUrl,
                 TiktokUrl = dto.TiktokUrl, OpeningHours = dto.OpeningHours,
-                MapEmbedUrl = dto.MapEmbedUrl
+                MapEmbedUrl = dto.MapEmbedUrl,
+                Restro24Url = dto.Restro24Url
             };
             _context.Restaurants.Add(restaurant);
             await _context.SaveChangesAsync();
@@ -84,6 +85,7 @@ namespace RestroApi.Controllers
             r.TiktokUrl = dto.TiktokUrl != null ? dto.TiktokUrl : r.TiktokUrl;
             r.OpeningHours = dto.OpeningHours != null ? dto.OpeningHours : r.OpeningHours;
             r.MapEmbedUrl = dto.MapEmbedUrl != null ? dto.MapEmbedUrl : r.MapEmbedUrl;
+            r.Restro24Url = dto.Restro24Url != null ? dto.Restro24Url : r.Restro24Url;
             r.IsActive = dto.IsActive ?? r.IsActive;
             await _context.SaveChangesAsync();
             return Ok(r);
@@ -178,6 +180,7 @@ namespace RestroApi.Controllers
         public string? TiktokUrl { get; set; }
         public string? OpeningHours { get; set; }
         public string? MapEmbedUrl { get; set; }
+        public string? Restro24Url { get; set; }
         public bool? IsActive { get; set; }
     }
 

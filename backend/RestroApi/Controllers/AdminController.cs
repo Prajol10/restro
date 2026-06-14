@@ -61,6 +61,7 @@ namespace RestroApi.Controllers
             r.InstagramUrl = dto.InstagramUrl != null ? dto.InstagramUrl : r.InstagramUrl;
             r.TiktokUrl = dto.TiktokUrl != null ? dto.TiktokUrl : r.TiktokUrl;
             r.MapEmbedUrl = dto.MapEmbedUrl != null ? dto.MapEmbedUrl : r.MapEmbedUrl;
+            r.Restro24Url = dto.Restro24Url != null ? dto.Restro24Url : r.Restro24Url;
             await _context.SaveChangesAsync();
             return Ok(r);
         }
@@ -443,6 +444,7 @@ namespace RestroApi.Controllers
         public string? InstagramUrl { get; set; }
         public string? TiktokUrl { get; set; }
         public string? MapEmbedUrl { get; set; }
+        public string? Restro24Url { get; set; }
     }
 
     public class CategoryDto
