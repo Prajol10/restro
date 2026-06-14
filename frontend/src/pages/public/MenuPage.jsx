@@ -309,20 +309,12 @@ const MenuPage = () => {
                     {item.subtitle && <p style={S.subtitle}>{item.subtitle}</p>}
                     <p style={S.price}>Rs. {item.price}</p>
                     <p style={S.description}>{item.description}</p>
-                    {item.isAvailable && (()=>{
-                      const cartItem = cart.find(c => c.id === item.id);
-                      return cartItem ? (
-                        <div style={{display:'flex',alignItems:'center',gap:'12px',marginTop:'12px'}}>
-                          <button onClick={()=>updateQty(item.id, cartItem.qty-1)} style={{width:'32px',height:'32px',borderRadius:'50%',border:`1px solid ${accent}`,backgroundColor:'transparent',color:accent,fontSize:'18px',cursor:'pointer',fontWeight:700}}>−</button>
-                          <span style={{color:'#fff',fontWeight:800,fontSize:'16px',minWidth:'24px',textAlign:'center'}}>{cartItem.qty}</span>
-                          <button onClick={()=>updateQty(item.id, cartItem.qty+1)} style={{width:'32px',height:'32px',borderRadius:'50%',border:'none',backgroundColor:accent,color:'#000',fontSize:'18px',cursor:'pointer',fontWeight:700}}>+</button>
-                        </div>
-                      ) : (
-                        <button onClick={()=>addToCart(item)} style={{marginTop:'8px',padding:'10px 24px',backgroundColor:accent,color:'#000',border:'none',borderRadius:'4px',fontWeight:700,fontSize:'0.8rem',textTransform:'uppercase',letterSpacing:'0.08em',cursor:'pointer'}}>
-                          + Add to Order
-                        </button>
-                      );
-                    })()}
+                    {item.isAvailable && restaurant?.restro24Url && (
+                      <a href={restaurant.restro24Url} target="_blank" rel="noopener noreferrer"
+                        style={{marginTop:'12px',padding:'10px 24px',backgroundColor:accent,color:'#000',border:'none',borderRadius:'4px',fontWeight:700,fontSize:'0.8rem',textTransform:'uppercase',letterSpacing:'0.08em',cursor:'pointer',textDecoration:'none',display:'inline-block'}}>
+                        Order Now
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>

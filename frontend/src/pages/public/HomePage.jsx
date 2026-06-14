@@ -166,9 +166,10 @@ const HomePage = () => {
             <button onClick={() => navigate(`/${slug}/contact`)} style={{...S.ctaBtn, backgroundColor: accent, color: '#000'}}>
               Reserve a Table
             </button>
-            <button onClick={() => navigate(`/${slug}/menu`)} style={{...S.ctaBtn, backgroundColor: 'transparent', border: '1.5px solid rgba(255,255,255,0.6)', color: '#fff'}}>
-              Order Online
-            </button>
+            {restaurant.restro24Url
+              ? <a href={restaurant.restro24Url} target="_blank" rel="noopener noreferrer" style={{...S.ctaBtn, backgroundColor: 'transparent', border: '1.5px solid rgba(255,255,255,0.6)', color: '#fff', textDecoration:'none'}}>Order Online</a>
+              : <button onClick={() => navigate(`/${slug}/menu`)} style={{...S.ctaBtn, backgroundColor: 'transparent', border: '1.5px solid rgba(255,255,255,0.6)', color: '#fff'}}>Order Online</button>
+            }
             {restaurant.phone && (
               <a href={`tel:${restaurant.phone}`} style={{...S.ctaBtn, backgroundColor: 'transparent', border: '1.5px solid rgba(255,255,255,0.6)', color: '#fff'}}>
                 Call Now

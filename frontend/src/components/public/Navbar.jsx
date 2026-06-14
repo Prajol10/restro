@@ -94,7 +94,11 @@ const Navbar = ({ isScrolled }) => {
             {!isMobile && restaurant?.phone && (
               <a href={`tel:${restaurant.phone}`} style={{fontSize:'13px',color:'#fff',textDecoration:'none',fontWeight:500}}>{restaurant.phone}</a>
             )}
-            {!isMobile && <button style={S.orderButton} onClick={()=>navigate(`/${restaurant?.subdomain}/menu`)}>ORDER ONLINE</button>}
+            {!isMobile && (
+            restaurant?.restro24Url
+              ? <a href={restaurant.restro24Url} target="_blank" rel="noopener noreferrer" style={{...S.orderButton, textDecoration:'none', display:'inline-block'}}>ORDER ONLINE</a>
+              : <button style={S.orderButton} onClick={()=>navigate(`/${restaurant?.subdomain}/menu`)}>ORDER ONLINE</button>
+          )}
             {isMobile && (
               <button onClick={()=>setIsMenuOpen(!isMenuOpen)} style={{background:'none',border:'none',color:'#fff',fontSize:'26px',cursor:'pointer',lineHeight:1,padding:'4px'}}>
                 {isMenuOpen ? '✕' : '☰'}
@@ -124,7 +128,10 @@ const Navbar = ({ isScrolled }) => {
             ))}
             <div style={{marginTop:'24px',display:'flex',flexDirection:'column',gap:'12px'}}>
               {restaurant?.phone && <a href={`tel:${restaurant.phone}`} style={{color:'rgba(255,255,255,0.6)',fontSize:'14px',textDecoration:'none'}}>📞 {restaurant.phone}</a>}
-              <button onClick={()=>{navigate(`/${restaurant?.subdomain}/menu`);setIsMenuOpen(false);}} style={{...S.orderButton,width:'100%',padding:'14px',fontSize:'13px'}}>ORDER ONLINE</button>
+              {restaurant?.restro24Url
+                ? <a href={restaurant.restro24Url} target="_blank" rel="noopener noreferrer" onClick={()=>setIsMenuOpen(false)} style={{...S.orderButton,width:'100%',padding:'14px',fontSize:'13px',textDecoration:'none',display:'block',textAlign:'center'}}>ORDER ONLINE</a>
+                : <button onClick={()=>{navigate(`/${restaurant?.subdomain}/menu`);setIsMenuOpen(false);}} style={{...S.orderButton,width:'100%',padding:'14px',fontSize:'13px'}}>ORDER ONLINE</button>
+              }
             </div>
           </div>
         </div>

@@ -890,7 +890,7 @@ const AdminDashboard = () => {
                 <div style={{...S.card,marginBottom:'16px'}}>
                   <p style={{fontSize:'11px',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'rgba(255,255,255,0.3)',marginBottom:'20px'}}>Social & Maps</p>
                   <div style={S.grid2}>
-                    {[{key:'facebookUrl',label:'Facebook URL'},{key:'instagramUrl',label:'Instagram URL'},{key:'tiktokUrl',label:'TikTok URL'},{key:'mapEmbedUrl',label:'Google Maps Embed URL'}].map(({key,label})=>(
+                    {[{key:'facebookUrl',label:'Facebook URL'},{key:'instagramUrl',label:'Instagram URL'},{key:'tiktokUrl',label:'TikTok URL'},{key:'mapEmbedUrl',label:'Google Maps Embed URL'},{key:'restro24Url',label:'Restro24 Order URL'}].map(({key,label})=>(
                       <div key={key}><label style={S.label}>{label}</label><input value={infoForm[key]||''} onChange={e=>setInfoForm({...infoForm,[key]:e.target.value})} style={S.input} /></div>
                     ))}
                   </div>

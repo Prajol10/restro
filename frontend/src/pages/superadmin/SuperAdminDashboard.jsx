@@ -127,6 +127,7 @@ export default function SuperAdminDashboard() {
     bgColor: '#0d0d0d', tagline: '', heroTitle: '', heroSubtitle: '',
     address: '', phone: '', email: '', logoUrl: '', bannerUrl: '', videoUrl: '',
     facebookUrl: '', instagramUrl: '', tiktokUrl: '', mapEmbedUrl: '',
+    restro24Url: '',
     openingHours: JSON.stringify({ monday: '11:00 AM - 10:00 PM', tuesday: '11:00 AM - 10:00 PM', wednesday: '11:00 AM - 10:00 PM', thursday: '11:00 AM - 10:00 PM', friday: '11:00 AM - 11:00 PM', saturday: '11:00 AM - 11:00 PM', sunday: 'Closed' })
   };
   const [form, setForm] = useState(defaultForm);
@@ -175,6 +176,7 @@ export default function SuperAdminDashboard() {
       logoUrl: r.logoUrl || '', bannerUrl: r.bannerUrl || '', videoUrl: r.videoUrl || '',
       facebookUrl: r.facebookUrl || '', instagramUrl: r.instagramUrl || '',
       tiktokUrl: r.tiktokUrl || '', mapEmbedUrl: r.mapEmbedUrl || '',
+      restro24Url: r.restro24Url || '',
       openingHours: r.openingHours || defaultForm.openingHours
     });
     setShowForm(true);
