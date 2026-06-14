@@ -479,6 +479,7 @@ export default function SuperAdminDashboard() {
                       Cancel
                     </button>
                   </div>
+                </div>
                 </form>
               </div>
             )}
