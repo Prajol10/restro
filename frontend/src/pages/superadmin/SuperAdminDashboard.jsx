@@ -415,7 +415,13 @@ export default function SuperAdminDashboard() {
                         onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
                         onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
                     </div>
-                  </div>
+                    <div>
+                      <label style={S.label}>Restro24 Order URL</label>
+                      <input value={form.restro24Url} onChange={e => setForm({ ...form, restro24Url: e.target.value })} placeholder="https://restro24.com/your-restaurant" style={S.input}
+                        onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
+                        onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'} />
+                      <p style={{fontSize:'11px',color:'rgba(255,255,255,0.35)',marginTop:'6px'}}>Customers will be redirected here when they click "Order Online"</p>
+                    </div>
 
                   <hr style={S.divider} />
                   <div style={{ marginBottom: '24px' }}>
