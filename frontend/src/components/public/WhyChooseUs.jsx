@@ -7,7 +7,7 @@ const WhyChooseUs = () => {
   if (!whyChooseUs || whyChooseUs.length === 0) return null;
 
   return (
-    <section style={{ padding: '100px 0', backgroundColor: '#080808' }}>
+    <section style={{ padding: '100px 0', backgroundColor: restaurant?.bgColor || '#0d0d0d' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
         <p style={{
           fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em',
@@ -27,7 +27,7 @@ const WhyChooseUs = () => {
         }}>
           {whyChooseUs.map(item => (
             <div key={item.id} style={{
-              backgroundColor: '#111',
+              backgroundColor: restaurant?.primaryColor || '#111',
               border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: '4px',
               padding: '36px 28px',

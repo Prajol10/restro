@@ -7,6 +7,7 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
   const [loaded, setLoaded] = useState(false);
 
   const accent = restaurant?.accentColor || '#C9A84C';
+  const bg = restaurant?.bgColor || '#0d0d0d';
 
   const videoRef1 = React.useRef(null);
   const videoRef2 = React.useRef(null);
@@ -66,7 +67,7 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
       display: 'flex',
       alignItems: 'center',
       overflow: 'hidden',
-      backgroundColor: '#0d0d0d'
+      backgroundColor: bg
     }}>
       {/* Background */}
       {hasVideo ? (
@@ -76,7 +77,7 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
               objectFit: 'cover', filter: 'brightness(0.35)',
-              willChange: 'transform', backgroundColor: '#0d0d0d',
+              willChange: 'transform', backgroundColor: bg,
               opacity: activeVideo === 1 ? 1 : 0,
               transition: 'opacity 0.5s ease'
             }}>
@@ -87,7 +88,7 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
               objectFit: 'cover', filter: 'brightness(0.35)',
-              willChange: 'transform', backgroundColor: '#0d0d0d',
+              willChange: 'transform', backgroundColor: bg,
               opacity: activeVideo === 2 ? 1 : 0,
               transition: 'opacity 0.5s ease'
             }}>
