@@ -6,7 +6,7 @@ const Footer = () => {
   const hours = (() => { try { return Object.entries(JSON.parse(restaurant?.openingHours || '{}')); } catch { return []; } })();
 
   return (
-    <footer id="contact" style={{ backgroundColor: restaurant?.bgColor || '#050505', paddingTop: '80px' }}>
+    <footer id="contact" style={{ backgroundColor: restaurant?.bgColor || '#0d0d0d', paddingTop: '80px' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
 
         {/* Top - Centered Logo with lines */}

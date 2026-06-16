@@ -80,7 +80,7 @@ const AboutPage = () => {
             <div style={S.divider} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '32px' }}>
               {whyChooseUs && whyChooseUs.length > 0 ? whyChooseUs.map(item => (
-                <div key={item.id} style={{ backgroundColor: restaurant?.bgColor || '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}
+                <div key={item.id} style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = accent}
                   onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'}>
                   {item.icon && <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{item.icon}</div>}
@@ -94,7 +94,7 @@ const AboutPage = () => {
                  { icon: '👨‍🍳', title: 'Expert Chefs', desc: 'Our skilled chefs bring years of experience and passion to every dish.' },
                  { icon: '🍷', title: 'Premium Experience', desc: 'From ambiance to service, we ensure every visit is memorable.' }
                 ].map((item, i) => (
-                  <div key={i} style={{ backgroundColor: restaurant?.bgColor || '#0d0d0d', border: '1px solid rgba(255,255,255,0.06)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}>
+                  <div key={i} style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '32px', textAlign: 'center', borderRadius: '4px' }}>
                     <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{item.icon}</div>
                     <div style={{ width: '32px', height: '2px', backgroundColor: accent, margin: '0 auto 16px' }} />
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>{item.title}</h3>

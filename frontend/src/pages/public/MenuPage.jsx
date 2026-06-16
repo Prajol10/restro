@@ -93,8 +93,7 @@ const MenuPage = () => {
     searchInput: {
       width: '100%',
       padding: '12px 20px',
-      backgroundColor: bg,
-      border: '1px solid rgba(255,255,255,0.1)',
+      backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
       color: '#fff',
       fontFamily: "'Inter', sans-serif",
       fontSize: '0.875rem'
@@ -103,8 +102,7 @@ const MenuPage = () => {
     controls: { display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' },
     categorySelect: {
       padding: '12px 20px',
-      backgroundColor: bg,
-      border: '1px solid rgba(255,255,255,0.1)',
+      backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
       color: '#fff',
       fontFamily: "'Inter', sans-serif",
       fontSize: '0.875rem'
