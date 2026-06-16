@@ -19,7 +19,7 @@ const AboutPage = () => {
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
     section: { padding: '100px 0' },
-    darkSection: { padding: '100px 0', backgroundColor: restaurant?.primaryColor || '#111' },
+    darkSection: { padding: '100px 0', backgroundColor: restaurant?.bgColor || '#0d0d0d' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     label: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     title: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
@@ -34,7 +34,7 @@ const AboutPage = () => {
         <div style={{
           height: '60vh', position: 'relative',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: restaurant?.primaryColor || '#111',
+          backgroundColor: restaurant?.bgColor || '#0d0d0d',
           backgroundImage: restaurant.aboutImageUrl ? `url(${restaurant.aboutImageUrl})` : 'none',
           backgroundSize: 'cover', backgroundPosition: 'center'
         }}>
@@ -107,7 +107,7 @@ const AboutPage = () => {
         </section>
 
         {/* CTA */}
-        <section style={{ backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: '80px 0', textAlign: 'center', color: '#fff' }}>
+        <section style={{ backgroundColor: restaurant?.primaryColor || '#1a1a1a', padding: '80px 0', textAlign: 'center', color: '#fff' }}>
           <div style={S.container}>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: '#fff', marginBottom: '24px' }}>
               Visit Us Today

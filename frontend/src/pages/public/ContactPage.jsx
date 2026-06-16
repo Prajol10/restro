@@ -37,7 +37,7 @@ const ContactPage = () => {
     map: { width: '100%', height: '100%', border: 'none' },
     contactInfo: { display: 'flex', flexDirection: 'column', gap: '32px' },
     infoCard: { 
-      backgroundColor: primary, 
+      backgroundColor: bg, 
       border: '1px solid rgba(255,255,255,0.06)', 
       padding: '28px',
       display: 'flex',
@@ -69,7 +69,7 @@ const ContactPage = () => {
       transition: 'color 0.3s ease'
     },
     form: { 
-      backgroundColor: primary, 
+      backgroundColor: bg, 
       border: '1px solid rgba(255,255,255,0.06)', 
       padding: '40px',
       borderRadius: '8px'
@@ -194,7 +194,7 @@ const ContactPage = () => {
                     ></iframe>
                   </div>
                 ) : (
-                  <div style={{...S.mapContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: primary}}>
+                  <div style={{...S.mapContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: bg}}>
                     <p style={{color: 'rgba(255,255,255,0.5)'}}>Map not available</p>
                   </div>
                 )}
