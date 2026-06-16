@@ -1,7 +1,15 @@
 import { useTenant } from '../../context/TenantContext';
+import { useState, useEffect } from 'react';
 import Layout from '../../components/public/Layout';
 
 const AboutPage = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const { restaurant, whyChooseUs } = useTenant();
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
