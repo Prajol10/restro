@@ -56,19 +56,19 @@ const HomePage = () => {
 
   const S = {
     section: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0' },
-    darkSection: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0', borderTop: '1px solid rgba(255,255,255,0.06)' },
+    darkSection: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0', borderTop: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     label: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     title: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2rem' : 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
     grid: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', gap: isMobile ? '24px' : '32px' },
-    card: { backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', textAlign: 'center' },
+    card: { backgroundColor: textColor === '#111111' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)', border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.08)', padding: '28px', textAlign: 'center', borderRadius: '8px' },
     image: { width: '160px', height: '160px', borderRadius: '50%', border: `3px solid ${accent}`, objectFit: 'cover', marginBottom: '20px' },
     itemName: { fontFamily: "'Playfair Display', serif", fontSize: '1.25rem', fontWeight: 700, color: textColor, marginBottom: '8px' },
     price: { fontSize: '1rem', color: accent, fontWeight: 700, marginBottom: '8px' },
     desc: { fontSize: '0.875rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.5)', lineHeight: '1.6' },
     link: { color: accent, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', marginTop: '24px', display: 'inline-block', cursor: 'pointer' },
-    reviewCard: { backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px' },
+    reviewCard: { backgroundColor: textColor === '#111111' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)', border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '8px' },
     ctaSection: { backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: isMobile ? '60px 0' : '100px 0', textAlign: 'center' },
     ctaTitle: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, color: '#ffffff', marginBottom: '24px' },
     ctaBtn: { padding: '16px 32px', fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', border: 'none', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
@@ -148,16 +148,16 @@ const HomePage = () => {
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>
               <div style={{ fontSize: '3rem', fontWeight: 700, color: accent }}>{averageRating}</div>
               <div style={{ color: accent, fontSize: '1.5rem', margin: '8px 0' }}>★★★★★</div>
-              <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>Based on {previewReviews.length} reviews</div>
+              <div style={{ color: textColor === '#111111' ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)', fontSize: '0.875rem' }}>Based on {previewReviews.length} reviews</div>
             </div>
             <div style={S.grid}>
               {previewReviews.map(review => (
                 <div key={review.id} style={S.reviewCard}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <span style={{ fontWeight: 600, color: '#fff' }}>{review.customerName}</span>
+                    <span style={{ fontWeight: 600, color: textColor }}>{review.customerName}</span>
                     <span style={{ color: accent }}>{'★'.repeat(review.rating)}</span>
                   </div>
-                  <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: '1.7', fontStyle: 'italic' }}>"{review.content}"</p>
+                  <p style={{ color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', lineHeight: '1.7', fontStyle: 'italic' }}>"{review.content}"</p>
                 </div>
               ))}
             </div>

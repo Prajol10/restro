@@ -37,7 +37,7 @@ const WhyChooseUs = () => {
         }}>
           {whyChooseUs.map(item => (
             <div key={item.id} style={{
-              backgroundColor: 'rgba(255,255,255,0.05)',
+              backgroundColor: textColor === '#111111' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.05)',
               border: '1px solid rgba(255,255,255,0.06)',
               borderRadius: '4px',
               padding: '36px 28px',
