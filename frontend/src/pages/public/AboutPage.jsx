@@ -54,7 +54,7 @@ const AboutPage = () => {
             <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' }}>
               About Us
             </h1>
-            <p style={{ fontSize: '1.1rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto' }}>
+            <p style={{ fontSize: '1.1rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', maxWidth: '600px', margin: '0 auto' }}>
               {restaurant.tagline || 'Authentic flavors, timeless tradition'}
             </p>
           </div>
@@ -68,7 +68,7 @@ const AboutPage = () => {
                 <p style={S.label}>Our Journey</p>
                 <h2 style={S.title}>{restaurant.name}</h2>
                 <div style={S.divider} />
-                <p style={{ fontSize: '16px', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)', lineHeight: 1.9, marginBottom: '16px' }}>
+                <p style={{ fontSize: '16px', color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', lineHeight: 1.9, marginBottom: '16px' }}>
                   {restaurant.aboutText || restaurant.aboutShort || `Welcome to ${restaurant.name}, where tradition meets innovation. Our journey began with a passion for authentic flavors and a commitment to providing an exceptional dining experience.`}
                 </p>
               </div>
@@ -96,7 +96,7 @@ const AboutPage = () => {
                   {item.icon && <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{item.icon}</div>}
                   <div style={{ width: '32px', height: '2px', backgroundColor: accent, margin: '0 auto 16px' }} />
                   <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: textColor, marginBottom: '12px' }}>{item.title}</h3>
-                  <p style={{ fontSize: '14px', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)', lineHeight: 1.8 }}>{item.description}</p>
+                  <p style={{ fontSize: '14px', color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', lineHeight: 1.8 }}>{item.description}</p>
                 </div>
               )) : (
                 [{ icon: '🍽', title: 'Authentic Recipes', desc: 'Our dishes are crafted using traditional recipes passed down through generations.' },
@@ -108,7 +108,7 @@ const AboutPage = () => {
                     <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{item.icon}</div>
                     <div style={{ width: '32px', height: '2px', backgroundColor: accent, margin: '0 auto 16px' }} />
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, color: textColor, marginBottom: '12px' }}>{item.title}</h3>
-                    <p style={{ fontSize: '14px', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)', lineHeight: 1.8 }}>{item.desc}</p>
+                    <p style={{ fontSize: '14px', color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', lineHeight: 1.8 }}>{item.desc}</p>
                   </div>
                 ))
               )}
@@ -122,7 +122,7 @@ const AboutPage = () => {
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: textColor, marginBottom: '24px' }}>
               Visit Us Today
             </h2>
-            <p style={{ fontSize: '1.1rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)', maxWidth: '600px', margin: '0 auto 32px' }}>
+            <p style={{ fontSize: '1.1rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', maxWidth: '600px', margin: '0 auto 32px' }}>
               {restaurant.reservationText || 'Experience the authentic flavors and warm hospitality that make us unique.'}
             </p>
             <a href={`/${restaurant.subdomain}/contact`} style={{ padding: '16px 32px', backgroundColor: accent, color: '#000', border: 'none', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>

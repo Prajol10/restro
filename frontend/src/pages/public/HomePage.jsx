@@ -70,7 +70,7 @@ const HomePage = () => {
     link: { color: accent, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', marginTop: '24px', display: 'inline-block', cursor: 'pointer' },
     reviewCard: { backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px' },
     ctaSection: { backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: isMobile ? '60px 0' : '100px 0', textAlign: 'center' },
-    ctaTitle: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, color: '#fff', marginBottom: '24px' },
+    ctaTitle: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '1.8rem' : '2.5rem', fontWeight: 900, color: '#ffffff', marginBottom: '24px' },
     ctaBtn: { padding: '16px 32px', fontSize: '0.875rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', border: 'none', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' },
     galleryGrid: { display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px', marginBottom: '32px' },
     galleryImg: { width: '100%', height: '200px', objectFit: 'cover', borderRadius: '4px' }
@@ -169,7 +169,7 @@ const HomePage = () => {
       <section style={S.ctaSection}>
         <div style={S.container}>
           <h2 style={S.ctaTitle}>Experience the Tradition</h2>
-          <p style={{...S.desc, maxWidth: '600px', margin: '0 auto 32px', textAlign: 'center'}}>
+          <p style={{...S.desc, maxWidth: '600px', margin: '0 auto 32px', textAlign: 'center', color: 'rgba(255,255,255,0.7)'}}>
             {restaurant.reservationText || 'Book your table today and enjoy an authentic dining experience.'}
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>

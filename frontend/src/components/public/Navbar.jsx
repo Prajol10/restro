@@ -10,6 +10,7 @@ const Navbar = ({ isScrolled }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuDropdownOpen, setIsMenuDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const isHomePage = location.pathname === `/${restaurant?.subdomain}` || location.pathname === '/';
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
@@ -20,8 +21,8 @@ const Navbar = ({ isScrolled }) => {
     const b = parseInt(hex.substr(4,2),16);
     return (r*299 + g*587 + b*114) / 1000 > 128;
   })();
-  const navBg = isScrolled
-    ? (isLightBg ? '#111111' : `rgba(13,13,13,0.95)`)
+  const navBg = (!isHomePage || isScrolled)
+    ? '#111111'
     : 'transparent';
   const navTextColor = '#ffffff';
   const getTextColor = (bgCol) => {
@@ -62,7 +63,7 @@ const Navbar = ({ isScrolled }) => {
       backdropFilter: isScrolled ? 'blur(10px)' : 'none',
       padding: isMobile ? '12px 20px' : '16px 48px',
       transition: 'all 0.3s ease',
-      borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.1)' : 'none'
+      borderBottom: (!isHomePage || isScrolled) ? '1px solid rgba(255,255,255,0.1)' : 'none'
     },
     container: { maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     logoSection: { display: 'flex', alignItems: 'center', gap: '10px' },
