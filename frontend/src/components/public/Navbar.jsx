@@ -13,6 +13,17 @@ const Navbar = ({ isScrolled }) => {
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
+  const isLightBg = (() => {
+    const hex = (bg || '#0d0d0d').replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    return (r*299 + g*587 + b*114) / 1000 > 128;
+  })();
+  const navBg = isScrolled
+    ? (isLightBg ? '#111111' : `rgba(13,13,13,0.95)`)
+    : 'transparent';
+  const navTextColor = '#ffffff';
   const getTextColor = (bgCol) => {
     if (!bgCol) return '#ffffff';
     const hex = bgCol.replace('#', '');
@@ -47,13 +58,11 @@ const Navbar = ({ isScrolled }) => {
   const S = {
     nav: {
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-      backgroundColor: isScrolled
-        ? (bg === '#fcfcfc' || bg === '#ffffff' || bg === '#fff' ? 'rgba(255,255,255,0.97)' : 'rgba(13,13,13,0.95)')
-        : 'transparent',
+      backgroundColor: navBg,
       backdropFilter: isScrolled ? 'blur(10px)' : 'none',
       padding: isMobile ? '12px 20px' : '16px 48px',
       transition: 'all 0.3s ease',
-      borderBottom: isScrolled ? '1px solid rgba(128,128,128,0.15)' : 'none'
+      borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.1)' : 'none'
     },
     container: { maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     logoSection: { display: 'flex', alignItems: 'center', gap: '10px' },
