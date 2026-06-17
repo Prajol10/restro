@@ -13,6 +13,16 @@ const Navbar = ({ isScrolled }) => {
 
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
+  const getTextColor = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 128 ? '#111111' : '#ffffff';
+  };
+  const textColor = getTextColor(bg);
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,12 +56,12 @@ const Navbar = ({ isScrolled }) => {
     container: { maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     logoSection: { display: 'flex', alignItems: 'center', gap: '10px' },
     logo: { height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${accent}` },
-    restaurantName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '18px' : '22px', fontWeight: 700, color: '#fff', textDecoration: 'none' },
+    restaurantName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '18px' : '22px', fontWeight: 700, color: textColor, textDecoration: 'none' },
     navLinks: { display: 'flex', gap: '28px', alignItems: 'center' },
-    navLink: { fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 600, color: '#fff', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '8px 0' },
+    navLink: { fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 600, color: textColor, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '8px 0' },
     activeLink: { color: accent },
     dropdown: { position: 'absolute', top: '100%', left: 0, backgroundColor: bg === '#0d0d0d' ? '#1a1a1a' : bg, minWidth: '200px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', borderRadius: '8px', padding: '12px 0', zIndex: 100 },
-    dropdownLink: { display: 'block', padding: '10px 20px', color: '#fff', textDecoration: 'none', fontSize: '13px' },
+    dropdownLink: { display: 'block', padding: '10px 20px', color: textColor, textDecoration: 'none', fontSize: '13px' },
     orderButton: { backgroundColor: accent, color: '#000', border: 'none', padding: isMobile ? '10px 16px' : '12px 24px', fontFamily: "'Inter', sans-serif", fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', borderRadius: '4px', cursor: 'pointer' },
   };
 

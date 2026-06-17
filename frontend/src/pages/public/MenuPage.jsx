@@ -80,13 +80,23 @@ const MenuPage = () => {
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
   const primary = restaurant?.primaryColor || '#111';
+  const getTextColor = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 128 ? '#111111' : '#ffffff';
+  };
+  const textColor = getTextColor(bg);
 
   const S = {
     page: { backgroundColor: bg, minHeight: '100vh' },
     section: { padding: isMobile ? '80px 0 60px' : '100px 0', backgroundColor: bg },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
-    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
+    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '24px' : '48px', flexWrap: 'wrap', gap: '16px' },
     searchContainer: { position: 'relative', maxWidth: '300px' },
@@ -136,11 +146,11 @@ const MenuPage = () => {
     card: { display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' },
     image: { width: isMobile ? '110px' : '160px', height: isMobile ? '110px' : '160px', borderRadius: '50%', objectFit: 'cover', marginBottom: '16px' },
     specialImage: { border: `3px solid ${accent}` },
-    itemName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '0.95rem' : '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
+    itemName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '0.95rem' : '1.25rem', fontWeight: 700, color: textColor, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
     subtitle: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', marginBottom: '12px', fontStyle: 'italic' },
     price: { fontSize: '1rem', color: accent, fontWeight: 700, marginBottom: '12px' },
     description: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.6', marginBottom: '16px' },
-    noResults: { textAlign: 'center', padding: '48px', color: 'rgba(255,255,255,0.5)' }
+    noResults: { textAlign: 'center', padding: '48px', color: textColor === '#111111' ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)' }
   };
 
   useEffect(() => {

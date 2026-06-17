@@ -40,6 +40,16 @@ const HomePage = () => {
 
   if (!restaurant) return null;
   const accent = restaurant.accentColor || '#C9A84C';
+  const getTextColor = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 128 ? '#111111' : '#ffffff';
+  };
+  const textColor = getTextColor(restaurant.bgColor);
   const averageRating = previewReviews.length > 0
     ? (previewReviews.reduce((sum, r) => sum + r.rating, 0) / previewReviews.length).toFixed(1)
     : 0;
@@ -49,14 +59,14 @@ const HomePage = () => {
     darkSection: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0', borderTop: '1px solid rgba(255,255,255,0.06)' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     label: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
-    title: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2rem' : 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
+    title: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2rem' : 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
     grid: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', gap: isMobile ? '24px' : '32px' },
     card: { backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', textAlign: 'center' },
     image: { width: '160px', height: '160px', borderRadius: '50%', border: `3px solid ${accent}`, objectFit: 'cover', marginBottom: '20px' },
-    itemName: { fontFamily: "'Playfair Display', serif", fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '8px' },
+    itemName: { fontFamily: "'Playfair Display', serif", fontSize: '1.25rem', fontWeight: 700, color: textColor, marginBottom: '8px' },
     price: { fontSize: '1rem', color: accent, fontWeight: 700, marginBottom: '8px' },
-    desc: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', lineHeight: '1.6' },
+    desc: { fontSize: '0.875rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.5)', lineHeight: '1.6' },
     link: { color: accent, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem', marginTop: '24px', display: 'inline-block', cursor: 'pointer' },
     reviewCard: { backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px' },
     ctaSection: { backgroundColor: restaurant.primaryColor || '#1a1a1a', padding: isMobile ? '60px 0' : '100px 0', textAlign: 'center' },

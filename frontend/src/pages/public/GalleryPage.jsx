@@ -16,6 +16,16 @@ const GalleryPage = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const accent = restaurant?.accentColor || '#C9A84C';
+  const getTextColor = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 128 ? '#111111' : '#ffffff';
+  };
+  const textColor = getTextColor(restaurant?.bgColor);
   const bg = restaurant?.bgColor || '#0d0d0d';
 
   // Styles
@@ -24,7 +34,7 @@ const GalleryPage = () => {
     section: { padding: '100px 0' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
-    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
+    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
     controls: { display: 'flex', justifyContent: 'center', marginBottom: '48px', flexWrap: 'wrap', gap: '12px' },
     categoryButton: { 
@@ -69,7 +79,7 @@ const GalleryPage = () => {
       right: 0, 
       background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', 
       padding: '20px 15px 10px',
-      color: '#fff',
+      color: textColor,
       opacity: 0,
       transition: 'opacity 0.3s ease'
     },
@@ -116,7 +126,7 @@ const GalleryPage = () => {
       right: '0', 
       background: 'none', 
       border: 'none', 
-      color: '#fff', 
+      color: textColor, 
       fontSize: '2rem', 
       cursor: 'pointer'
     },
@@ -126,7 +136,7 @@ const GalleryPage = () => {
       transform: 'translateY(-50%)', 
       background: 'rgba(0,0,0,0.5)', 
       border: 'none', 
-      color: '#fff', 
+      color: textColor, 
       fontSize: '2rem', 
       cursor: 'pointer',
       width: '50px',
@@ -139,7 +149,7 @@ const GalleryPage = () => {
     lightboxPrev: { left: '-60px' },
     lightboxNext: { right: '-60px' },
     lightboxInfo: { 
-      color: '#fff', 
+      color: textColor, 
       textAlign: 'center', 
       marginTop: '20px',
       maxWidth: '600px'

@@ -3,6 +3,16 @@ import { useTenant } from '../../context/TenantContext';
 const WhyChooseUs = () => {
   const { restaurant, whyChooseUs } = useTenant();
   const accent = restaurant?.accentColor || '#C9A84C';
+  const getTextColor = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 128 ? '#111111' : '#ffffff';
+  };
+  const textColor = getTextColor(restaurant?.bgColor);
 
   if (!whyChooseUs || whyChooseUs.length === 0) return null;
 
@@ -16,7 +26,7 @@ const WhyChooseUs = () => {
         <h2 style={{
           fontFamily: "'Playfair Display', serif",
           fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-          fontWeight: 900, color: '#fff',
+          fontWeight: 900, color: textColor,
           lineHeight: 1.1, marginBottom: '24px'
         }}>What Makes Us Different</h2>
         <div style={{ width: '40px', height: '2px', backgroundColor: accent, marginBottom: '56px' }} />
@@ -43,7 +53,7 @@ const WhyChooseUs = () => {
               <h3 style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '1.25rem', fontWeight: 700,
-                color: '#fff', marginBottom: '14px'
+                color: textColor, marginBottom: '14px'
               }}>{item.title}</h3>
               <p style={{
                 color: 'rgba(255,255,255,0.55)',

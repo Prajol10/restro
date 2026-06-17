@@ -23,6 +23,16 @@ const ContactPage = () => {
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
   const primary = restaurant?.primaryColor || '#111111';
+  const getTextColor = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 128 ? '#111111' : '#ffffff';
+  };
+  const textColor = getTextColor(bg);
 
   // Styles
   const S = {
@@ -30,7 +40,7 @@ const ContactPage = () => {
     section: { padding: isMobile ? '80px 0 60px' : '100px 0' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
-    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: '#fff', marginBottom: '16px' },
+    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
     divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
     content: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '32px' : '64px', alignItems: 'start' },
     mapContainer: { height: isMobile ? '280px' : '500px', borderRadius: '8px', overflow: 'hidden' },
@@ -49,23 +59,23 @@ const ContactPage = () => {
     infoTitle: { 
       fontSize: '1.125rem', 
       fontWeight: 700, 
-      color: '#fff', 
+      color: textColor, 
       marginBottom: '8px',
       textTransform: 'uppercase',
       letterSpacing: '0.05em'
     },
     infoText: { 
       fontSize: '1rem', 
-      color: 'rgba(255,255,255,0.7)',
+      color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)',
       lineHeight: '1.6'
     },
     hours: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' },
-    hoursDay: { fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)' },
-    hoursTime: { fontSize: '0.875rem', color: '#fff', textAlign: 'right' },
+    hoursDay: { fontSize: '0.875rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)' },
+    hoursTime: { fontSize: '0.875rem', color: textColor, textAlign: 'right' },
     social: { display: 'flex', gap: '16px', marginTop: '16px' },
     socialLink: { 
       fontSize: '1.5rem', 
-      color: 'rgba(255,255,255,0.7)',
+      color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)',
       transition: 'color 0.3s ease'
     },
     form: { 
@@ -79,7 +89,7 @@ const ContactPage = () => {
       display: 'block',
       fontSize: '0.875rem', 
       fontWeight: 600, 
-      color: '#fff', 
+      color: textColor, 
       marginBottom: '8px',
       textTransform: 'uppercase',
       letterSpacing: '0.05em'
@@ -89,7 +99,7 @@ const ContactPage = () => {
       padding: '14px 18px', 
       backgroundColor: bg, 
       border: '1px solid rgba(255,255,255,0.1)', 
-      color: '#fff',
+      color: textColor,
       fontFamily: "'Inter', sans-serif",
       fontSize: '1rem'
     },
@@ -98,7 +108,7 @@ const ContactPage = () => {
       padding: '14px 18px', 
       backgroundColor: bg, 
       border: '1px solid rgba(255,255,255,0.1)', 
-      color: '#fff',
+      color: textColor,
       fontFamily: "'Inter', sans-serif",
       fontSize: '1rem',
       minHeight: '120px',
@@ -195,7 +205,7 @@ const ContactPage = () => {
                   </div>
                 ) : (
                   <div style={{...S.mapContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: bg}}>
-                    <p style={{color: 'rgba(255,255,255,0.5)'}}>Map not available</p>
+                    <p style={{color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)'}}>Map not available</p>
                   </div>
                 )}
                 
