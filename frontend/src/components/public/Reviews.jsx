@@ -6,6 +6,15 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:5240/api';
 const Reviews = () => {
   const { restaurant, reviews, slug } = useTenant();
   const accent = restaurant?.accentColor || '#C9A84C';
+  const getTC = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    return (r*299 + g*587 + b*114) / 1000 > 128 ? '#111111' : '#ffffff';
+  };
+  const tc = getTC(restaurant?.bgColor);
   const [current, setCurrent] = useState(0);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ customerName: '', rating: 5, content: '' });
@@ -37,7 +46,7 @@ const Reviews = () => {
     <section id="reviews" style={{ backgroundColor: '#080808', padding: '100px 0' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 48px', textAlign: 'center' }}>
         <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' }}>Testimonials</p>
-        <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, color: '#fff', marginBottom: '64px' }}>What People Say</h2>
+        <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, color: tc, marginBottom: '64px' }}>What People Say</h2>
 
         {approved.length > 0 && (
           <div style={{ position: 'relative', marginBottom: '48px' }}>
@@ -56,7 +65,7 @@ const Reviews = () => {
                     <div style={{ display: 'flex', gap: '4px' }}>
                       {[1,2,3,4,5].map(i => <span key={i} style={{ color: i <= review.rating ? '#FBBF24' : 'rgba(255,255,255,0.15)', fontSize: '16px' }}>★</span>)}
                     </div>
-                    <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fff' }}>{review.customerName}</p>
+                    <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: tc }}>{review.customerName}</p>
                     {review.source && <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>via {review.source}</p>}
                   </div>
                 </div>
@@ -85,7 +94,7 @@ const Reviews = () => {
             <button onClick={() => setShowForm(!showForm)} style={{
               padding: '12px 32px', fontSize: '11px', fontWeight: 700,
               letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer',
-              backgroundColor: 'transparent', color: 'rgba(255,255,255,0.5)',
+              backgroundColor: 'transparent', color: tc === '#111111' ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)',
               border: '1px solid rgba(255,255,255,0.2)',
               transition: 'all 0.3s ease'
             }}
@@ -100,7 +109,7 @@ const Reviews = () => {
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '8px' }}>Your Name</label>
                 <input value={form.customerName} onChange={e => setForm({ ...form, customerName: e.target.value })} required
-                  style={{ width: '100%', backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} />
+                  style={{ width: '100%', backgroundColor: restaurant?.primaryColor || '#111', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', color: tc, fontSize: '14px', outline: 'none', boxSizing: 'border-box' }} />
               </div>
               <div style={{ marginBottom: '16px' }}>
                 <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '8px' }}>Rating</label>
@@ -114,7 +123,7 @@ const Reviews = () => {
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '8px' }}>Your Review</label>
                 <textarea value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} required rows={4}
-                  style={{ width: '100%', backgroundColor: '#111', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none', resize: 'none', boxSizing: 'border-box' }} />
+                  style={{ width: '100%', backgroundColor: restaurant?.primaryColor || '#111', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', color: tc, fontSize: '14px', outline: 'none', resize: 'none', boxSizing: 'border-box' }} />
               </div>
               <button type="submit" disabled={submitting} style={{
                 width: '100%', padding: '14px', fontWeight: 700, fontSize: '11px',

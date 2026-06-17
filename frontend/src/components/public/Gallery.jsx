@@ -4,6 +4,15 @@ import { useTenant } from '../../context/TenantContext';
 const Gallery = () => {
   const { restaurant, gallery } = useTenant();
   const accent = restaurant?.accentColor || '#C9A84C';
+  const getTC = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    return (r*299 + g*587 + b*114) / 1000 > 128 ? '#111111' : '#ffffff';
+  };
+  const tc = getTC(restaurant?.bgColor);
   const [selected, setSelected] = useState(null);
 
   if (!gallery || gallery.length === 0) return null;
@@ -21,7 +30,7 @@ const Gallery = () => {
           <h2 style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: 'clamp(2rem, 4vw, 3rem)',
-            fontWeight: 900, color: '#fff', margin: 0
+            fontWeight: 900, color: tc, margin: 0
           }}>Gallery</h2>
         </div>
 
@@ -68,7 +77,7 @@ const Gallery = () => {
                   padding: '20px 12px 10px', transform: 'translateY(100%)',
                   transition: 'transform 0.3s'
                 }}>
-                  <p style={{ color: '#fff', fontSize: '12px', margin: 0 }}>{img.caption}</p>
+                  <p style={{ color: tc, fontSize: '12px', margin: 0 }}>{img.caption}</p>
                 </div>
               )}
             </div>
@@ -103,7 +112,7 @@ const Gallery = () => {
                 position: 'absolute', top: '-16px', right: '-16px',
                 width: '36px', height: '36px', borderRadius: '50%',
                 backgroundColor: 'rgba(255,255,255,0.1)', border: 'none',
-                color: '#fff', fontSize: '18px', cursor: 'pointer',
+                color: tc, fontSize: '18px', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}
             >✕</button>

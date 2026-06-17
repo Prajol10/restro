@@ -103,17 +103,17 @@ const MenuPage = () => {
     searchInput: {
       width: '100%',
       padding: '12px 20px',
-      backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-      color: '#fff',
+      backgroundColor: textColor === '#111111' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)', border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)',
+      color: textColor,
       fontFamily: "'Inter', sans-serif",
       fontSize: '0.875rem'
     },
-    searchIcon: { position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.5)' },
+    searchIcon: { position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)', color: textColor === '#111111' ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)' },
     controls: { display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' },
     categorySelect: {
       padding: '12px 20px',
-      backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-      color: '#fff',
+      backgroundColor: textColor === '#111111' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)', border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)',
+      color: textColor,
       fontFamily: "'Inter', sans-serif",
       fontSize: '0.875rem'
     },
@@ -135,7 +135,7 @@ const MenuPage = () => {
       padding: '10px 20px',
       backgroundColor: 'transparent',
       border: '1px solid rgba(255,255,255,0.1)',
-      color: 'rgba(255,255,255,0.7)',
+      color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)',
       fontFamily: "'Inter', sans-serif",
       fontSize: '0.875rem',
       cursor: 'pointer',

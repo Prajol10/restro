@@ -3,6 +3,15 @@ import { useTenant } from '../../context/TenantContext';
 const About = () => {
   const { restaurant } = useTenant();
   const accent = restaurant?.accentColor || '#C9A84C';
+  const getTC = (bgCol) => {
+    if (!bgCol) return '#ffffff';
+    const hex = bgCol.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    return (r*299 + g*587 + b*114) / 1000 > 128 ? '#111111' : '#ffffff';
+  };
+  const tc = getTC(restaurant?.bgColor);
 
   if (!restaurant?.aboutText && !restaurant?.aboutShort) return null;
 
@@ -21,14 +30,14 @@ const About = () => {
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: 'clamp(2rem, 4vw, 3.5rem)',
-              fontWeight: 900, color: '#fff',
+              fontWeight: 900, color: tc,
               lineHeight: 1.1, marginBottom: '24px'
             }}>
               {restaurant?.name}
             </h2>
             <div style={{ width: '48px', height: '2px', backgroundColor: accent, marginBottom: '32px' }} />
             <p style={{
-              color: 'rgba(255,255,255,0.6)', lineHeight: 1.9,
+              color: tc === '#111111' ? 'rgba(0,0,0,0.6)', lineHeight: 1.9,
               fontSize: '16px', marginBottom: '16px'
             }}>
               {restaurant?.aboutText || restaurant?.aboutShort}
@@ -49,7 +58,7 @@ const About = () => {
             </div>
           ) : (
             <div style={{
-              height: '400px', backgroundColor: '#111',
+              height: '400px', backgroundColor: restaurant?.primaryColor || '#111',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '80px', borderRadius: '4px',
               border: '1px solid rgba(255,255,255,0.05)'

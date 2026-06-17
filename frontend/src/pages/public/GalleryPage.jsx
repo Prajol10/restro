@@ -40,8 +40,8 @@ const GalleryPage = () => {
     categoryButton: { 
       padding: '10px 20px', 
       backgroundColor: 'transparent', 
-      border: '1px solid rgba(255,255,255,0.1)', 
-      color: 'rgba(255,255,255,0.7)',
+      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)', 
+      color: textColor === '#111111' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)',
       fontFamily: "'Inter', sans-serif",
       fontSize: '0.875rem', 
       cursor: 'pointer',
@@ -161,7 +161,7 @@ const GalleryPage = () => {
     },
     lightboxDescription: { 
       fontSize: '1rem', 
-      color: 'rgba(255,255,255,0.7)'
+      color: textColor === '#111111' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
     },
     downloadButton: { 
       marginTop: '15px', 
@@ -312,7 +312,7 @@ const GalleryPage = () => {
             </div>
             
             {filteredGallery.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '48px', color: 'rgba(255,255,255,0.5)' }}>
+              <div style={{ textAlign: 'center', padding: '48px', color: textColor === '#111111' ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)' }}>
                 <h3>No images found</h3>
                 <p>Check back later for updates to our gallery</p>
               </div>

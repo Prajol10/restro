@@ -56,7 +56,7 @@ const HomePage = () => {
 
   const S = {
     section: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0' },
-    darkSection: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0', borderTop: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)' },
+    darkSection: { backgroundColor: restaurant.bgColor || '#0d0d0d', padding: isMobile ? '60px 0' : '100px 0' },
     container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
     label: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
     title: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2rem' : 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
@@ -114,7 +114,7 @@ const HomePage = () => {
           <div style={{ display: 'grid', gridTemplateColumns: (restaurant.aboutImageUrl && !isMobile) ? '1fr 1fr' : '1fr', gap: isMobile ? '32px' : '64px', alignItems: 'center' }}>
             <div>
               {restaurant.aboutShort && (
-                <p style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '24px', borderLeft: `3px solid ${accent}`, paddingLeft: '20px' }}>
+                <p style={{ fontSize: '1.25rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.85)', lineHeight: '1.8', fontStyle: 'italic', marginBottom: '24px', borderLeft: `3px solid ${accent}`, paddingLeft: '20px' }}>
                   {restaurant.aboutShort}
                 </p>
               )}

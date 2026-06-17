@@ -48,7 +48,7 @@ const ContactPage = () => {
     contactInfo: { display: 'flex', flexDirection: 'column', gap: '32px' },
     infoCard: { 
       backgroundColor: bg, 
-      border: '1px solid rgba(255,255,255,0.06)', 
+      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)', 
       padding: '28px',
       display: 'flex',
       alignItems: 'flex-start',
@@ -80,7 +80,7 @@ const ContactPage = () => {
     },
     form: { 
       backgroundColor: bg, 
-      border: '1px solid rgba(255,255,255,0.06)', 
+      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)', 
       padding: '40px',
       borderRadius: '8px'
     },
@@ -98,7 +98,7 @@ const ContactPage = () => {
       width: '100%', 
       padding: '14px 18px', 
       backgroundColor: bg, 
-      border: '1px solid rgba(255,255,255,0.1)', 
+      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)', 
       color: textColor,
       fontFamily: "'Inter', sans-serif",
       fontSize: '1rem'
@@ -107,7 +107,7 @@ const ContactPage = () => {
       width: '100%', 
       padding: '14px 18px', 
       backgroundColor: bg, 
-      border: '1px solid rgba(255,255,255,0.1)', 
+      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)', 
       color: textColor,
       fontFamily: "'Inter', sans-serif",
       fontSize: '1rem',

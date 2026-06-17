@@ -58,7 +58,15 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
     return () => clearInterval(interval);
   }, [banners.length]);
 
-  const defaultBg = 'linear-gradient(135deg, #1a0a00 0%, #0d0d0d 40%, #1a1a0a 100%)';
+  const primary = restaurant?.primaryColor || '#1a1a1a';
+  const defaultBg = `linear-gradient(135deg, ${primary}ee 0%, ${bg}dd 50%, ${primary}cc 100%)`;
+  const isLightBg = (() => {
+    const hex = bg.replace('#', '');
+    const r = parseInt(hex.substr(0,2),16);
+    const g = parseInt(hex.substr(2,2),16);
+    const b = parseInt(hex.substr(4,2),16);
+    return (r*299 + g*587 + b*114) / 1000 > 128;
+  })();
 
   return (
     <section id="hero" style={{
@@ -67,7 +75,7 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
       display: 'flex',
       alignItems: 'center',
       overflow: 'hidden',
-      backgroundColor: bg
+      backgroundColor: isLightBg ? primary : bg
     }}>
       {/* Background */}
       {hasVideo ? (
@@ -110,13 +118,15 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
           </div>
         ))
       ) : (
-        <div style={{ position: 'absolute', inset: 0, background: defaultBg }} />
+        <div style={{ position: 'absolute', inset: 0, background: defaultBg }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%)' }} />
+        </div>
       )}
 
       {/* Gradient overlay */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.1) 100%)'
+        background: 'linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.2) 100%)'
       }} />
 
       {/* Content */}
@@ -124,7 +134,8 @@ const Hero = ({ onOrderClick, onReserveClick }) => {
         position: 'relative', zIndex: 10,
         maxWidth: '1280px', margin: '0 auto',
         padding: '0 48px', width: '100%',
-        paddingTop: '80px'
+        paddingTop: '120px',
+        paddingBottom: '80px'
       }}>
         <div style={{
           maxWidth: '640px',
