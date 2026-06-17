@@ -47,18 +47,20 @@ const Navbar = ({ isScrolled }) => {
   const S = {
     nav: {
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-      backgroundColor: isScrolled ? 'rgba(13,13,13,0.95)' : 'transparent',
+      backgroundColor: isScrolled
+        ? (bg === '#fcfcfc' || bg === '#ffffff' || bg === '#fff' ? 'rgba(255,255,255,0.97)' : 'rgba(13,13,13,0.95)')
+        : 'transparent',
       backdropFilter: isScrolled ? 'blur(10px)' : 'none',
       padding: isMobile ? '12px 20px' : '16px 48px',
       transition: 'all 0.3s ease',
-      borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.08)' : 'none'
+      borderBottom: isScrolled ? '1px solid rgba(128,128,128,0.15)' : 'none'
     },
     container: { maxWidth: '1280px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
     logoSection: { display: 'flex', alignItems: 'center', gap: '10px' },
     logo: { height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${accent}` },
-    restaurantName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '18px' : '22px', fontWeight: 700, color: textColor, textDecoration: 'none' },
+    restaurantName: { fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '18px' : '22px', fontWeight: 700, color: '#ffffff', textDecoration: 'none' },
     navLinks: { display: 'flex', gap: '28px', alignItems: 'center' },
-    navLink: { fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 600, color: textColor, textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '8px 0' },
+    navLink: { fontFamily: "'Inter', sans-serif", fontSize: '13px', fontWeight: 600, color: '#ffffff', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '0.05em', padding: '8px 0' },
     activeLink: { color: accent },
     dropdown: { position: 'absolute', top: '100%', left: 0, backgroundColor: bg === '#0d0d0d' ? '#1a1a1a' : bg, minWidth: '200px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', borderRadius: '8px', padding: '12px 0', zIndex: 100 },
     dropdownLink: { display: 'block', padding: '10px 20px', color: textColor, textDecoration: 'none', fontSize: '13px' },
@@ -110,7 +112,7 @@ const Navbar = ({ isScrolled }) => {
               : <button style={S.orderButton} onClick={()=>navigate(`/${restaurant?.subdomain}/menu`)}>ORDER ONLINE</button>
           )}
             {isMobile && (
-              <button onClick={()=>setIsMenuOpen(!isMenuOpen)} style={{background:'none',border:'none',color:'#fff',fontSize:'26px',cursor:'pointer',lineHeight:1,padding:'4px'}}>
+              <button onClick={()=>setIsMenuOpen(!isMenuOpen)} style={{background:'none',border:'none',color:'#ffffff',fontSize:'26px',cursor:'pointer',lineHeight:1,padding:'4px'}}>
                 {isMenuOpen ? '✕' : '☰'}
               </button>
             )}
