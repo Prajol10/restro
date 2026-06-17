@@ -117,12 +117,12 @@ const AboutPage = () => {
         </section>
 
         {/* CTA */}
-        <section style={{ backgroundColor: restaurant?.primaryColor || '#1a1a1a', padding: '80px 0', textAlign: 'center', color: textColor }}>
+        <section style={{ backgroundColor: restaurant?.primaryColor || '#1a1a1a', padding: '80px 0', textAlign: 'center', color: '#ffffff' }}>
           <div style={S.container}>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: textColor, marginBottom: '24px' }}>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 900, color: '#ffffff', marginBottom: '24px' }}>
               Visit Us Today
             </h2>
-            <p style={{ fontSize: '1.1rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)', maxWidth: '600px', margin: '0 auto 32px' }}>
+            <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.75)', maxWidth: '600px', margin: '0 auto 32px' }}>
               {restaurant.reservationText || 'Experience the authentic flavors and warm hospitality that make us unique.'}
             </p>
             <a href={`/${restaurant.subdomain}/contact`} style={{ padding: '16px 32px', backgroundColor: accent, color: '#000', border: 'none', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>
