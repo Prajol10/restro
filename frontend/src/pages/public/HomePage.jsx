@@ -168,8 +168,8 @@ const HomePage = () => {
       {/* Reservation CTA */}
       <section style={S.ctaSection}>
         <div style={S.container}>
-          <h2 style={S.ctaTitle}>Experience the Tradition</h2>
-          <p style={{...S.desc, maxWidth: '600px', margin: '0 auto 32px', textAlign: 'center', color: 'rgba(255,255,255,0.7)'}}>
+          <h2 style={{...S.ctaTitle, color: '#ffffff'}}>Experience the Tradition</h2>
+          <p style={{maxWidth:'600px',margin:'0 auto 32px',textAlign:'center',color:'rgba(255,255,255,0.7)',fontSize:'0.875rem',lineHeight:'1.6'}}>
             {restaurant.reservationText || 'Book your table today and enjoy an authentic dining experience.'}
           </p>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>

@@ -56,7 +56,7 @@ const WhyChooseUs = () => {
                 color: textColor, marginBottom: '14px'
               }}>{item.title}</h3>
               <p style={{
-                color: 'rgba(255,255,255,0.55)',
+                color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.55)',
                 fontSize: '14px', lineHeight: 1.8
               }}>{item.description}</p>
             </div>
