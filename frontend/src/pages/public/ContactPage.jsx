@@ -35,7 +35,7 @@ const ContactPage = () => {
   const subText = isLight ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.55)';
   const borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
   const inputBg = isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.04)';
-  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 64px' };
+  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 64px', width: '100%', boxSizing: 'border-box' };
   const hours = (() => { try { return Object.entries(JSON.parse(restaurant?.openingHours || '{}')); } catch { return []; } })();
 
   const handleSubmit = async (e) => {

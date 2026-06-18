@@ -40,7 +40,7 @@ const GalleryPage = () => {
   const textColor = getTextColor(bg);
   const isLight = textColor === '#111111';
   const borderColor = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)';
-  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 64px' };
+  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 64px', width: '100%', boxSizing: 'border-box' };
 
   const filteredGallery = gallery ? gallery.filter(i => !i.isArchived) : [];
 

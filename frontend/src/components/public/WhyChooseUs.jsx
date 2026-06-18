@@ -21,8 +21,8 @@ const WhyChooseUs = () => {
   if (!whyChooseUs || whyChooseUs.length === 0) return null;
 
   return (
-    <section style={{ padding: '112px 0', backgroundColor: bg, borderTop: `1px solid ${borderColor}` }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 64px' }}>
+    <section style={{ padding: typeof window !== 'undefined' && window.innerWidth <= 768 ? '48px 0' : '112px 0', backgroundColor: bg, borderTop: `1px solid ${borderColor}` }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: typeof window !== 'undefined' && window.innerWidth <= 768 ? '0 16px' : '0 64px', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ maxWidth: '560px', marginBottom: '64px' }}>
           <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', color: accent, marginBottom: '14px' }}>Why Choose Us</p>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', fontWeight: 900, color: textColor, lineHeight: 1.1, marginBottom: '20px' }}>What Makes Us Different</h2>

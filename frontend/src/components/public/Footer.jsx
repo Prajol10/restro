@@ -25,7 +25,7 @@ const Footer = () => {
 
   return (
     <footer id="contact" style={{ backgroundColor: primary, paddingTop: '80px' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: typeof window !== 'undefined' && window.innerWidth <= 768 ? '0 16px' : '0 48px', width: '100%', boxSizing: 'border-box' }}>
 
         {/* Top - Centered Logo with lines */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '64px' }}>
@@ -43,7 +43,7 @@ const Footer = () => {
         </div>
 
         {/* 3 Columns */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr 1px 1fr', gap: '0', marginBottom: '64px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: typeof window !== 'undefined' && window.innerWidth <= 768 ? '1fr' : '1fr 1px 1fr 1px 1fr', gap: '0', marginBottom: '64px' }}>
           {/* Contact */}
           <div style={{ textAlign: 'center', padding: '0 40px' }}>
             <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', color: footerTextColor, marginBottom: '20px' }}>Contact Us</p>

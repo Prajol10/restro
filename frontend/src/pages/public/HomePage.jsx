@@ -56,8 +56,8 @@ const HomePage = () => {
     ? (previewReviews.reduce((sum, r) => sum + r.rating, 0) / previewReviews.length).toFixed(1)
     : 0;
 
-  const sectionPad = isMobile ? '64px 0' : '112px 0';
-  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 64px' };
+  const sectionPad = isMobile ? '48px 0' : '112px 0';
+  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 64px', width: '100%', boxSizing: 'border-box' };
 
   const SectionLabel = ({ children }) => (
     <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', color: accent, marginBottom: '14px' }}>{children}</p>

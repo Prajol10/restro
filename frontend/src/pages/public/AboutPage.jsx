@@ -28,8 +28,8 @@ const AboutPage = () => {
   const subText = isLight ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.55)';
   const borderColor = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)';
   const cardBg = isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)';
-  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 64px' };
-  const sectionPad = isMobile ? '64px 0' : '112px 0';
+  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 16px' : '0 64px', width: '100%', boxSizing: 'border-box' };
+  const sectionPad = isMobile ? '40px 0' : '112px 0';
 
   if (!restaurant) return null;
 

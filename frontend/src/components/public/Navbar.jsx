@@ -61,7 +61,7 @@ const Navbar = ({ isScrolled }) => {
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
       backgroundColor: navBg,
       backdropFilter: isScrolled ? 'blur(10px)' : 'none',
-      padding: isMobile ? '12px 20px' : '16px 48px',
+      padding: isMobile ? '12px 16px' : '16px 48px',
       transition: 'all 0.3s ease',
       borderBottom: (!isHomePage || isScrolled) ? '1px solid rgba(255,255,255,0.1)' : 'none'
     },
