@@ -130,9 +130,10 @@ const MenuPage = () => {
       cursor: isDownloading ? 'not-allowed' : 'pointer',
       borderRadius: '4px'
     },
-    categoryTabs: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: isMobile ? '24px' : '48px' },
+    categoryTabs: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: isMobile ? '24px' : '48px', overflowX: 'auto', paddingBottom: '8px' },
     categoryTab: {
-      padding: '10px 20px',
+      padding: isMobile ? '8px 14px' : '10px 20px',
+      fontSize: isMobile ? '0.8rem' : '0.875rem',
       backgroundColor: 'transparent',
       border: '1px solid rgba(255,255,255,0.1)',
       color: textColor === '#111111' ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)',

@@ -58,7 +58,7 @@ const AboutPage = () => {
         {/* Our Story */}
         <section style={{ padding: sectionPad, backgroundColor: bg }}>
           <div style={container}>
-            <div style={{ display: 'grid', gridTemplateColumns: (restaurant.aboutImageUrl && !isMobile) ? '1fr 1fr' : '1fr', gap: isMobile ? '40px' : '96px', alignItems: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: (restaurant.aboutImageUrl && !isMobile) ? '55% 45%' : '1fr', gap: isMobile ? '40px' : '80px', alignItems: 'center' }}>
               <div>
                 <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', color: accent, marginBottom: '14px' }}>Our Journey</p>
                 <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2rem' : 'clamp(2.2rem, 4vw, 3rem)', fontWeight: 900, color: textColor, marginBottom: '20px', lineHeight: 1.1 }}>{restaurant.name}</h2>

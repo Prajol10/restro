@@ -16,12 +16,18 @@ export const TenantProvider = ({ children }) => {
   const [whyChooseUs, setWhyChooseUs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loadingMsg, setLoadingMsg] = useState('Loading...');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        setLoadingMsg('Connecting to server...');
+        
+        // Ping to wake up Render cold start
+        try { await fetch(`${API}/Auth/ping`, { signal: AbortSignal.timeout(3000) }); } catch {}
+        setLoadingMsg('Loading restaurant...');
         
         // Fetch restaurant
         const restaurantRes = await fetch(`${API}/Restaurant/${slug}`);
@@ -89,6 +95,7 @@ export const TenantProvider = ({ children }) => {
     reviews,
     whyChooseUs,
     loading,
+    loadingMsg,
     error
   };
 
