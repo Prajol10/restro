@@ -2,393 +2,192 @@ import { useState, useEffect } from 'react';
 import { useTenant } from '../../context/TenantContext';
 import Layout from '../../components/public/Layout';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5240/api';
+
 const ContactPage = () => {
   const { restaurant } = useTenant();
   const [isMobile, setIsMobile] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+
   const accent = restaurant?.accentColor || '#C9A84C';
   const bg = restaurant?.bgColor || '#0d0d0d';
-  const primary = restaurant?.primaryColor || '#111111';
+  const primary = restaurant?.primaryColor || '#1a1a1a';
   const getTextColor = (bgCol) => {
     if (!bgCol) return '#ffffff';
     const hex = bgCol.replace('#', '');
     const r = parseInt(hex.substr(0,2),16);
     const g = parseInt(hex.substr(2,2),16);
     const b = parseInt(hex.substr(4,2),16);
-    const brightness = (r*299 + g*587 + b*114) / 1000;
-    return brightness > 128 ? '#111111' : '#ffffff';
+    return (r*299 + g*587 + b*114) / 1000 > 128 ? '#111111' : '#ffffff';
   };
   const textColor = getTextColor(bg);
-
-  // Styles
-  const S = {
-    page: { backgroundColor: bg, minHeight: '100vh' },
-    section: { padding: isMobile ? '80px 0 60px' : '100px 0' },
-    container: { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' },
-    sectionLabel: { fontSize: '11px', fontWeight: 700, letterSpacing: '0.3em', textTransform: 'uppercase', color: accent, marginBottom: '16px' },
-    sectionTitle: { fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 900, color: textColor, marginBottom: '16px' },
-    divider: { width: '40px', height: '2px', backgroundColor: accent, marginBottom: '48px' },
-    content: { display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '32px' : '64px', alignItems: 'start' },
-    mapContainer: { height: isMobile ? '280px' : '500px', borderRadius: '8px', overflow: 'hidden' },
-    map: { width: '100%', height: '100%', border: 'none' },
-    contactInfo: { display: 'flex', flexDirection: 'column', gap: '32px' },
-    infoCard: { 
-      backgroundColor: bg, 
-      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)', 
-      padding: '28px',
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: '20px'
-    },
-    icon: { fontSize: '1.5rem', color: accent, minWidth: '30px' },
-    infoContent: { flex: 1 },
-    infoTitle: { 
-      fontSize: '1.125rem', 
-      fontWeight: 700, 
-      color: textColor, 
-      marginBottom: '8px',
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em'
-    },
-    infoText: { 
-      fontSize: '1rem', 
-      color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)',
-      lineHeight: '1.6'
-    },
-    hours: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' },
-    hoursDay: { fontSize: '0.875rem', color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)' },
-    hoursTime: { fontSize: '0.875rem', color: textColor, textAlign: 'right' },
-    social: { display: 'flex', gap: '16px', marginTop: '16px' },
-    socialLink: { 
-      fontSize: '1.5rem', 
-      color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)',
-      transition: 'color 0.3s ease'
-    },
-    form: { 
-      backgroundColor: bg, 
-      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.08)' : '1px solid rgba(255,255,255,0.06)', 
-      padding: '40px',
-      borderRadius: '8px'
-    },
-    formGroup: { marginBottom: '24px' },
-    label: { 
-      display: 'block',
-      fontSize: '0.875rem', 
-      fontWeight: 600, 
-      color: textColor, 
-      marginBottom: '8px',
-      textTransform: 'uppercase',
-      letterSpacing: '0.05em'
-    },
-    input: { 
-      width: '100%', 
-      padding: '14px 18px', 
-      backgroundColor: bg, 
-      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)', 
-      color: textColor,
-      fontFamily: "'Inter', sans-serif",
-      fontSize: '1rem'
-    },
-    textarea: { 
-      width: '100%', 
-      padding: '14px 18px', 
-      backgroundColor: bg, 
-      border: textColor === '#111111' ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.1)', 
-      color: textColor,
-      fontFamily: "'Inter', sans-serif",
-      fontSize: '1rem',
-      minHeight: '120px',
-      resize: 'vertical'
-    },
-    submitButton: { 
-      width: '100%', 
-      padding: '16px', 
-      backgroundColor: accent, 
-      color: '#000', 
-      border: 'none', 
-      fontFamily: "'Inter', sans-serif",
-      fontSize: '0.875rem', 
-      fontWeight: 700, 
-      textTransform: 'uppercase', 
-      letterSpacing: '0.1em', 
-      cursor: 'pointer',
-      borderRadius: '4px',
-      transition: 'opacity 0.3s ease'
-    },
-    submitButtonDisabled: { opacity: 0.7, cursor: 'not-allowed' },
-    formMessage: { 
-      padding: '16px', 
-      borderRadius: '4px', 
-      marginTop: '24px',
-      textAlign: 'center',
-      fontWeight: 600
-    },
-    formSuccess: { backgroundColor: 'rgba(0,255,0,0.1)', color: 'lightgreen' },
-    formError: { backgroundColor: 'rgba(255,0,0,0.1)', color: 'orange' },
-    openingHoursSection: { marginTop: '64px' }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const isLight = textColor === '#111111';
+  const subText = isLight ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.55)';
+  const borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
+  const inputBg = isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.04)';
+  const container = { maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 64px' };
+  const hours = (() => { try { return Object.entries(JSON.parse(restaurant?.openingHours || '{}')); } catch { return []; } })();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError('');
-    setSubmitSuccess(false);
-
-    // In a real implementation, you would send this to your backend
-    // For now, we'll simulate a successful submission
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Reset form and show success message
+      await new Promise(resolve => setTimeout(resolve, 800));
       setFormData({ name: '', email: '', phone: '', message: '' });
       setSubmitSuccess(true);
-      
-      // Hide success message after 5 seconds
       setTimeout(() => setSubmitSuccess(false), 5000);
-    } catch (error) {
-      setSubmitError('Failed to send message. Please try again.');
+    } catch {
+      setSubmitError('Failed to send. Please try again or call us directly.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Parse opening hours from JSON
-  const openingHours = restaurant?.openingHours ? JSON.parse(restaurant.openingHours) : {};
+  const inputStyle = {
+    width: '100%', padding: '14px 18px',
+    backgroundColor: inputBg,
+    border: `1px solid ${borderColor}`,
+    borderRadius: '8px', color: textColor,
+    fontFamily: "'Inter', sans-serif", fontSize: '14px',
+    outline: 'none', boxSizing: 'border-box',
+    transition: 'border-color 0.2s'
+  };
 
   if (!restaurant) return null;
 
   return (
     <Layout>
-      <div style={S.page}>
-        <section style={S.section}>
-          <div style={S.container}>
-            <p style={S.sectionLabel}>GET IN TOUCH</p>
-            <h1 style={S.sectionTitle}>Contact Us</h1>
-            <div style={S.divider} />
-            
-            <div style={S.content}>
-              {/* Map and Contact Info */}
+      <div style={{ backgroundColor: bg, minHeight: '100vh' }}>
+
+        {/* Hero */}
+        <div style={{ paddingTop: isMobile ? '100px' : '140px', paddingBottom: isMobile ? '48px' : '80px', textAlign: 'center', backgroundColor: bg, borderBottom: `1px solid ${borderColor}` }}>
+          <div style={container}>
+            <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.35em', textTransform: 'uppercase', color: accent, marginBottom: '14px' }}>GET IN TOUCH</p>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: isMobile ? '2.5rem' : '4rem', fontWeight: 900, color: textColor, marginBottom: '20px', lineHeight: 1.0 }}>Contact Us</h1>
+            <div style={{ width: '48px', height: '2px', backgroundColor: accent, margin: '0 auto 20px' }} />
+            <p style={{ fontSize: '1rem', color: subText, maxWidth: '480px', margin: '0 auto' }}>
+              We'd love to hear from you. Reach out for reservations, inquiries or just to say hello.
+            </p>
+          </div>
+        </div>
+
+        {/* Contact Info Cards */}
+        <section style={{ padding: isMobile ? '48px 0' : '80px 0', backgroundColor: bg }}>
+          <div style={container}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: '16px', marginBottom: isMobile ? '48px' : '80px' }}>
+              {[
+                { icon: '📍', label: 'Address', value: restaurant.address, href: restaurant.mapEmbedUrl ? null : null },
+                { icon: '📞', label: 'Phone', value: restaurant.phone, href: restaurant.phone ? `tel:${restaurant.phone}` : null },
+                { icon: '✉️', label: 'Email', value: restaurant.email, href: restaurant.email ? `mailto:${restaurant.email}` : null },
+                { icon: '🕐', label: 'Hours', value: hours.length > 0 ? 'See below' : 'Contact us', href: null },
+              ].map(({ icon, label, value, href }) => (
+                <div key={label}
+                  style={{ backgroundColor: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)', border: `1px solid ${borderColor}`, borderRadius: '12px', padding: '28px 24px', textAlign: 'center', transition: 'all 0.3s', cursor: href ? 'pointer' : 'default' }}
+                  onClick={() => href && window.open(href)}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = borderColor; e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                  <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{icon}</div>
+                  <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: accent, marginBottom: '8px' }}>{label}</p>
+                  <p style={{ fontSize: '13px', color: subText, lineHeight: 1.5 }}>{value || 'Not available'}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Map + Form */}
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '40px' : '64px', alignItems: 'start' }}>
+
+              {/* Left - Map + Hours */}
               <div>
                 {restaurant.mapEmbedUrl ? (
-                  <div style={S.mapContainer}>
-                    <iframe 
-                      src={restaurant.mapEmbedUrl} 
-                      style={S.map}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title="Restaurant Location"
-                    ></iframe>
+                  <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '32px', boxShadow: '0 16px 40px rgba(0,0,0,0.15)' }}>
+                    <iframe src={restaurant.mapEmbedUrl} style={{ width: '100%', height: isMobile ? '240px' : '360px', border: 'none' }} allowFullScreen loading="lazy" title="Location" />
                   </div>
-                ) : (
-                  <div style={{...S.mapContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: bg}}>
-                    <p style={{color: textColor === '#111111' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)'}}>Map not available</p>
-                  </div>
-                )}
-                
-                <div style={S.contactInfo}>
-                  <div style={S.infoCard}>
-                    <div style={S.icon}>📍</div>
-                    <div style={S.infoContent}>
-                      <h3 style={S.infoTitle}>Address</h3>
-                      <p style={S.infoText}>
-                        {restaurant.address || 'Restaurant address not available'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div style={S.infoCard}>
-                    <div style={S.icon}>📞</div>
-                    <div style={S.infoContent}>
-                      <h3 style={S.infoTitle}>Phone</h3>
-                      {restaurant.phone ? (
-                        <p style={S.infoText}>
-                          <a href={`tel:${restaurant.phone}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                            {restaurant.phone}
-                          </a>
-                        </p>
-                      ) : (
-                        <p style={S.infoText}>Phone number not available</p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div style={S.infoCard}>
-                    <div style={S.icon}>✉️</div>
-                    <div style={S.infoContent}>
-                      <h3 style={S.infoTitle}>Email</h3>
-                      {restaurant.email ? (
-                        <p style={S.infoText}>
-                          <a href={`mailto:${restaurant.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                            {restaurant.email}
-                          </a>
-                        </p>
-                      ) : (
-                        <p style={S.infoText}>Email not available</p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div style={S.infoCard}>
-                    <div style={S.icon}>🌐</div>
-                    <div style={S.infoContent}>
-                      <h3 style={S.infoTitle}>Social Media</h3>
-                      <div style={S.social}>
-                        {restaurant.facebookUrl && (
-                          <a href={restaurant.facebookUrl} target="_blank" rel="noopener noreferrer" style={S.socialLink}>
-                            f
-                          </a>
-                        )}
-                        {restaurant.instagramUrl && (
-                          <a href={restaurant.instagramUrl} target="_blank" rel="noopener noreferrer" style={S.socialLink}>
-                            i
-                          </a>
-                        )}
-                        {restaurant.tiktokUrl && (
-                          <a href={restaurant.tiktokUrl} target="_blank" rel="noopener noreferrer" style={S.socialLink}>
-                            t
-                          </a>
-                        )}
-                        {restaurant.websiteUrl && (
-                          <a href={restaurant.websiteUrl} target="_blank" rel="noopener noreferrer" style={S.socialLink}>
-                            w
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Contact Form */}
-              <div>
-                <div style={S.form}>
-                  <h2 style={{...S.sectionTitle, fontSize: '1.75rem', marginBottom: '32px'}}>Send us a message</h2>
-                  
-                  <form onSubmit={handleSubmit}>
-                    <div style={S.formGroup}>
-                      <label htmlFor="name" style={S.label}>Full Name</label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        style={S.input}
-                      />
-                    </div>
-                    
-                    <div style={S.formGroup}>
-                      <label htmlFor="email" style={S.label}>Email Address</label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        style={S.input}
-                      />
-                    </div>
-                    
-                    <div style={S.formGroup}>
-                      <label htmlFor="phone" style={S.label}>Phone Number</label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        style={S.input}
-                      />
-                    </div>
-                    
-                    <div style={S.formGroup}>
-                      <label htmlFor="message" style={S.label}>Message</label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        style={S.textarea}
-                      ></textarea>
-                    </div>
-                    
-                    <button 
-                      type="submit" 
-                      disabled={isSubmitting}
-                      style={{
-                        ...S.submitButton,
-                        ...(isSubmitting ? S.submitButtonDisabled : {})
-                      }}
-                    >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </button>
-                    
-                    {submitSuccess && (
-                      <div style={{...S.formMessage, ...S.formSuccess}}>
-                        Message sent successfully! We'll get back to you soon.
-                      </div>
-                    )}
-                    
-                    {submitError && (
-                      <div style={{...S.formMessage, ...S.formError}}>
-                        {submitError}
-                      </div>
-                    )}
-                  </form>
-                </div>
-              </div>
-            </div>
-            
-            {/* Opening Hours */}
-            <div style={S.openingHoursSection}>
-              <div style={{...S.infoCard, maxWidth: '600px', margin: '0 auto'}}>
-                <div style={S.icon}>🕐</div>
-                <div style={S.infoContent}>
-                  <h3 style={S.infoTitle}>Opening Hours</h3>
-                  {Object.keys(openingHours).length > 0 ? (
-                    <div style={S.hours}>
-                      {Object.entries(openingHours).map(([day, hours]) => (
-                        <div key={day} style={{ display: 'contents' }}>
-                          <div style={S.hoursDay}>{day.charAt(0).toUpperCase() + day.slice(1)}</div>
-                          <div style={S.hoursTime}>{hours}</div>
+                ) : null}
+
+                {hours.length > 0 && (
+                  <div style={{ backgroundColor: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)', border: `1px solid ${borderColor}`, borderRadius: '12px', padding: '32px' }}>
+                    <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: accent, marginBottom: '20px' }}>Opening Hours</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {hours.map(([day, time]) => (
+                        <div key={day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '10px', borderBottom: `1px solid ${borderColor}` }}>
+                          <span style={{ fontSize: '13px', color: textColor, textTransform: 'capitalize', fontWeight: 500 }}>{day}</span>
+                          <span style={{ fontSize: '13px', color: time.toLowerCase() === 'closed' ? 'rgba(239,68,68,0.7)' : accent, fontWeight: 600 }}>{time}</span>
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <p style={S.infoText}>Opening hours not available</p>
-                  )}
-                </div>
+                    {(restaurant.facebookUrl || restaurant.instagramUrl || restaurant.tiktokUrl) && (
+                      <div style={{ marginTop: '24px', display: 'flex', gap: '12px' }}>
+                        {restaurant.facebookUrl && <a href={restaurant.facebookUrl} target="_blank" rel="noopener noreferrer" style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: textColor, fontSize: '16px', textDecoration: 'none', transition: 'all 0.2s' }} onMouseEnter={e => { e.target.style.backgroundColor = accent; e.target.style.color = '#000'; }} onMouseLeave={e => { e.target.style.backgroundColor = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'; e.target.style.color = textColor; }}>f</a>}
+                        {restaurant.instagramUrl && <a href={restaurant.instagramUrl} target="_blank" rel="noopener noreferrer" style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: textColor, fontSize: '16px', textDecoration: 'none', transition: 'all 0.2s' }} onMouseEnter={e => { e.target.style.backgroundColor = accent; e.target.style.color = '#000'; }} onMouseLeave={e => { e.target.style.backgroundColor = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'; e.target.style.color = textColor; }}>ig</a>}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Right - Contact Form */}
+              <div style={{ backgroundColor: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)', border: `1px solid ${borderColor}`, borderRadius: '12px', padding: isMobile ? '28px 24px' : '40px' }}>
+                <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: accent, marginBottom: '8px' }}>Send a Message</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.8rem', fontWeight: 700, color: textColor, marginBottom: '28px' }}>Get in Touch</h3>
+
+                {submitSuccess ? (
+                  <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
+                    <h4 style={{ color: textColor, fontWeight: 700, marginBottom: '8px' }}>Message Sent!</h4>
+                    <p style={{ color: subText, fontSize: '14px' }}>We'll get back to you shortly.</p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <div style={{ marginBottom: '20px' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: isLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Full Name *</label>
+                      <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required placeholder="Your name" style={inputStyle}
+                        onFocus={e => e.target.style.borderColor = accent}
+                        onBlur={e => e.target.style.borderColor = borderColor} />
+                    </div>
+                    <div style={{ marginBottom: '20px' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: isLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Email Address *</label>
+                      <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required placeholder="your@email.com" style={inputStyle}
+                        onFocus={e => e.target.style.borderColor = accent}
+                        onBlur={e => e.target.style.borderColor = borderColor} />
+                    </div>
+                    <div style={{ marginBottom: '20px' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: isLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Phone Number</label>
+                      <input type="tel" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="98XXXXXXXX" style={inputStyle}
+                        onFocus={e => e.target.style.borderColor = accent}
+                        onBlur={e => e.target.style.borderColor = borderColor} />
+                    </div>
+                    <div style={{ marginBottom: '28px' }}>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: isLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Message *</label>
+                      <textarea value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} required placeholder="How can we help you?" rows={5} style={{...inputStyle, resize: 'vertical', minHeight: '120px'}}
+                        onFocus={e => e.target.style.borderColor = accent}
+                        onBlur={e => e.target.style.borderColor = borderColor} />
+                    </div>
+                    {submitError && <p style={{ color: '#f87171', fontSize: '13px', marginBottom: '16px' }}>{submitError}</p>}
+                    <button type="submit" disabled={isSubmitting}
+                      style={{ width: '100%', padding: '16px', backgroundColor: accent, color: '#000', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1, transition: 'all 0.3s' }}
+                      onMouseEnter={e => { if (!isSubmitting) { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = `0 8px 24px ${accent}44`; }}}
+                      onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = 'none'; }}>
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
         </section>
+
       </div>
     </Layout>
   );
