@@ -95,7 +95,7 @@ const AdminDashboard = () => {
     },
     sidebarBottom: { marginTop:'auto' },
     main: { flex:1, padding:'32px 48px', overflowY:'auto' },
-    msg: (success) => ({ position:'fixed', top:'20px', right:'20px', zIndex:1000, padding:'14px 24px', borderRadius:'8px', fontWeight:600, backgroundColor: success ? 'rgba(74,222,128,0.15)' : 'rgba(239,68,68,0.15)', color: success ? '#4ade80' : '#f87171', border:'1px solid '+(success ? 'rgba(74,222,128,0.3)' : 'rgba(239,68,68,0.3)') }),
+    msg: (success) => ({ position:'fixed', top:'80px', right:'20px', zIndex:1000, padding:'14px 24px', borderRadius:'8px', fontWeight:600, backgroundColor: success ? 'rgba(74,222,128,0.15)' : 'rgba(239,68,68,0.15)', color: success ? '#4ade80' : '#f87171', border:'1px solid '+(success ? 'rgba(74,222,128,0.3)' : 'rgba(239,68,68,0.3)') }),
     pageTitle: { color:'#fff', fontSize:'28px', fontWeight:900, marginBottom:'24px' },
     card: { backgroundColor:'#111', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'12px', padding:'24px', marginBottom:'16px' },
     empty: { textAlign:'center', padding:'48px 24px', color:'rgba(255,255,255,0.3)', fontSize:'14px' },
@@ -157,7 +157,6 @@ const AdminDashboard = () => {
     else if (activeTab==='gallery') fetchGallery();
     else if (activeTab==='archive') { fetchArchivedGallery(); fetchArchivedItems(); }
     else if (activeTab==='why-choose-us') fetchWhyChooseUs();
-    else if (activeTab==='awards') fetchAwards();
     else if (activeTab==='awards') fetchAwards();
     else if (activeTab==='about-us' && restaurant) { setAboutForm({ aboutText:restaurant.aboutText||'', aboutShort:restaurant.aboutShort||'', aboutImageUrl:restaurant.aboutImageUrl||'' }); setEditingAbout(false); }
     else if (activeTab==='info' && restaurant) { const h=(()=>{try{return JSON.parse(restaurant.openingHours||'{}');}catch{return {};}})(); setInfoForm({...restaurant,openingHoursObj:h}); }
@@ -485,7 +484,7 @@ const AdminDashboard = () => {
                     <div><label style={S.label}>Category *</label><select value={itemForm.categoryId} onChange={e=>setItemForm({...itemForm,categoryId:e.target.value})} required style={S.select}><option value="">Select category</option>{categories.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
                     <div><label style={S.label}>Name *</label><input value={itemForm.name} onChange={e=>setItemForm({...itemForm,name:e.target.value})} required style={S.input} /></div>
                     <div><label style={S.label}>Subtitle</label><input value={itemForm.subtitle} onChange={e=>setItemForm({...itemForm,subtitle:e.target.value})} style={S.input} /></div>
-                    <div><label style={S.label}>Price * ($)</label><input type="number" step="0.01" min="0" value={itemForm.price} onChange={e=>setItemForm({...itemForm,price:e.target.value})} required style={S.input} placeholder="0.00" /></div>
+                    <div><label style={S.label}>Price * (Rs.)</label><input type="number" step="0.01" min="0" value={itemForm.price} onChange={e=>setItemForm({...itemForm,price:e.target.value})} required style={S.input} placeholder="0.00" /></div>
                     <div style={{gridColumn:'1/-1'}}><label style={S.label}>Description</label><textarea value={itemForm.description} onChange={e=>setItemForm({...itemForm,description:e.target.value})} rows={3} style={S.textarea} /></div>
                     <div style={{gridColumn:'1/-1'}}>
                       <label style={S.label}>Image</label>
@@ -779,63 +778,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {activeTab==='awards' && (
-          <div>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'24px'}}>
-              <h1 style={S.pageTitle}>Awards & Recognition</h1>
-              <button onClick={()=>{setShowAwardForm(!showAwardForm);setEditingAward(null);setAwardForm({icon:'🏆',title:'',organization:'',year:'',description:'',sortOrder:0});}} style={S.btnPrimary(accent)}>{showAwardForm?'Cancel':'+ Add Award'}</button>
-            </div>
-            {showAwardForm&&(
-              <div style={{...S.card,marginBottom:'16px'}}>
-                <p style={{fontWeight:700,color:'#fff',fontSize:'14px',marginBottom:'16px'}}>{editingAward?'Edit Award':'New Award'}</p>
-                <form onSubmit={saveAward}>
-                  <div style={S.grid2}>
-                    <div><label style={S.label}>Icon (emoji)</label><input value={awardForm.icon} onChange={e=>setAwardForm({...awardForm,icon:e.target.value})} placeholder="🏆 🥇 ⭐" style={S.input} /></div>
-                    <div><label style={S.label}>Year</label><input value={awardForm.year} onChange={e=>setAwardForm({...awardForm,year:e.target.value})} placeholder="2024" style={S.input} /></div>
-                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Title *</label><input value={awardForm.title} onChange={e=>setAwardForm({...awardForm,title:e.target.value})} required placeholder="Best Restaurant Award" style={S.input} /></div>
-                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Organization</label><input value={awardForm.organization} onChange={e=>setAwardForm({...awardForm,organization:e.target.value})} placeholder="Nepal Restaurant Association" style={S.input} /></div>
-                    <div style={{gridColumn:'1/-1'}}><label style={S.label}>Description</label><textarea value={awardForm.description} onChange={e=>setAwardForm({...awardForm,description:e.target.value})} rows={3} placeholder="Brief description of the award..." style={S.textarea} /></div>
-                    <div><label style={S.label}>Sort Order</label><input type="number" value={awardForm.sortOrder} onChange={e=>setAwardForm({...awardForm,sortOrder:parseInt(e.target.value)||0})} style={S.input} /></div>
-                  </div>
-                  <div style={{display:'flex',gap:'8px',marginTop:'16px'}}>
-                    <button type="submit" style={S.btnPrimary(accent)}>Save Award</button>
-                    <button type="button" onClick={()=>{setShowAwardForm(false);setEditingAward(null);}} style={S.btnOutline}>Cancel</button>
-                  </div>
-                </form>
-              </div>
-            )}
-            {awards.length===0?(
-              <div style={S.empty}><p style={{fontSize:'40px',marginBottom:'12px'}}>🏆</p><p>No awards yet — click "+ Add Award" to add</p></div>
-            ):(
-              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill, minmax(320px, 1fr))',gap:'20px'}}>
-                {awards.map(item=>(
-                  <div key={item.id} style={{...S.card,display:'flex',gap:'16px'}}>
-                    <div style={{fontSize:'2.5rem',flexShrink:0}}>{item.icon||'🏆'}</div>
-                    <div style={{flex:1}}>
-                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'6px'}}>
-                        <h3 style={{fontWeight:700,color:'#fff',fontSize:'15px',lineHeight:1.3}}>{item.title}</h3>
-                        <div style={{display:'flex',gap:'6px',marginLeft:'8px',flexShrink:0}}>
-                          <button onClick={()=>{setEditingAward(item);setAwardForm({icon:item.icon||'🏆',title:item.title,organization:item.organization||'',year:item.year||'',description:item.description||'',sortOrder:item.sortOrder});setShowAwardForm(true);window.scrollTo({top:0,behavior:'smooth'});}} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(255,255,255,0.4)',fontSize:'13px',padding:'4px 6px'}}>✏️</button>
-                          <button onClick={()=>deleteAward(item.id)} style={{background:'none',border:'none',cursor:'pointer',color:'rgba(239,68,68,0.4)',fontSize:'13px',padding:'4px 6px'}}>🗑</button>
-                        </div>
-                      </div>
-                      {item.organization&&<p style={{color:'rgba(255,255,255,0.5)',fontSize:'12px',marginBottom:'4px'}}>🏛 {item.organization}</p>}
-                      {item.year&&<p style={{color:accent,fontSize:'12px',fontWeight:700,marginBottom:'6px'}}>📅 {item.year}</p>}
-                      {item.description&&<p style={{color:'rgba(255,255,255,0.65)',fontSize:'13px',lineHeight:1.5}}>{item.description}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
 
-        {activeTab==='filemanager' && (
-          <div>
-            <h1 style={S.pageTitle}>File Manager</h1>
-            <div style={{height:'calc(100vh - 160px)'}}><FileManager restaurantSlug={slug} /></div>
-          </div>
-        )}
 
         {activeTab==='info' && infoForm && (
           <div>
