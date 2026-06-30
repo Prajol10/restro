@@ -196,7 +196,9 @@ export default function SuperAdminDashboard() {
         method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ email: f.email, password: f.password })
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data = {};
+      try { data = text ? JSON.parse(text) : {}; } catch { data = { message: text || 'Server error. Please try again.' }; }
       if (!res.ok) throw new Error(data.message || 'Failed');
       setAdminMessages(prev => ({ ...prev, [restaurantId]: '✅ Admin created: ' + f.email }));
       setAdminForms(prev => ({ ...prev, [restaurantId]: null }));
